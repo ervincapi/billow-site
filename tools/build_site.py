@@ -199,6 +199,33 @@ T = {
 ),
 }
 
+S5 = {
+  "en": (("Insights", "See where a year of subscriptions goes.",
+          "A 12-month chart shows what you spent, what it costs per day and which months peak. Billow flags forgotten subscriptions and counts what you saved by cancelling.",
+          ["12-month trend with your cost per day", "Possibly forgotten and saved-this-year totals", "Your most expensive subscriptions, ranked"],
+          "Insights with a 12-month spending chart"), "Insights"),
+  "de": (("Einblicke", "Sieh, wohin ein Jahr Abos geht.",
+          "Ein 12-Monats-Diagramm zeigt, was du ausgegeben hast, was es pro Tag kostet und in welchen Monaten es Spitzen gibt. Billow markiert vergessene Abos und zählt, was du durch Kündigungen gespart hast.",
+          ["12-Monats-Verlauf mit deinen Kosten pro Tag", "Summen für vermutlich vergessene Abos und die Ersparnis dieses Jahres", "Deine teuersten Abos im Ranking"],
+          "Einblicke mit 12-Monats-Ausgabendiagramm"), "Einblicke"),
+  "es": (("Análisis", "Mira a dónde va un año de suscripciones.",
+          "Un gráfico de 12 meses muestra cuánto gastaste, cuánto cuesta al día y qué meses son los más caros. Billow marca las suscripciones olvidadas y cuenta lo que ahorraste al cancelar.",
+          ["Tendencia de 12 meses con tu coste diario", "Totales de posibles olvidos y del ahorro de este año", "Tus suscripciones más caras, ordenadas"],
+          "Análisis con gráfico de gasto de 12 meses"), "Análisis"),
+  "it": (("Analisi", "Scopri dove va un anno di abbonamenti.",
+          "Un grafico di 12 mesi mostra quanto hai speso, quanto costa al giorno e quali mesi sono i più cari. Billow segnala gli abbonamenti dimenticati e conta quanto hai risparmiato disdicendo.",
+          ["Andamento di 12 mesi con il costo al giorno", "Totali dei possibili dimenticati e del risparmio di quest'anno", "I tuoi abbonamenti più cari, in classifica"],
+          "Analisi con grafico della spesa di 12 mesi"), "Analisi"),
+  "sq": (("Analiza", "Shihni ku shkon një vit abonimesh.",
+          "Një grafik 12-mujor tregon sa keni shpenzuar, sa kushton në ditë dhe cilët muaj janë më të shtrenjtët. Billow shënon abonimet e harruara dhe numëron sa keni kursyer duke anuluar.",
+          ["Ecuria 12-mujore me koston tuaj ditore", "Totalet e abonimeve ndoshta të harruara dhe të kursimeve të këtij viti", "Abonimet tuaja më të shtrenjta, të renditura"],
+          "Analiza me grafikun e shpenzimeve 12-mujore"), "Analiza"),
+}
+for _l, (_s5, _cap) in S5.items():
+    T[_l]["s5"] = _s5
+    T[_l]["caps"] = T[_l]["caps"][:3] + [_cap] + T[_l]["caps"][3:]
+GALLERY = ["onboarding", "home", "calendar", "insights", "detail", "add"]
+
 APPLE = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.37 12.6c-.02-2.3 1.88-3.4 1.96-3.46-1.07-1.56-2.73-1.78-3.32-1.8-1.41-.14-2.76.83-3.47.83-.72 0-1.82-.81-3-.79-1.54.02-2.96.9-3.76 2.28-1.6 2.78-.41 6.9 1.15 9.16.76 1.1 1.67 2.34 2.86 2.3 1.15-.05 1.58-.74 2.97-.74 1.38 0 1.77.74 2.98.72 1.23-.02 2.01-1.12 2.76-2.23.87-1.28 1.23-2.52 1.25-2.58-.03-.01-2.4-.92-2.42-3.66l.04-.03zM14.1 5.86c.63-.77 1.06-1.83.94-2.89-.91.04-2.01.61-2.66 1.37-.58.67-1.09 1.75-.96 2.79 1.02.08 2.05-.52 2.68-1.27z"/></svg>'
 ICONS = [
   '<circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/><path d="M3 3l18 18"/>',
@@ -249,9 +276,9 @@ def page(lang):
     options = "".join(f'<option value="{l}" data-href="{href(l)}"{" selected" if l == lang else ""}>{NAMES[l]}</option>' for l in LANGS)
     flags = "".join(f'<a href="{href(l)}" lang="{l}"{" aria-current=\"page\"" if l == lang else ""}>{NAMES[l]}</a>' for l in LANGS)
     pills = "".join(f'<span class="pill">{e(p)}</span>' for p in t["pills"])
-    shots = {"s1": "detail", "s2": "calendar", "s3": "onboarding", "s4": "add"}
+    shots = {"s1": "detail", "s2": "calendar", "s5": "insights", "s3": "onboarding", "s4": "add"}
     sections = []
-    for i, k in enumerate(["s1", "s2", "s3", "s4"]):
+    for i, k in enumerate(["s1", "s2", "s5", "s3", "s4"]):
         eyebrow, h2, p, items, alt = t[k]
         p = e(p).replace("{tag}", f'<span class="tag-amber">{e(t["tag"])}</span>')
         lis = "\n        ".join(f"<li>{e(x)}</li>" for x in items)
@@ -271,7 +298,7 @@ def page(lang):
 </section>""")
     gallery = "\n    ".join(
         f'<figure><div class="phone"><img src="{root}img/{n}.jpg" alt="{e(c)}" loading="lazy"></div><figcaption>{e(c)}</figcaption></figure>'
-        for n, c in zip(["onboarding", "home", "calendar", "detail", "add"], t["caps"]))
+        for n, c in zip(GALLERY, t["caps"]))
     tiles = "\n      ".join(
         f'<div class="tile"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">{ico}</svg></div><strong>{e(a)}</strong><span>{e(b)}</span></div>'
         for ico, (a, b) in zip(ICONS, t["tiles"]))
