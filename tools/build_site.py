@@ -1,0 +1,371 @@
+"""Generates the Billow landing page in five languages into billow-site/."""
+import html
+import pathlib
+import sys
+
+SITE = pathlib.Path(sys.argv[1])
+STYLE = pathlib.Path(sys.argv[2]).read_text()
+BASE = "https://ervincapi.github.io/billow-site/"
+
+LANGS = ["en", "de", "es", "it", "sq"]
+NAMES = {"en": "English", "de": "Deutsch", "es": "Español", "it": "Italiano", "sq": "Shqip"}
+OG = {"en": "en_US", "de": "de_DE", "es": "es_ES", "it": "it_IT", "sq": "sq_AL"}
+
+T = {
+"en": dict(
+  title="Billow — Subscription Tracker",
+  desc="Track every subscription, renewal and free trial on your iPhone. Know what leaves your account before payday. No account, no bank login, private in your iCloud.",
+  og="Know what leaves your account before payday.",
+  nav_features="Features", nav_privacy="Privacy", nav_support="Support", lang_label="Language",
+  h1a="Know what leaves your account", h1b="before payday.",
+  lead="Billow tracks every subscription, renewal and free trial, and warns you before money goes out.",
+  badge="Coming soon to the App Store",
+  pills=["No account", "No bank login", "Private in iCloud", "No ads or tracking"],
+  alt_home="Billow home screen with monthly total, upcoming renewals and attention cards",
+  s1=("Every detail", "See exactly what each one costs you.",
+      "Every subscription shows its real cost per day and per year, a price-history chart that flags every increase, and the full billing history.",
+      ["Cost per day, month and year, in your home currency", "Price history with every increase marked", "Mark paid, pause, snooze or cancel in one tap"],
+      "Disney+ detail with price history showing a rise from $13.99 to $16.99"),
+  s2=("Payday planner", "Plan around the day you get paid.",
+      "The calendar shows daily totals, marks your payday and tells you exactly what leaves your account before the next one, with 3, 6 and 12-month forecasts.",
+      ["Month grid with daily totals", "“Before payday” total that updates as charges land", "Forecasts for the months ahead"],
+      "Calendar with daily totals and payday marker"),
+  s3=("Trials & price hikes", "Never pay for a trial you forgot.",
+      "Add a free trial and Billow sets a {tag} deadline a day before it converts, with a Live Activity countdown on your Lock Screen. Price changes and forgotten subscriptions get flagged too.",
+      ["Time Sensitive reminders before a trial converts", "Alerts when a price goes up", "“Still using this?” check-ins and duplicate detection"],
+      "Billow welcome screen"),
+  tag="cancel by",
+  s4=("Add in seconds", "Share a receipt. Billow does the rest.",
+      "Search 500+ known services, or share a receipt, screenshot, PDF or bank statement. Billow finds the recurring charges on your iPhone and explains why it thinks each one repeats.",
+      ["500+ services with logos, plans and billing cycles", "Import from receipts and bank statements, on device", "Home Screen, Lock Screen and StandBy widgets"],
+      "Adding a subscription from the merchant catalog"),
+  gallery="A closer look", caps=["Welcome", "Home", "Calendar", "Detail", "Add"],
+  priv_h="Private by design",
+  priv_sub="Billow has no account, no server and no analytics. Your subscriptions stay on your iPhone and in your own iCloud.",
+  tiles=[("No account", "Open the app and start. Nothing to sign up for."),
+         ("No bank login", "Statements you share are read on your iPhone."),
+         ("Your iCloud", "Synced through your private iCloud database."),
+         ("No tracking", "No ads, no analytics, no third-party SDKs.")],
+  langs_h="Made for five languages and every currency",
+  logos_by="Merchant logos by", privacy_policy="Privacy Policy",
+),
+"de": dict(
+  title="Billow — Abo-Tracker",
+  desc="Behalte jedes Abo, jede Verlängerung und jede Testphase auf deinem iPhone im Blick. Wisse vor dem Zahltag, was von deinem Konto abgeht. Kein Konto, kein Bank-Login, privat in deiner iCloud.",
+  og="Wisse vor dem Zahltag, was von deinem Konto abgeht.",
+  nav_features="Funktionen", nav_privacy="Datenschutz", nav_support="Support", lang_label="Sprache",
+  h1a="Wisse, was von deinem Konto abgeht –", h1b="vor dem Zahltag.",
+  lead="Billow behält jedes Abo, jede Verlängerung und jede Testphase im Blick und warnt dich, bevor Geld abgebucht wird.",
+  badge="Bald im App Store",
+  pills=["Kein Konto", "Kein Bank-Login", "Privat in iCloud", "Keine Werbung, kein Tracking"],
+  alt_home="Billow-Startbildschirm mit Monatssumme, anstehenden Verlängerungen und Hinweiskarten",
+  s1=("Jedes Detail", "Sieh genau, was dich jedes Abo kostet.",
+      "Jedes Abo zeigt seine echten Kosten pro Tag und Jahr, einen Preisverlauf, der jede Erhöhung markiert, und den kompletten Abbuchungsverlauf.",
+      ["Kosten pro Tag, Monat und Jahr in deiner Hauptwährung", "Preisverlauf mit jeder Erhöhung markiert", "Als bezahlt markieren, pausieren, verschieben oder kündigen – mit einem Tipp"],
+      "Disney+-Details mit Preisverlauf von 13,99 $ auf 16,99 $"),
+  s2=("Zahltag-Planer", "Plane rund um deinen Zahltag.",
+      "Der Kalender zeigt Tagessummen, markiert deinen Zahltag und sagt dir genau, was vor dem nächsten von deinem Konto abgeht – mit Prognosen für 3, 6 und 12 Monate.",
+      ["Monatsansicht mit Tagessummen", "Summe „vor dem Zahltag“, die sich mit jeder Abbuchung aktualisiert", "Prognosen für die kommenden Monate"],
+      "Kalender mit Tagessummen und Zahltag-Markierung"),
+  s3=("Testphasen & Preiserhöhungen", "Zahl nie wieder für eine vergessene Testphase.",
+      "Füge eine Testphase hinzu und Billow setzt einen Tag vor der Umwandlung eine Frist „{tag}“ – mit Live-Activity-Countdown auf deinem Sperrbildschirm. Auch Preisänderungen und vergessene Abos werden markiert.",
+      ["Dringende Erinnerungen, bevor eine Testphase umgewandelt wird", "Hinweise, wenn ein Preis steigt", "„Nutzt du das noch?“-Abfragen und Duplikaterkennung"],
+      "Billow-Willkommensbildschirm"),
+  tag="Kündigen bis",
+  s4=("In Sekunden hinzugefügt", "Beleg teilen. Billow erledigt den Rest.",
+      "Durchsuche über 500 bekannte Dienste oder teile einen Beleg, Screenshot, ein PDF oder einen Kontoauszug. Billow findet die wiederkehrenden Abbuchungen auf deinem iPhone und erklärt, warum es sie für wiederkehrend hält.",
+      ["Über 500 Dienste mit Logos, Tarifen und Abrechnungszyklen", "Import aus Belegen und Kontoauszügen, direkt auf dem Gerät", "Widgets für Home-Bildschirm, Sperrbildschirm und StandBy"],
+      "Abo aus dem Händlerkatalog hinzufügen"),
+  gallery="Ein genauerer Blick", caps=["Willkommen", "Start", "Kalender", "Details", "Hinzufügen"],
+  priv_h="Datenschutz von Anfang an",
+  priv_sub="Billow hat kein Konto, keinen Server und keine Analyse-Tools. Deine Abos bleiben auf deinem iPhone und in deiner eigenen iCloud.",
+  tiles=[("Kein Konto", "App öffnen und loslegen. Keine Registrierung."),
+         ("Kein Bank-Login", "Geteilte Kontoauszüge werden auf deinem iPhone gelesen."),
+         ("Deine iCloud", "Synchronisiert über deine private iCloud-Datenbank."),
+         ("Kein Tracking", "Keine Werbung, keine Analyse, keine Drittanbieter-SDKs.")],
+  langs_h="Gemacht für fünf Sprachen und jede Währung",
+  logos_by="Händlerlogos von", privacy_policy="Datenschutzerklärung",
+),
+"es": dict(
+  title="Billow — Control de suscripciones",
+  desc="Controla cada suscripción, renovación y prueba gratuita en tu iPhone. Sabe qué sale de tu cuenta antes del día de cobro. Sin cuenta, sin acceso bancario, privado en tu iCloud.",
+  og="Sabe qué sale de tu cuenta antes del día de cobro.",
+  nav_features="Funciones", nav_privacy="Privacidad", nav_support="Soporte", lang_label="Idioma",
+  h1a="Sabe qué sale de tu cuenta", h1b="antes del día de cobro.",
+  lead="Billow controla cada suscripción, renovación y prueba gratuita, y te avisa antes de que salga el dinero.",
+  badge="Próximamente en el App Store",
+  pills=["Sin cuenta", "Sin acceso bancario", "Privado en iCloud", "Sin anuncios ni rastreo"],
+  alt_home="Pantalla de inicio de Billow con el total mensual, próximas renovaciones y avisos",
+  s1=("Cada detalle", "Mira exactamente cuánto te cuesta cada una.",
+      "Cada suscripción muestra su coste real por día y por año, un gráfico de historial de precios que marca cada subida y el historial completo de cobros.",
+      ["Coste por día, mes y año en tu moneda principal", "Historial de precios con cada subida marcada", "Marca como pagada, pausa, pospón o cancela con un toque"],
+      "Detalle de Disney+ con historial de precios de 13,99 $ a 16,99 $"),
+  s2=("Planificador del día de cobro", "Organízate en torno al día en que cobras.",
+      "El calendario muestra los totales diarios, marca tu día de cobro y te dice exactamente qué sale de tu cuenta antes del siguiente, con previsiones a 3, 6 y 12 meses.",
+      ["Vista mensual con totales diarios", "Total «antes del cobro» que se actualiza con cada cargo", "Previsiones para los próximos meses"],
+      "Calendario con totales diarios y marca del día de cobro"),
+  s3=("Pruebas y subidas de precio", "No vuelvas a pagar por una prueba que olvidaste.",
+      "Añade una prueba gratuita y Billow fija un plazo «{tag}» un día antes de que se convierta, con una cuenta atrás en Actividad en vivo en tu pantalla bloqueada. También marca los cambios de precio y las suscripciones olvidadas.",
+      ["Recordatorios urgentes antes de que una prueba se convierta", "Avisos cuando sube un precio", "Preguntas «¿Aún lo usas?» y detección de duplicados"],
+      "Pantalla de bienvenida de Billow"),
+  tag="cancelar antes del",
+  s4=("Añade en segundos", "Comparte un recibo. Billow hace el resto.",
+      "Busca entre más de 500 servicios conocidos o comparte un recibo, una captura, un PDF o un extracto bancario. Billow encuentra los cobros recurrentes en tu iPhone y explica por qué cree que se repiten.",
+      ["Más de 500 servicios con logos, planes y ciclos de cobro", "Importa recibos y extractos bancarios en el propio dispositivo", "Widgets para la pantalla de inicio, la pantalla bloqueada y StandBy"],
+      "Añadir una suscripción desde el catálogo"),
+  gallery="Un vistazo más de cerca", caps=["Bienvenida", "Inicio", "Calendario", "Detalle", "Añadir"],
+  priv_h="Privado por diseño",
+  priv_sub="Billow no tiene cuenta, ni servidor, ni analíticas. Tus suscripciones se quedan en tu iPhone y en tu propio iCloud.",
+  tiles=[("Sin cuenta", "Abre la app y empieza. Sin registros."),
+         ("Sin acceso bancario", "Los extractos que compartes se leen en tu iPhone."),
+         ("Tu iCloud", "Sincronizado con tu base de datos privada de iCloud."),
+         ("Sin rastreo", "Sin anuncios, sin analíticas, sin SDK de terceros.")],
+  langs_h="Hecho para cinco idiomas y cualquier moneda",
+  logos_by="Logos de comercios de", privacy_policy="Política de privacidad",
+),
+"it": dict(
+  title="Billow — Gestione abbonamenti",
+  desc="Tieni traccia di ogni abbonamento, rinnovo e prova gratuita sul tuo iPhone. Sappi cosa esce dal tuo conto prima dello stipendio. Nessun account, nessun accesso bancario, privato nel tuo iCloud.",
+  og="Sappi cosa esce dal tuo conto prima dello stipendio.",
+  nav_features="Funzioni", nav_privacy="Privacy", nav_support="Assistenza", lang_label="Lingua",
+  h1a="Sappi cosa esce dal tuo conto", h1b="prima dello stipendio.",
+  lead="Billow tiene traccia di ogni abbonamento, rinnovo e prova gratuita, e ti avvisa prima che i soldi escano.",
+  badge="Presto su App Store",
+  pills=["Nessun account", "Nessun accesso bancario", "Privato in iCloud", "Niente pubblicità né tracciamento"],
+  alt_home="Schermata Home di Billow con totale mensile, prossimi rinnovi e avvisi",
+  s1=("Ogni dettaglio", "Scopri quanto ti costa davvero ognuno.",
+      "Ogni abbonamento mostra il costo reale al giorno e all'anno, un grafico dello storico prezzi che segnala ogni aumento e lo storico completo degli addebiti.",
+      ["Costo al giorno, al mese e all'anno nella tua valuta", "Storico prezzi con ogni aumento evidenziato", "Segna come pagato, metti in pausa, posticipa o disdici con un tocco"],
+      "Dettaglio Disney+ con storico prezzi da 13,99 $ a 16,99 $"),
+  s2=("Pianificatore dello stipendio", "Organizzati intorno al giorno dello stipendio.",
+      "Il calendario mostra i totali giornalieri, segna il giorno dello stipendio e ti dice esattamente cosa esce dal conto prima del prossimo, con previsioni a 3, 6 e 12 mesi.",
+      ["Vista mensile con totali giornalieri", "Totale «prima dello stipendio» che si aggiorna a ogni addebito", "Previsioni per i prossimi mesi"],
+      "Calendario con totali giornalieri e giorno dello stipendio"),
+  s3=("Prove e aumenti di prezzo", "Non pagare mai più una prova dimenticata.",
+      "Aggiungi una prova gratuita e Billow imposta una scadenza «{tag}» il giorno prima della conversione, con un conto alla rovescia in Attività Live sulla schermata di blocco. Segnala anche aumenti di prezzo e abbonamenti dimenticati.",
+      ["Promemoria urgenti prima che una prova si converta", "Avvisi quando un prezzo aumenta", "Domande «Lo usi ancora?» e rilevamento dei doppioni"],
+      "Schermata di benvenuto di Billow"),
+  tag="disdici entro",
+  s4=("Aggiungi in pochi secondi", "Condividi una ricevuta. Al resto pensa Billow.",
+      "Cerca tra oltre 500 servizi noti oppure condividi una ricevuta, uno screenshot, un PDF o un estratto conto. Billow trova gli addebiti ricorrenti sul tuo iPhone e spiega perché pensa che si ripetano.",
+      ["Oltre 500 servizi con loghi, piani e cicli di fatturazione", "Importa ricevute ed estratti conto direttamente sul dispositivo", "Widget per Home, schermata di blocco e StandBy"],
+      "Aggiunta di un abbonamento dal catalogo"),
+  gallery="Uno sguardo più da vicino", caps=["Benvenuto", "Home", "Calendario", "Dettaglio", "Aggiungi"],
+  priv_h="Privato per scelta",
+  priv_sub="Billow non ha account, server né strumenti di analisi. I tuoi abbonamenti restano sul tuo iPhone e nel tuo iCloud.",
+  tiles=[("Nessun account", "Apri l'app e inizia. Nessuna registrazione."),
+         ("Nessun accesso bancario", "Gli estratti conto che condividi vengono letti sul tuo iPhone."),
+         ("Il tuo iCloud", "Sincronizzato tramite il tuo database iCloud privato."),
+         ("Nessun tracciamento", "Niente pubblicità, analisi o SDK di terze parti.")],
+  langs_h="Pensato per cinque lingue e ogni valuta",
+  logos_by="Loghi dei servizi di", privacy_policy="Informativa sulla privacy",
+),
+"sq": dict(
+  title="Billow — Ndjekja e abonimeve",
+  desc="Ndiqni çdo abonim, rinovim dhe provë falas në iPhone. Dijeni çfarë del nga llogaria juaj para ditës së rrogës. Pa llogari, pa hyrje në bankë, privat në iCloud-in tuaj.",
+  og="Dijeni çfarë del nga llogaria juaj para ditës së rrogës.",
+  nav_features="Veçoritë", nav_privacy="Privatësia", nav_support="Ndihma", lang_label="Gjuha",
+  h1a="Dijeni çfarë del nga llogaria juaj", h1b="para ditës së rrogës.",
+  lead="Billow ndjek çdo abonim, rinovim dhe provë falas, dhe ju paralajmëron para se të dalin paratë.",
+  badge="Së shpejti në App Store",
+  pills=["Pa llogari", "Pa hyrje në bankë", "Privat në iCloud", "Pa reklama dhe pa gjurmim"],
+  alt_home="Ekrani kryesor i Billow me totalin mujor, rinovimet e ardhshme dhe njoftimet",
+  s1=("Çdo detaj", "Shihni saktësisht sa ju kushton secili.",
+      "Çdo abonim tregon koston e vërtetë për ditë dhe për vit, një grafik të historikut të çmimit që shënon çdo rritje dhe historikun e plotë të pagesave.",
+      ["Kosto për ditë, muaj dhe vit në monedhën tuaj", "Historiku i çmimit me çdo rritje të shënuar", "Shënojeni të paguar, pezulloni, shtyjeni ose anulojeni me një prekje"],
+      "Detajet e Disney+ me historikun e çmimit nga 13,99 $ në 16,99 $"),
+  s2=("Planifikuesi i rrogës", "Planifikoni sipas ditës kur merrni rrogën.",
+      "Kalendari tregon totalet ditore, shënon ditën e rrogës dhe ju tregon saktësisht çfarë del nga llogaria para rrogës së ardhshme, me parashikime për 3, 6 dhe 12 muaj.",
+      ["Pamje mujore me totalet ditore", "Totali «para rrogës» që përditësohet me çdo pagesë", "Parashikime për muajt në vijim"],
+      "Kalendari me totalet ditore dhe ditën e rrogës"),
+  s3=("Provat dhe rritjet e çmimit", "Mos paguani më për një provë që e harruat.",
+      "Shtoni një provë falas dhe Billow vendos afatin «{tag}» një ditë para se të kalojë në pagesë, me numërim mbrapsht në Live Activity në ekranin e kyçjes. Shënohen gjithashtu ndryshimet e çmimit dhe abonimet e harruara.",
+      ["Kujtesa urgjente para se prova të kalojë në pagesë", "Njoftime kur rritet një çmim", "Pyetje «Ende e përdorni?» dhe zbulim i dyfishimeve"],
+      "Ekrani i mirëseardhjes në Billow"),
+  tag="anuloni deri më",
+  s4=("Shtoni në pak sekonda", "Ndani një faturë. Pjesën tjetër e bën Billow.",
+      "Kërkoni mes mbi 500 shërbimeve të njohura ose ndani një faturë, pamje ekrani, PDF ose pasqyrë bankare. Billow gjen pagesat e përsëritura në iPhone dhe shpjegon pse mendon se përsëriten.",
+      ["Mbi 500 shërbime me logo, plane dhe cikle pagese", "Importim nga faturat dhe pasqyrat bankare, në pajisje", "Widget-e për ekranin kryesor, ekranin e kyçjes dhe StandBy"],
+      "Shtimi i një abonimi nga katalogu"),
+  gallery="Një vështrim më nga afër", caps=["Mirëseardhja", "Kreu", "Kalendari", "Detajet", "Shto"],
+  priv_h="Privatësi që në projektim",
+  priv_sub="Billow nuk ka llogari, server apo analitikë. Abonimet tuaja qëndrojnë në iPhone dhe në iCloud-in tuaj.",
+  tiles=[("Pa llogari", "Hapni aplikacionin dhe filloni. Pa regjistrim."),
+         ("Pa hyrje në bankë", "Pasqyrat që ndani lexohen në iPhone."),
+         ("iCloud-i juaj", "Sinkronizohet përmes bazës suaj private të të dhënave në iCloud."),
+         ("Pa gjurmim", "Pa reklama, pa analitikë, pa SDK të palëve të treta.")],
+  langs_h="Krijuar për pesë gjuhë dhe çdo monedhë",
+  logos_by="Logot e shërbimeve nga", privacy_policy="Politika e privatësisë",
+),
+}
+
+APPLE = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.37 12.6c-.02-2.3 1.88-3.4 1.96-3.46-1.07-1.56-2.73-1.78-3.32-1.8-1.41-.14-2.76.83-3.47.83-.72 0-1.82-.81-3-.79-1.54.02-2.96.9-3.76 2.28-1.6 2.78-.41 6.9 1.15 9.16.76 1.1 1.67 2.34 2.86 2.3 1.15-.05 1.58-.74 2.97-.74 1.38 0 1.77.74 2.98.72 1.23-.02 2.01-1.12 2.76-2.23.87-1.28 1.23-2.52 1.25-2.58-.03-.01-2.4-.92-2.42-3.66l.04-.03zM14.1 5.86c.63-.77 1.06-1.83.94-2.89-.91.04-2.01.61-2.66 1.37-.58.67-1.09 1.75-.96 2.79 1.02.08 2.05-.52 2.68-1.27z"/></svg>'
+ICONS = [
+  '<circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/><path d="M3 3l18 18"/>',
+  '<path d="M3 10h18L12 4 3 10z"/><path d="M5 10v8M9 10v8M15 10v8M19 10v8M3 20h18"/>',
+  '<path d="M7 18a5 5 0 0 1-.5-9.97A6 6 0 0 1 18 9a4.5 4.5 0 0 1-.5 9H7z"/>',
+  '<circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/>',
+]
+EXTRA_CSS = """
+.lang { position: relative; }
+.lang select { appearance: none; -webkit-appearance: none; font: inherit; font-size: 14px; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 6px 30px 6px 12px; cursor: pointer; }
+.lang::after { content: ""; position: absolute; right: 12px; top: 50%; width: 7px; height: 7px; border-right: 2px solid var(--muted); border-bottom: 2px solid var(--muted); transform: translateY(-70%) rotate(45deg); pointer-events: none; }
+header.top nav { align-items: center; }
+.flags a { background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 8px 16px; font-size: 15px; color: var(--ink); }
+.flags a[aria-current] { border-color: var(--accent); color: var(--accent); font-weight: 600; }
+"""
+# Root page only: send first-time visitors to their language once; never override a choice they made.
+DETECT = """<script>
+(function () {
+  var supported = ["de", "es", "it", "sq"], key = "billow-lang";
+  try {
+    if (localStorage.getItem(key)) return;
+    var l = (navigator.languages || [navigator.language || ""]).map(function (x) { return x.slice(0, 2).toLowerCase(); });
+    for (var i = 0; i < l.length; i++) {
+      if (l[i] === "en") break;
+      if (supported.indexOf(l[i]) >= 0) { localStorage.setItem(key, l[i]); location.replace(l[i] + "/"); return; }
+    }
+  } catch (e) {}
+})();
+</script>"""
+REMEMBER = """<script>
+document.getElementById("lang").addEventListener("change", function (e) {
+  try { localStorage.setItem("billow-lang", e.target.value); } catch (err) {}
+  location.href = e.target.options[e.target.selectedIndex].dataset.href;
+});
+</script>"""
+
+e = html.escape
+
+
+def page(lang):
+    t = T[lang]
+    root = "" if lang == "en" else "../"
+    def url(l):
+        return BASE if l == "en" else f"{BASE}{l}/"
+    def href(l):
+        return f"{root}index.html" if l == "en" else f"{root}{l}/index.html"
+    alts = "\n".join(f'<link rel="alternate" hreflang="{l}" href="{url(l)}">' for l in LANGS)
+    options = "".join(f'<option value="{l}" data-href="{href(l)}"{" selected" if l == lang else ""}>{NAMES[l]}</option>' for l in LANGS)
+    flags = "".join(f'<a href="{href(l)}" lang="{l}"{" aria-current=\"page\"" if l == lang else ""}>{NAMES[l]}</a>' for l in LANGS)
+    pills = "".join(f'<span class="pill">{e(p)}</span>' for p in t["pills"])
+    shots = {"s1": "detail", "s2": "calendar", "s3": "onboarding", "s4": "add"}
+    sections = []
+    for i, k in enumerate(["s1", "s2", "s3", "s4"]):
+        eyebrow, h2, p, items, alt = t[k]
+        p = e(p).replace("{tag}", f'<span class="tag-amber">{e(t["tag"])}</span>')
+        lis = "\n        ".join(f"<li>{e(x)}</li>" for x in items)
+        flip = " flip" if i % 2 else ""
+        sections.append(f"""<section class="feature{flip}">
+  <div class="wrap">
+    <div class="text">
+      <div class="eyebrow">{e(eyebrow)}</div>
+      <h2>{e(h2)}</h2>
+      <p>{p}</p>
+      <ul>
+        {lis}
+      </ul>
+    </div>
+    <div class="shot"><div class="phone"><img src="{root}img/{shots[k]}.jpg" alt="{e(alt)}" loading="lazy"></div></div>
+  </div>
+</section>""")
+    gallery = "\n    ".join(
+        f'<figure><div class="phone"><img src="{root}img/{n}.jpg" alt="{e(c)}" loading="lazy"></div><figcaption>{e(c)}</figcaption></figure>'
+        for n, c in zip(["onboarding", "home", "calendar", "detail", "add"], t["caps"]))
+    tiles = "\n      ".join(
+        f'<div class="tile"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">{ico}</svg></div><strong>{e(a)}</strong><span>{e(b)}</span></div>'
+        for ico, (a, b) in zip(ICONS, t["tiles"]))
+    style = STYLE.replace("</style>", EXTRA_CSS + "</style>")
+    return f"""<!doctype html>
+<html lang="{lang}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{e(t["title"])}</title>
+<meta name="description" content="{e(t["desc"])}">
+<link rel="canonical" href="{url(lang)}">
+{alts}
+<link rel="alternate" hreflang="x-default" href="{BASE}">
+<link rel="icon" href="{root}img/icon.png">
+<link rel="apple-touch-icon" href="{root}img/icon.png">
+<meta property="og:title" content="{e(t["title"])}">
+<meta property="og:description" content="{e(t["og"])}">
+<meta property="og:locale" content="{OG[lang]}">
+<meta property="og:image" content="{BASE}img/icon.png">
+{DETECT if lang == "en" else ""}
+{style}
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="{href(lang)}"><img src="{root}img/icon.png" alt="">Billow</a>
+    <nav>
+      <a class="hide-sm" href="#features">{e(t["nav_features"])}</a>
+      <a class="hide-sm" href="#privacy">{e(t["nav_privacy"])}</a>
+      <a href="{root}support.html">{e(t["nav_support"])}</a>
+      <label class="lang"><span class="visually-hidden" style="position:absolute;left:-9999px">{e(t["lang_label"])}</span><select id="lang" aria-label="{e(t["lang_label"])}">{options}</select></label>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <h1>{e(t["h1a"])} <span>{e(t["h1b"])}</span></h1>
+      <p class="lead">{e(t["lead"])}</p>
+      <span class="badge">{APPLE}{e(t["badge"])}</span>
+      <div class="pills">{pills}</div>
+    </div>
+    <div class="phone"><img src="{root}img/home.jpg" alt="{e(t["alt_home"])}"></div>
+  </div>
+</section>
+
+<main id="features">
+
+{chr(10).join(sections)}
+
+</main>
+
+<section class="gallery">
+  <h2>{e(t["gallery"])}</h2>
+  <div class="strip">
+    {gallery}
+  </div>
+</section>
+
+<section class="privacy" id="privacy">
+  <div class="wrap">
+    <h2>{e(t["priv_h"])}</h2>
+    <p class="sub">{e(t["priv_sub"])}</p>
+    <div class="grid4">
+      {tiles}
+    </div>
+  </div>
+</section>
+
+<section class="langs">
+  <div class="wrap">
+    <h2>{e(t["langs_h"])}</h2>
+    <div class="flags">{flags}</div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Ervin Capi · {e(t["logos_by"])} <a href="https://logo.dev">Logo.dev</a></span>
+    <nav><a href="{root}support.html">{e(t["nav_support"])}</a><a href="{root}privacy.html">{e(t["privacy_policy"])}</a></nav>
+  </div>
+</footer>
+
+{REMEMBER}
+</body>
+</html>
+"""
+
+
+for lang in LANGS:
+    out = SITE / "index.html" if lang == "en" else SITE / lang / "index.html"
+    out.parent.mkdir(exist_ok=True)
+    out.write_text(page(lang))
+    print(out)
