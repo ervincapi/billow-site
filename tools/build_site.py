@@ -224,6 +224,32 @@ S5 = {
 for _l, (_s5, _cap) in S5.items():
     T[_l]["s5"] = _s5
     T[_l]["caps"] = T[_l]["caps"][:3] + [_cap] + T[_l]["caps"][3:]
+S6 = {
+  "en": ("Email receipts", "Find subscriptions in your inbox.",
+         "Connect Gmail, iCloud Mail or any IMAP mailbox and Billow finds the receipts for your subscriptions. Mail is read on your iPhone with read-only access, only the merchant, amount, date and billing cycle are kept, and nothing is ever uploaded. Disconnect any time. {privacy}",
+         ["Gmail, iCloud Mail and other IMAP mailboxes", "Only receipt emails from the last 18 months, read-only", "Message text is discarded right after reading"],
+         "Mailboxes screen with a connected iCloud Mail account and its last scan", "How Billow handles your email"),
+  "de": ("E-Mail-Belege", "Finde Abos in deinem Posteingang.",
+         "Verbinde Gmail, iCloud Mail oder ein IMAP-Postfach und Billow findet die Belege deiner Abos. Mails werden auf deinem iPhone nur lesend gelesen, gespeichert werden nur Anbieter, Betrag, Datum und Abrechnungszyklus, und nichts wird hochgeladen. Jederzeit trennbar. {privacy}",
+         ["Gmail, iCloud Mail und andere IMAP-Postfächer", "Nur Beleg-Mails der letzten 18 Monate, nur lesend", "Der Mailtext wird direkt nach dem Lesen verworfen"],
+         "Postfächer-Bildschirm mit verbundenem iCloud-Mail-Konto und letzter Prüfung", "Wie Billow mit deinen E-Mails umgeht"),
+  "es": ("Recibos por email", "Encuentra suscripciones en tu bandeja de entrada.",
+         "Conecta Gmail, el correo de iCloud o cualquier buzón IMAP y Billow encuentra los recibos de tus suscripciones. El correo se lee en tu iPhone en solo lectura, solo se guardan el comercio, el importe, la fecha y el ciclo de cobro, y nunca se sube nada. Desconéctalo cuando quieras. {privacy}",
+         ["Gmail, correo de iCloud y otros buzones IMAP", "Solo emails de recibos de los últimos 18 meses, en solo lectura", "El texto del mensaje se descarta justo después de leerlo"],
+         "Pantalla de buzones con una cuenta de correo de iCloud conectada y su último análisis", "Cómo trata Billow tu correo"),
+  "it": ("Ricevute email", "Trova gli abbonamenti nella tua posta.",
+         "Collega Gmail, la posta di iCloud o qualsiasi casella IMAP e Billow trova le ricevute dei tuoi abbonamenti. La posta viene letta sul tuo iPhone in sola lettura, si conservano solo esercente, importo, data e ciclo di fatturazione e non viene caricato nulla. Puoi disconnetterti quando vuoi. {privacy}",
+         ["Gmail, posta di iCloud e altre caselle IMAP", "Solo email di ricevute degli ultimi 18 mesi, in sola lettura", "Il testo del messaggio viene eliminato subito dopo la lettura"],
+         "Schermata delle caselle con un account di posta iCloud collegato e l'ultima analisi", "Come Billow tratta la tua posta"),
+  "sq": ("Faturat me email", "Gjeni abonimet në kutinë tuaj postare.",
+         "Lidhni Gmail, iCloud Mail ose çdo kuti IMAP dhe Billow gjen faturat e abonimeve tuaja. Posta lexohet në iPhone-in tuaj vetëm për lexim, ruhen vetëm tregtari, shuma, data dhe cikli i pagesës, dhe asgjë nuk ngarkohet kurrë. Mund të shkëputeni në çdo kohë. {privacy}",
+         ["Gmail, iCloud Mail dhe kuti të tjera IMAP", "Vetëm email-et e faturave të 18 muajve të fundit, vetëm për lexim", "Teksti i mesazhit fshihet menjëherë pas leximit"],
+         "Ekrani i kutive postare me një llogari iCloud Mail të lidhur dhe kontrollin e fundit", "Si e trajton Billow postën tuaj"),
+}
+TERMS = {"en": "Terms of Use", "de": "Nutzungsbedingungen", "es": "Términos de uso", "it": "Termini d'uso", "sq": "Kushtet e përdorimit"}
+for _l, _s6 in S6.items():
+    T[_l]["s6"] = _s6[:5]
+    T[_l]["privacy_link"] = _s6[5]
 GALLERY = ["onboarding", "home", "calendar", "insights", "detail", "add"]
 
 APPLE = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.37 12.6c-.02-2.3 1.88-3.4 1.96-3.46-1.07-1.56-2.73-1.78-3.32-1.8-1.41-.14-2.76.83-3.47.83-.72 0-1.82-.81-3-.79-1.54.02-2.96.9-3.76 2.28-1.6 2.78-.41 6.9 1.15 9.16.76 1.1 1.67 2.34 2.86 2.3 1.15-.05 1.58-.74 2.97-.74 1.38 0 1.77.74 2.98.72 1.23-.02 2.01-1.12 2.76-2.23.87-1.28 1.23-2.52 1.25-2.58-.03-.01-2.4-.92-2.42-3.66l.04-.03zM14.1 5.86c.63-.77 1.06-1.83.94-2.89-.91.04-2.01.61-2.66 1.37-.58.67-1.09 1.75-.96 2.79 1.02.08 2.05-.52 2.68-1.27z"/></svg>'
@@ -276,11 +302,12 @@ def page(lang):
     options = "".join(f'<option value="{l}" data-href="{href(l)}"{" selected" if l == lang else ""}>{NAMES[l]}</option>' for l in LANGS)
     flags = "".join(f'<a href="{href(l)}" lang="{l}"{" aria-current=\"page\"" if l == lang else ""}>{NAMES[l]}</a>' for l in LANGS)
     pills = "".join(f'<span class="pill">{e(p)}</span>' for p in t["pills"])
-    shots = {"s1": "detail", "s2": "calendar", "s5": "insights", "s3": "onboarding", "s4": "add"}
+    shots = {"s1": "detail", "s2": "calendar", "s5": "insights", "s3": "onboarding", "s4": "add", "s6": "mailboxes"}
     sections = []
-    for i, k in enumerate(["s1", "s2", "s5", "s3", "s4"]):
+    for i, k in enumerate(["s1", "s2", "s5", "s3", "s4", "s6"]):
         eyebrow, h2, p, items, alt = t[k]
         p = e(p).replace("{tag}", f'<span class="tag-amber">{e(t["tag"])}</span>')
+        p = p.replace("{privacy}", f'<a href="{root}privacy.html">{e(t["privacy_link"])}</a>')
         lis = "\n        ".join(f"<li>{e(x)}</li>" for x in items)
         flip = " flip" if i % 2 else ""
         sections.append(f"""<section class="feature{flip}">
@@ -381,7 +408,7 @@ def page(lang):
 <footer>
   <div class="wrap">
     <span>© 2026 Ervin Capi · {e(t["logos_by"])} <a href="https://logo.dev">Logo.dev</a></span>
-    <nav><a href="{root}support.html">{e(t["nav_support"])}</a><a href="{root}privacy.html">{e(t["privacy_policy"])}</a></nav>
+    <nav><a href="{root}support.html">{e(t["nav_support"])}</a><a href="{root}privacy.html">{e(t["privacy_policy"])}</a><a href="{root}terms.html">{e(TERMS[lang])}</a></nav>
   </div>
 </footer>
 
