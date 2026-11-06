@@ -545,6 +545,55 @@ def try_section(lang, root):
 <script>window.BILLOW_DEMO = {cfg};</script>
 <script src="{root}demo.js?v={DEMO_VER}" defer></script>"""
 
+# ---- Contact form (FormSubmit relays to CONTACT_EMAIL; the first submission asks that mailbox to activate the form).
+CONTACT_EMAIL = "ecapi88@gmail.com"
+CONTACT = {
+  "en": dict(eyebrow="Contact", h="Get in touch.", sub="A question, an idea or a bug? Write to me and I'll reply within two working days.", name="Your name", email="Your email", message="Message", send="Send message", sending="Sending…", sent="Thanks, your message is on its way.", error="Couldn't send. Email me directly at {mail}.", direct="Or email", note="Delivered by FormSubmit and used only to reply to you.", nav="Contact", subject="Message from billow-app.org"),
+  "de": dict(eyebrow="Kontakt", h="Schreib mir.", sub="Eine Frage, eine Idee oder ein Fehler? Schreib mir und ich antworte innerhalb von zwei Werktagen.", name="Dein Name", email="Deine E-Mail", message="Nachricht", send="Nachricht senden", sending="Wird gesendet…", sent="Danke, deine Nachricht ist unterwegs.", error="Senden fehlgeschlagen. Schreib mir direkt an {mail}.", direct="Oder per E-Mail", note="Zugestellt über FormSubmit und nur für die Antwort verwendet.", nav="Kontakt", subject="Nachricht von billow-app.org"),
+  "es": dict(eyebrow="Contacto", h="Escríbeme.", sub="¿Una pregunta, una idea o un error? Escríbeme y te responderé en dos días laborables.", name="Tu nombre", email="Tu correo", message="Mensaje", send="Enviar mensaje", sending="Enviando…", sent="Gracias, tu mensaje está en camino.", error="No se pudo enviar. Escríbeme directamente a {mail}.", direct="O por correo", note="Entregado por FormSubmit y usado solo para responderte.", nav="Contacto", subject="Mensaje desde billow-app.org"),
+  "it": dict(eyebrow="Contatti", h="Scrivimi.", sub="Una domanda, un'idea o un bug? Scrivimi e ti rispondo entro due giorni lavorativi.", name="Il tuo nome", email="La tua email", message="Messaggio", send="Invia messaggio", sending="Invio in corso…", sent="Grazie, il tuo messaggio è in arrivo.", error="Invio non riuscito. Scrivimi direttamente a {mail}.", direct="Oppure via email", note="Consegnato da FormSubmit e usato solo per risponderti.", nav="Contatti", subject="Messaggio da billow-app.org"),
+  "sq": dict(eyebrow="Kontakt", h="Më shkruani.", sub="Një pyetje, një ide apo një gabim? Më shkruani dhe do t'ju përgjigjem brenda dy ditësh pune.", name="Emri juaj", email="Email-i juaj", message="Mesazhi", send="Dërgo mesazhin", sending="Po dërgohet…", sent="Faleminderit, mesazhi juaj është rrugës.", error="Dërgimi dështoi. Më shkruani drejtpërdrejt në {mail}.", direct="Ose me email", note="Dërgohet përmes FormSubmit dhe përdoret vetëm për t'ju përgjigjur.", nav="Kontakt", subject="Mesazh nga billow-app.org"),
+}
+
+def contact_form(lang, root, next_url):
+    c = CONTACT[lang]
+    mail_link = f'<a href="mailto:{CONTACT_EMAIL}">{CONTACT_EMAIL}</a>'
+    return f"""<form id="contact-form" class="contact-form" action="https://formsubmit.co/{CONTACT_EMAIL}" method="POST" data-sending="{e(c["sending"])}" data-sent="{e(c["sent"])}" data-error="{e(c["error"]).replace("{mail}", e(mail_link))}">
+        <input type="hidden" name="_subject" value="{e(c["subject"])}">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_next" value="{next_url}">
+        <input type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px">
+        <div class="two">
+          <label><span>{e(c["name"])}</span><input type="text" name="name" required autocomplete="name" maxlength="120"></label>
+          <label><span>{e(c["email"])}</span><input type="email" name="email" required autocomplete="email" maxlength="200"></label>
+        </div>
+        <label><span>{e(c["message"])}</span><textarea name="message" required rows="5" maxlength="4000"></textarea></label>
+        <div class="actions">
+          <button type="submit" class="send">{e(c["send"])}</button>
+          <span class="direct">{e(c["direct"])} {mail_link}</span>
+        </div>
+        <p class="status" role="status" aria-live="polite"></p>
+        <p class="note">{e(c["note"])}</p>
+      </form>"""
+
+def contact_section(lang, root):
+    c = CONTACT[lang]
+    page = BASE if lang == "en" else f"{BASE}{lang}/"
+    return f"""<section class="contact" id="contact">
+  <div class="wrap">
+    <div class="text reveal">
+      <div class="eyebrow">{e(c["eyebrow"])}</div>
+      <h2>{e(c["h"])}</h2>
+      <p>{e(c["sub"])}</p>
+    </div>
+    <div class="reveal d1">
+      {contact_form(lang, root, page + "#contact")}
+    </div>
+  </div>
+</section>
+<script src="{root}contact.js" defer></script>"""
+
 def page(lang):
     t = T[lang]
     root = "" if lang == "en" else "../"
@@ -693,6 +742,8 @@ def page(lang):
   </div>
 </section>
 
+{contact_section(lang, root)}
+
 <section class="closing">
   <div class="wrap">
     <div class="box reveal">
@@ -706,7 +757,7 @@ def page(lang):
 <footer>
   <div class="wrap">
     <a class="brand" href="{href(lang)}"><img src="{root}img/icon.png" alt="">Billow</a>
-    <nav><a href="{root}support.html">{e(t["nav_support"])}</a><a href="{root}privacy.html">{e(t["privacy_policy"])}</a><a href="{root}terms.html">{e(TERMS[lang])}</a></nav>
+    <nav><a href="{root}support.html">{e(t["nav_support"])}</a><a href="#contact">{e(CONTACT[lang]["nav"])}</a><a href="{root}privacy.html">{e(t["privacy_policy"])}</a><a href="{root}terms.html">{e(TERMS[lang])}</a></nav>
     <span>© 2026 <a class="author" href="https://www.linkedin.com/in/ervin-capi/" rel="me noopener" target="_blank">Ervin Capi<svg viewBox="0 0 24 24" aria-label="LinkedIn" role="img"><path d="M20.4 2H3.6A1.6 1.6 0 0 0 2 3.6v16.8A1.6 1.6 0 0 0 3.6 22h16.8a1.6 1.6 0 0 0 1.6-1.6V3.6A1.6 1.6 0 0 0 20.4 2zM8 19H5v-9h3zM6.5 8.7a1.7 1.7 0 1 1 0-3.4 1.7 1.7 0 0 1 0 3.4zM19 19h-3v-4.6c0-1.1 0-2.5-1.5-2.5S12.7 13 12.7 14.3V19h-3v-9h2.9v1.2a3.2 3.2 0 0 1 2.9-1.6c3.1 0 3.6 2 3.6 4.7z"/></svg></a> · {e(t["logos_by"])} <a href="https://logo.dev">Logo.dev</a></span>
   </div>
 </footer>

@@ -373,6 +373,29 @@ footer .author:hover { color: var(--accent); text-decoration: none; }
   .try { padding-top: 72px; }
   .demo .phone { width: 300px; }
 }
+
+/* ---------- contact ---------- */
+.contact { padding: 24px 0 96px; }
+.contact .wrap { display: grid; grid-template-columns: .8fr 1.2fr; gap: 56px; align-items: start; }
+.contact h2 { font-size: clamp(30px, 3.8vw, 42px); line-height: 1.1; margin: 0 0 14px; }
+.contact .text p { color: var(--muted); margin: 0; max-width: 40ch; }
+.contact-form { background: var(--surface); border: 1px solid var(--line); border-radius: 24px; padding: 28px; display: grid; gap: 14px; position: relative; }
+.contact-form .two { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.contact-form label { display: grid; gap: 6px; font-size: 13px; font-weight: 600; color: var(--muted); }
+.contact-form input, .contact-form textarea { font: inherit; font-size: 16px; color: var(--ink); background: var(--ground); border: 1px solid var(--line); border-radius: 12px; padding: 11px 14px; width: 100%; outline: none; transition: border-color .2s, box-shadow .2s; }
+.contact-form input:focus, .contact-form textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 20%, transparent); }
+.contact-form textarea { resize: vertical; min-height: 130px; }
+.contact-form .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 18px; }
+.contact-form .send { font: inherit; font-size: 15px; font-weight: 600; color: #fff; background: var(--accent); border: 0; border-radius: 12px; padding: 12px 22px; cursor: pointer; transition: transform .2s, background .2s; }
+.contact-form .send:hover { transform: translateY(-1px); background: color-mix(in srgb, var(--accent) 85%, #000); }
+.contact-form .send:disabled { opacity: .6; cursor: default; transform: none; }
+.contact-form .direct { font-size: 14px; color: var(--muted); }
+.contact-form .status { margin: 0; font-size: 14px; min-height: 1.4em; color: var(--muted); }
+.contact-form .status.ok { color: #15803D; font-weight: 600; }
+.contact-form .status.err { color: #B91C1C; }
+.contact-form .note { margin: 0; font-size: 12px; color: var(--muted); }
+@media (max-width: 960px) { .contact .wrap { grid-template-columns: 1fr; gap: 28px; } }
+@media (max-width: 640px) { .contact-form { padding: 20px; border-radius: 18px; } .contact-form .two { grid-template-columns: 1fr; } }
 </style>
 
 </head>
@@ -608,6 +631,37 @@ footer .author:hover { color: var(--accent); text-decoration: none; }
   </div>
 </section>
 
+<section class="contact" id="contact">
+  <div class="wrap">
+    <div class="text reveal">
+      <div class="eyebrow">Kontakt</div>
+      <h2>Schreib mir.</h2>
+      <p>Eine Frage, eine Idee oder ein Fehler? Schreib mir und ich antworte innerhalb von zwei Werktagen.</p>
+    </div>
+    <div class="reveal d1">
+      <form id="contact-form" class="contact-form" action="https://formsubmit.co/ecapi88@gmail.com" method="POST" data-sending="Wird gesendet…" data-sent="Danke, deine Nachricht ist unterwegs." data-error="Senden fehlgeschlagen. Schreib mir direkt an &lt;a href=&quot;mailto:ecapi88@gmail.com&quot;&gt;ecapi88@gmail.com&lt;/a&gt;.">
+        <input type="hidden" name="_subject" value="Nachricht von billow-app.org">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_next" value="https://billow-app.org/de/#contact">
+        <input type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px">
+        <div class="two">
+          <label><span>Dein Name</span><input type="text" name="name" required autocomplete="name" maxlength="120"></label>
+          <label><span>Deine E-Mail</span><input type="email" name="email" required autocomplete="email" maxlength="200"></label>
+        </div>
+        <label><span>Nachricht</span><textarea name="message" required rows="5" maxlength="4000"></textarea></label>
+        <div class="actions">
+          <button type="submit" class="send">Nachricht senden</button>
+          <span class="direct">Oder per E-Mail <a href="mailto:ecapi88@gmail.com">ecapi88@gmail.com</a></span>
+        </div>
+        <p class="status" role="status" aria-live="polite"></p>
+        <p class="note">Zugestellt über FormSubmit und nur für die Antwort verwendet.</p>
+      </form>
+    </div>
+  </div>
+</section>
+<script src="../contact.js" defer></script>
+
 <section class="closing">
   <div class="wrap">
     <div class="box reveal">
@@ -621,7 +675,7 @@ footer .author:hover { color: var(--accent); text-decoration: none; }
 <footer>
   <div class="wrap">
     <a class="brand" href="../de/index.html"><img src="../img/icon.png" alt="">Billow</a>
-    <nav><a href="../support.html">Support</a><a href="../privacy.html">Datenschutzerklärung</a><a href="../terms.html">Nutzungsbedingungen</a></nav>
+    <nav><a href="../support.html">Support</a><a href="#contact">Kontakt</a><a href="../privacy.html">Datenschutzerklärung</a><a href="../terms.html">Nutzungsbedingungen</a></nav>
     <span>© 2026 <a class="author" href="https://www.linkedin.com/in/ervin-capi/" rel="me noopener" target="_blank">Ervin Capi<svg viewBox="0 0 24 24" aria-label="LinkedIn" role="img"><path d="M20.4 2H3.6A1.6 1.6 0 0 0 2 3.6v16.8A1.6 1.6 0 0 0 3.6 22h16.8a1.6 1.6 0 0 0 1.6-1.6V3.6A1.6 1.6 0 0 0 20.4 2zM8 19H5v-9h3zM6.5 8.7a1.7 1.7 0 1 1 0-3.4 1.7 1.7 0 0 1 0 3.4zM19 19h-3v-4.6c0-1.1 0-2.5-1.5-2.5S12.7 13 12.7 14.3V19h-3v-9h2.9v1.2a3.2 3.2 0 0 1 2.9-1.6c3.1 0 3.6 2 3.6 4.7z"/></svg></a> · Händlerlogos von <a href="https://logo.dev">Logo.dev</a></span>
   </div>
 </footer>
