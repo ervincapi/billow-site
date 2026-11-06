@@ -287,6 +287,51 @@ document.getElementById("lang").addEventListener("change", function (e) {
   }, { rootMargin: "0px 0px -8% 0px", threshold: 0.08 });
   els.forEach(function (el) { io.observe(el); });
 })();
+(function () {
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var bar = document.querySelector(".progress");
+  function onScroll() {
+    var h = document.documentElement, max = h.scrollHeight - h.clientHeight;
+    bar.style.setProperty("--p", max > 0 ? (h.scrollTop / max).toFixed(4) : 0);
+  }
+  window.addEventListener("scroll", onScroll, { passive: true }); onScroll();
+  var hero = document.getElementById("hero");
+  if (hero && !reduce && window.matchMedia("(pointer: fine)").matches) {
+    hero.addEventListener("pointermove", function (ev) {
+      var r = hero.getBoundingClientRect();
+      hero.style.setProperty("--mx", ((ev.clientX - r.left) / r.width * 2 - 1).toFixed(3));
+      hero.style.setProperty("--my", ((ev.clientY - r.top) / r.height * 2 - 1).toFixed(3));
+    });
+    hero.addEventListener("pointerleave", function () { hero.style.setProperty("--mx", 0); hero.style.setProperty("--my", 0); });
+  }
+  document.querySelectorAll(".tile").forEach(function (tile) {
+    tile.addEventListener("pointermove", function (ev) {
+      var r = tile.getBoundingClientRect();
+      tile.style.setProperty("--x", (ev.clientX - r.left) + "px");
+      tile.style.setProperty("--y", (ev.clientY - r.top) + "px");
+    });
+  });
+  var counters = document.querySelectorAll("[data-count]");
+  if (counters.length && "IntersectionObserver" in window && !reduce) {
+    var cio = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        cio.unobserve(en.target);
+        var raw = en.target.getAttribute("data-count"), m = raw.match(/^([0-9]+)(.*)$/);
+        if (!m) return;
+        var target = parseInt(m[1], 10), suffix = m[2], start = null;
+        function step(ts) {
+          if (!start) start = ts;
+          var p = Math.min(1, (ts - start) / 1400), eased = 1 - Math.pow(1 - p, 3);
+          en.target.textContent = Math.round(target * eased) + suffix;
+          if (p < 1) requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+      });
+    }, { threshold: 0.6 });
+    counters.forEach(function (c) { cio.observe(c); });
+  }
+})();
 </script>"""
 
 e = html.escape
@@ -309,6 +354,7 @@ HERO_CARDS = {
   "it": [("Prima dello stipendio", "84,97 €"), ("La prova finisce", "tra 2 giorni"), ("Prezzo aumentato", "+3,00 €")],
   "sq": [("Para pagës", "84,97 €"), ("Prova mbaron", "pas 2 ditësh"), ("Çmimi u rrit", "+3,00 €")],
 }
+SERVICES = ["Netflix", "Spotify", "Disney+", "iCloud+", "YouTube Premium", "Apple Music", "Amazon Prime", "ChatGPT", "Adobe Creative Cloud", "Microsoft 365", "Dropbox", "Strava", "Duolingo", "The New York Times", "PlayStation Plus", "Canva", "Notion", "HBO Max"]
 # Stats strip under the hero: (value, label) x3.
 STATS = {
   "en": [("500+", "services with logos"), ("5", "languages, every currency"), ("0", "accounts, servers or trackers")],
@@ -333,7 +379,8 @@ def page(lang):
     cards = "\n      ".join(
         f'<div class="card c{i + 1}"><span class="ci {cls}">{svg}</span><span><small>{e(a)}</small><strong>{e(b)}</strong></span></div>'
         for i, ((cls, svg), (a, b)) in enumerate(zip(CARD_ICONS, HERO_CARDS[lang])))
-    stats = "\n      ".join(f'<div class="stat"><b>{e(v)}</b><span>{e(l)}</span></div>' for v, l in STATS[lang])
+    ticker = "".join(f'<span><i>{n[0]}</i>{e(n)}</span>' for n in SERVICES)
+    stats = "\n      ".join(f'<div class="stat"><b data-count="{e(v)}">{e(v)}</b><span>{e(l)}</span></div>' for v, l in STATS[lang])
     shots = {"s1": "detail", "s2": "calendar", "s5": "insights", "s3": "onboarding", "s4": "add", "s6": "mailboxes"}
     sections = []
     for i, k in enumerate(["s1", "s2", "s5", "s3", "s4", "s6"]):
@@ -384,6 +431,7 @@ def page(lang):
 {style}
 </head>
 <body>
+<div class="progress" aria-hidden="true"></div>
 
 <header class="top">
   <div class="wrap">
@@ -397,7 +445,10 @@ def page(lang):
   </div>
 </header>
 
-<section class="hero">
+<section class="hero" id="hero">
+  <div class="orbs" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+  <div class="floor" aria-hidden="true"></div>
+  <div class="beam" aria-hidden="true"></div>
   <div class="wrap">
     <div>
       <span class="kicker"><i>{SPARK}</i>{e(kicker)}</span>
@@ -409,10 +460,12 @@ def page(lang):
       </div>
       <div class="pills">{pills}</div>
     </div>
-    <div class="visual" aria-hidden="false">
+    <div class="visual">
       <div class="ring" aria-hidden="true"></div>
-      <div class="phone"><img src="{root}img/home.jpg" alt="{e(t["alt_home"])}" width="414" height="900" fetchpriority="high"></div>
-      {cards}
+      <div class="stage">
+        <div class="phone"><div class="screen"><img src="{root}img/home.jpg" alt="{e(t["alt_home"])}" width="414" height="900" fetchpriority="high"></div></div>
+        {cards}
+      </div>
     </div>
   </div>
 </section>
@@ -424,6 +477,8 @@ def page(lang):
     </div>
   </div>
 </section>
+
+<div class="ticker" aria-hidden="true"><div class="track">{ticker}{ticker}</div></div>
 
 <main id="features">
 

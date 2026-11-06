@@ -75,9 +75,13 @@ header.top nav a.cta:hover { background: color-mix(in srgb, var(--accent) 85%, #
 .pill::before { content: ""; width: 16px; height: 16px; border-radius: 50%; background: rgba(125,211,230,.25) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237DD3E6' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E") center/9px no-repeat; }
 
 .visual { position: relative; justify-self: center; width: 100%; max-width: 520px; display: grid; place-items: center; padding: 24px 0; }
-.visual .ring { position: absolute; width: 520px; height: 520px; border-radius: 50%; background: conic-gradient(from 180deg, rgba(125,211,230,.0), rgba(125,211,230,.55), rgba(253,230,138,.35), rgba(52,211,153,.4), rgba(125,211,230,.0)); filter: blur(42px); opacity: .75; animation: spin 26s linear infinite; }
+.visual .ring { position: absolute; width: 440px; height: 440px; border-radius: 50%; background: conic-gradient(from 180deg, rgba(125,211,230,.0), rgba(125,211,230,.55), rgba(253,230,138,.35), rgba(52,211,153,.4), rgba(125,211,230,.0)); filter: blur(42px); opacity: .75; animation: spin 26s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
-.visual .phone { position: relative; z-index: 1; animation: float 7s ease-in-out infinite; }
+.visual .phone { position: relative; z-index: 1; width: 264px; border-radius: 42px; padding: 9px; animation: float 7s ease-in-out infinite; }
+.visual .phone::before { top: 16px; height: 20px; }
+.visual .screen { aspect-ratio: 414 / 700; border-radius: 33px; }
+.visual .screen img { animation: scrollShot 16s ease-in-out 1.5s infinite alternate; will-change: transform; }
+@keyframes scrollShot { 0%, 14% { transform: translateY(0); } 86%, 100% { transform: translateY(-22.2%); } }
 @keyframes float { 0%, 100% { transform: translateY(0) rotate(-2.5deg); } 50% { transform: translateY(-14px) rotate(-1.5deg); } }
 .card { position: absolute; z-index: 2; display: flex; align-items: center; gap: 12px; padding: 12px 16px 12px 12px; border-radius: 18px; background: rgba(255,255,255,.92); color: #0B1220; box-shadow: 0 20px 50px -18px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.6) inset; backdrop-filter: blur(14px); animation: float 8s ease-in-out infinite; }
 @media (prefers-color-scheme: dark) { .card { background: rgba(18,28,37,.92); color: #EAF1F5; box-shadow: 0 20px 50px -18px rgba(0,0,0,.8), 0 0 0 1px rgba(255,255,255,.08) inset; } }
@@ -88,14 +92,16 @@ header.top nav a.cta:hover { background: color-mix(in srgb, var(--accent) 85%, #
 .card .ci.mint { background: linear-gradient(135deg, #34D399, #059669); }
 .card small { display: block; font-size: 12px; font-weight: 600; letter-spacing: .02em; color: var(--muted); line-height: 1.2; }
 .card strong { display: block; font-size: 17px; font-weight: 800; letter-spacing: -.02em; line-height: 1.2; font-variant-numeric: tabular-nums; white-space: nowrap; }
-.card.c1 { left: -8%; top: 16%; animation-delay: -2s; }
-.card.c2 { right: -10%; top: 42%; animation-delay: -4.5s; }
-.card.c3 { left: -2%; bottom: 14%; animation-delay: -6s; }
+.card.c1 { left: 0; top: 17%; animation-delay: -2s; }
+.card.c2 { right: 0; top: 46%; animation-delay: -4.5s; }
+.card.c3 { left: 3%; bottom: 13%; animation-delay: -6s; }
 
 /* ---------- phone frame ---------- */
 .phone { width: 300px; max-width: 80vw; border-radius: 46px; padding: 10px; background: #0B1117; position: relative; box-shadow: 0 40px 90px -30px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.08) inset, 0 0 0 2px #1B2630; }
 .phone::before { content: ""; position: absolute; top: 20px; left: 50%; transform: translateX(-50%); width: 28%; height: 24px; border-radius: 999px; background: #0B1117; z-index: 1; }
 .phone img { display: block; width: 100%; border-radius: 37px; }
+.phone .screen { overflow: hidden; border-radius: 37px; background: #fff; }
+.phone .screen img { border-radius: 0; }
 
 /* ---------- stats ---------- */
 .stats { position: relative; z-index: 2; margin-top: -56px; }
@@ -184,7 +190,8 @@ footer nav a:hover { color: var(--ink); }
 .js .reveal.in { opacity: 1; transform: none; }
 .js .reveal.d1 { transition-delay: .1s; } .js .reveal.d2 { transition-delay: .2s; } .js .reveal.d3 { transition-delay: .3s; }
 @media (prefers-reduced-motion: reduce) {
-  .hero::before, .visual .ring, .visual .phone, .card, .closing .box::before { animation: none !important; }
+  .hero::before, .visual .ring, .visual .phone, .visual .screen img, .card, .closing .box::before { animation: none !important; }
+  .visual .screen { aspect-ratio: auto; }
   .js .reveal { opacity: 1; transform: none; transition: none; }
   html { scroll-behavior: auto; }
 }
@@ -209,7 +216,7 @@ footer nav a:hover { color: var(--ink); }
   .lang select { padding: 7px 26px 7px 12px; }
   .hero h1 { font-size: clamp(36px, 11vw, 48px); }
   .visual { padding: 12px 0; }
-  .visual .phone { width: 250px; }
+  .visual .phone { width: 224px; }
   .card { padding: 10px 13px 10px 10px; border-radius: 15px; }
   .card .ci { width: 32px; height: 32px; border-radius: 10px; } .card .ci svg { width: 17px; height: 17px; }
   .card small { font-size: 11px; } .card strong { font-size: 14.5px; }
@@ -226,4 +233,68 @@ footer nav a:hover { color: var(--ink); }
   footer .wrap { justify-content: center; text-align: center; }
 }
 @media (max-width: 400px) { .grid4 { grid-template-columns: 1fr; } }
+
+/* ---------- ambient + futuristic layers ---------- */
+@property --angle { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
+body::before { content: ""; position: fixed; inset: -20%; z-index: -1; pointer-events: none; opacity: .55;
+  background: radial-gradient(30% 30% at 15% 20%, var(--glow), transparent 70%), radial-gradient(26% 30% at 85% 60%, color-mix(in srgb, var(--accent-2) 14%, transparent), transparent 70%), radial-gradient(22% 26% at 40% 90%, color-mix(in srgb, #FBBF24 10%, transparent), transparent 70%);
+  filter: blur(40px); animation: drift 36s ease-in-out infinite alternate; }
+.progress { position: fixed; top: 0; left: 0; height: 3px; width: 100%; z-index: 30; transform-origin: 0 50%; transform: scaleX(var(--p, 0)); background: linear-gradient(90deg, var(--accent), var(--accent-2), #A7F3D0); box-shadow: 0 0 12px var(--accent-2); pointer-events: none; }
+
+.hero { --mx: 0; --my: 0; }
+.hero .orbs { position: absolute; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; transform: translate3d(calc(var(--mx) * -18px), calc(var(--my) * -14px), 0); transition: transform .6s cubic-bezier(.2,.8,.2,1); }
+.hero .orbs span { position: absolute; border-radius: 50%; filter: blur(2px); opacity: .55; background: radial-gradient(circle at 35% 35%, rgba(255,255,255,.65), rgba(125,211,230,.35) 45%, rgba(125,211,230,0) 72%); animation: orb var(--d, 14s) ease-in-out var(--delay, 0s) infinite alternate; box-shadow: 0 0 40px rgba(125,211,230,.35); }
+.hero .orbs span:nth-child(1) { width: 120px; height: 120px; left: 6%; top: 18%; --d: 16s; }
+.hero .orbs span:nth-child(2) { width: 54px; height: 54px; left: 30%; top: 72%; --d: 12s; --delay: -3s; }
+.hero .orbs span:nth-child(3) { width: 24px; height: 24px; left: 44%; top: 22%; --d: 9s; --delay: -5s; opacity: .8; }
+.hero .orbs span:nth-child(4) { width: 90px; height: 90px; left: 78%; top: 8%; --d: 18s; --delay: -7s; background: radial-gradient(circle at 35% 35%, rgba(255,255,255,.6), rgba(253,230,138,.35) 45%, rgba(253,230,138,0) 72%); box-shadow: 0 0 40px rgba(253,230,138,.3); }
+.hero .orbs span:nth-child(5) { width: 38px; height: 38px; left: 90%; top: 64%; --d: 11s; --delay: -2s; background: radial-gradient(circle at 35% 35%, rgba(255,255,255,.6), rgba(52,211,153,.35) 45%, rgba(52,211,153,0) 72%); box-shadow: 0 0 40px rgba(52,211,153,.3); }
+.hero .orbs span:nth-child(6) { width: 14px; height: 14px; left: 62%; top: 84%; --d: 8s; --delay: -4s; opacity: .9; }
+@keyframes orb { from { transform: translate3d(0, 0, 0) scale(1); } to { transform: translate3d(28px, -46px, 0) scale(1.15); } }
+.hero .floor { position: absolute; left: -20%; right: -20%; bottom: -2px; height: 46%; z-index: -1; pointer-events: none; transform: perspective(700px) rotateX(62deg); transform-origin: 50% 100%; opacity: .5;
+  background: linear-gradient(rgba(125,211,230,.22) 1.5px, transparent 1.5px) 0 0 / 100% 48px, linear-gradient(90deg, rgba(125,211,230,.22) 1.5px, transparent 1.5px) 0 0 / 48px 100%;
+  -webkit-mask-image: linear-gradient(180deg, transparent, #000 45%, #000 80%, transparent); mask-image: linear-gradient(180deg, transparent, #000 45%, #000 80%, transparent); animation: floor 2.4s linear infinite; }
+@keyframes floor { to { background-position: 0 48px, 0 0; } }
+.hero .beam { position: absolute; top: -20%; bottom: -20%; left: -30%; width: 18%; z-index: 0; pointer-events: none; background: linear-gradient(90deg, transparent, rgba(255,255,255,.07), rgba(255,255,255,.14), rgba(255,255,255,.07), transparent); transform: skewX(-18deg); animation: beam 11s ease-in-out infinite; }
+@keyframes beam { 0%, 55% { left: -30%; } 100% { left: 130%; } }
+.hero h1 span { background-size: 220% auto; animation: shimmer 7s linear infinite; }
+@keyframes shimmer { to { background-position: -220% center; } }
+.hero .wrap { position: relative; z-index: 1; }
+.visual { perspective: 1400px; }
+.visual .stage { position: relative; width: 100%; display: grid; place-items: center; transform-style: preserve-3d; transform: rotateY(calc(var(--mx) * 9deg)) rotateX(calc(var(--my) * -9deg)); transition: transform .5s cubic-bezier(.2,.8,.2,1); }
+.visual .stage .card { transform: translateZ(60px); }
+.visual .stage .card.c1 { animation-name: floatZ; } .visual .stage .card.c2 { animation-name: floatZ; } .visual .stage .card.c3 { animation-name: floatZ; }
+@keyframes floatZ { 0%, 100% { transform: translateZ(60px) translateY(0); } 50% { transform: translateZ(60px) translateY(-12px); } }
+.visual .ring { animation: spin 26s linear infinite, pulse 6s ease-in-out infinite alternate; }
+@keyframes pulse { from { opacity: .55; } to { opacity: .9; } }
+
+.stats .wrap > div { position: relative; isolation: isolate; border: 1px solid transparent; background: linear-gradient(var(--surface), var(--surface)) padding-box, conic-gradient(from var(--angle), var(--line) 0 60%, var(--accent-2) 75%, var(--line) 90%) border-box; animation: rotateAngle 8s linear infinite; }
+@keyframes rotateAngle { to { --angle: 360deg; } }
+.feature .shot { border: 1px solid transparent; background-clip: padding-box, border-box; }
+.feature .shot { background: linear-gradient(160deg, color-mix(in srgb, var(--accent) 14%, var(--surface)), var(--surface) 55%, color-mix(in srgb, var(--accent-2) 10%, var(--surface))) padding-box, conic-gradient(from var(--angle), var(--line) 0 55%, var(--accent) 70%, var(--accent-2) 78%, var(--line) 92%) border-box; animation: rotateAngle 10s linear infinite; }
+.feature.flip .shot { background: linear-gradient(200deg, color-mix(in srgb, #FBBF24 12%, var(--surface)), var(--surface) 55%, color-mix(in srgb, var(--accent) 10%, var(--surface))) padding-box, conic-gradient(from var(--angle), var(--line) 0 55%, #FBBF24 70%, var(--accent-2) 78%, var(--line) 92%) border-box; }
+
+.ticker { padding: 56px 0 0; overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent); mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent); }
+.ticker .track { display: flex; gap: 12px; width: max-content; animation: ticker 48s linear infinite; }
+.ticker:hover .track { animation-play-state: paused; }
+.ticker .track span { display: inline-flex; align-items: center; gap: 10px; padding: 9px 18px 9px 12px; border-radius: 999px; font-size: 14px; font-weight: 600; color: var(--muted); background: var(--surface); border: 1px solid var(--line); white-space: nowrap; transition: color .2s, border-color .2s, transform .2s; }
+.ticker .track span:hover { color: var(--ink); border-color: var(--accent); transform: translateY(-2px); }
+.ticker .track span i { width: 24px; height: 24px; border-radius: 8px; display: grid; place-items: center; font: 800 11px/1 -apple-system, BlinkMacSystemFont, sans-serif; font-style: normal; color: #fff; background: linear-gradient(135deg, var(--accent), var(--accent-2)); }
+@keyframes ticker { to { transform: translateX(-50%); } }
+
+.tile { overflow: hidden; }
+.tile::before { content: ""; position: absolute; inset: 0; border-radius: inherit; background: radial-gradient(260px circle at var(--x, 50%) var(--y, 50%), color-mix(in srgb, var(--accent) 22%, transparent), transparent 65%); opacity: 0; transition: opacity .4s; pointer-events: none; }
+.tile:hover::before { opacity: 1; }
+.tile > * { position: relative; }
+.badge { position: relative; overflow: hidden; }
+.badge::after { content: ""; position: absolute; top: -50%; bottom: -50%; left: -40%; width: 30%; background: linear-gradient(90deg, transparent, rgba(255,255,255,.25), transparent); transform: skewX(-20deg); animation: beam 6s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  body::before, .hero .orbs span, .hero .floor, .hero .beam, .hero h1 span, .visual .ring, .stats .wrap > div, .feature .shot, .ticker .track, .badge::after, .visual .stage .card { animation: none !important; }
+  .visual .stage, .hero .orbs { transform: none !important; transition: none; }
+}
+@media (max-width: 960px) {
+  .hero .floor { height: 30%; }
+  .visual .stage { transform: none; }
+}
 </style>
