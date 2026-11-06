@@ -594,6 +594,172 @@ def contact_section(lang, root):
 </section>
 <script src="{root}contact.js" defer></script>"""
 
+# ---- Pricing: plan names, Pro features and the Free/Pro split come from the app's String Catalog; prices from App/Billow.storekit.
+PAYWALL = {
+ "paywall.badge": {
+  "en": "BILLOW PRO",
+  "de": "BILLOW PRO",
+  "es": "BILLOW PRO",
+  "it": "BILLOW PRO",
+  "sq": "BILLOW PRO"
+ },
+ "paywall.feature.family": {
+  "en": "Shared with your family via Family Sharing",
+  "de": "Mit der Familie über Familienfreigabe geteilt",
+  "es": "Compartido con tu familia mediante En familia",
+  "it": "Condiviso con la famiglia tramite In famiglia",
+  "sq": "Ndahet me familjen përmes Family Sharing"
+ },
+ "paywall.feature.letters": {
+  "en": "Cancellation letters for your country",
+  "de": "Kündigungsschreiben für dein Land",
+  "es": "Cartas de baja para tu país",
+  "it": "Lettere di disdetta per il tuo paese",
+  "sq": "Letra anulimi për vendin tuaj"
+ },
+ "paywall.feature.trials": {
+  "en": "Trial countdowns and price-change alerts",
+  "de": "Testphasen-Countdown und Preiswarnungen",
+  "es": "Cuenta atrás de pruebas y alertas de precio",
+  "it": "Conto alla rovescia prove e avvisi prezzi",
+  "sq": "Numërim mbrapsht për provat dhe njoftime për çmimet"
+ },
+ "paywall.feature.unlimited": {
+  "en": "Unlimited subscriptions",
+  "de": "Unbegrenzt viele Abos",
+  "es": "Suscripciones ilimitadas",
+  "it": "Abbonamenti illimitati",
+  "sq": "Abonime të pakufizuara"
+ },
+ "paywall.feature.widgets": {
+  "en": "All widgets, export, household sharing",
+  "de": "Alle Widgets, Export, Haushalt teilen",
+  "es": "Todos los widgets, exportación, uso compartido en casa",
+  "it": "Tutti i widget, esportazione, condivisione familiare",
+  "sq": "Të gjitha widget-et, eksporti, ndarja familjare"
+ },
+ "paywall.plan.lifetime": {
+  "en": "Lifetime",
+  "de": "Lebenslang",
+  "es": "De por vida",
+  "it": "A vita",
+  "sq": "Përgjithmonë"
+ },
+ "paywall.plan.monthly": {
+  "en": "Monthly",
+  "de": "Monatlich",
+  "es": "Mensual",
+  "it": "Mensile",
+  "sq": "Mujor"
+ },
+ "paywall.plan.yearly": {
+  "en": "Yearly",
+  "de": "Jährlich",
+  "es": "Anual",
+  "it": "Annuale",
+  "sq": "Vjetor"
+ },
+ "paywall.lifetime": {
+  "en": "Pay once, no subscription",
+  "de": "Einmal zahlen, kein Abo",
+  "es": "Pagas una vez, sin suscripción",
+  "it": "Paghi una volta, nessun abbonamento",
+  "sq": "Paguani një herë, pa abonim"
+ },
+ "paywall.monthly": {
+  "en": "Billed monthly, cancel anytime",
+  "de": "Monatlich abgerechnet, jederzeit kündbar",
+  "es": "Cobro mensual, cancela cuando quieras",
+  "it": "Addebito mensile, disdici quando vuoi",
+  "sq": "Faturohet çdo muaj, anuloni kurdo"
+ },
+ "paywall.sub": {
+  "en": "Free tracks 7. Pro tracks all of them and watches trials and prices for you.",
+  "de": "Kostenlos verwaltet 7. Pro verwaltet alle und behält Testphasen und Preise für dich im Blick.",
+  "es": "Gratis controla 7. Pro las controla todas y vigila pruebas y precios por ti.",
+  "it": "Gratis ne segue 7. Pro li segue tutti e tiene d'occhio prove e prezzi per te.",
+  "sq": "Falas ndjek 7. Pro i ndjek të gjitha dhe vëzhgon provat dhe çmimet për ju."
+ },
+ "paywall.cta.trial": {
+  "en": "Start 14-day free trial",
+  "de": "14 Tage kostenlos testen",
+  "es": "Empezar prueba gratis de 14 días",
+  "it": "Inizia la prova gratuita di 14 giorni",
+  "sq": "Filloni provën 14-ditore falas"
+ },
+ "paywall.redeem": {
+  "en": "Redeem code",
+  "de": "Code einlösen",
+  "es": "Canjear código",
+  "it": "Riscatta codice",
+  "sq": "Përdor kodin"
+ },
+ "paywall.yearly.trial": {
+  "en": "14 days free, then %@/year · %@/month",
+  "de": "14 Tage kostenlos, dann %@/Jahr · %@/Monat",
+  "es": "14 días gratis, luego %@/año · %@/mes",
+  "it": "14 giorni gratis, poi %@/anno · %@/mese",
+  "sq": "14 ditë falas, pastaj %@/vit · %@/muaj"
+ }
+}
+PRICES = {"monthly": "$2.99", "yearly": "$19.99", "yearly_month": "$1.67", "lifetime": "$49.99"}
+PRICING = {
+  "en": dict(nav="Pricing", eyebrow="Pricing", h="Free to start. Pro when you want it all.", free="Free", free_desc="Everything you need to stop forgetting.", free_feats=["Track up to 7 subscriptions", "Calendar, payday view and 3-month forecast", "Receipt and statement import, on device", "iCloud sync between your devices"], plus="Everything in Free, plus", per_month="/month", per_year="/year", once="one-time", popular="Most popular", trial="14 days free", save="Save 44%", lifetime_hint="Yours forever, every future update", no_fees="No fees on what you save, ever. Cancel in your Apple account at any time.", prices_note="Prices in US dollars; the App Store shows your local price.", codes_h="Discount codes", codes_soon="Coming soon", codes_body="Launch offers and promo codes are on the way. You'll redeem them in the app under Billow Pro › Redeem code.", codes_hint="Follow the site or the App Store page for the first codes."),
+  "de": dict(nav="Preise", eyebrow="Preise", h="Kostenlos starten. Pro, wenn du alles willst.", free="Kostenlos", free_desc="Alles, was du brauchst, um nichts mehr zu vergessen.", free_feats=["Bis zu 7 Abos verwalten", "Kalender, Zahltag-Ansicht und 3-Monats-Prognose", "Import aus Belegen und Kontoauszügen, auf dem Gerät", "iCloud-Sync zwischen deinen Geräten"], plus="Alles aus Kostenlos, plus", per_month="/Monat", per_year="/Jahr", once="einmalig", popular="Am beliebtesten", trial="14 Tage kostenlos", save="44 % sparen", lifetime_hint="Für immer deins, inklusive aller Updates", no_fees="Nie eine Gebühr auf deine Ersparnis. Jederzeit in deinem Apple-Konto kündbar.", prices_note="Preise in US-Dollar; der App Store zeigt deinen lokalen Preis.", codes_h="Rabattcodes", codes_soon="Bald verfügbar", codes_body="Startangebote und Promo-Codes sind unterwegs. Du löst sie in der App unter Billow Pro › Code einlösen ein.", codes_hint="Die ersten Codes erscheinen hier und auf der App-Store-Seite."),
+  "es": dict(nav="Precios", eyebrow="Precios", h="Gratis para empezar. Pro cuando lo quieras todo.", free="Gratis", free_desc="Todo lo que necesitas para dejar de olvidar.", free_feats=["Controla hasta 7 suscripciones", "Calendario, vista del día de pago y previsión a 3 meses", "Importación de recibos y extractos, en el dispositivo", "Sincronización iCloud entre tus dispositivos"], plus="Todo lo de Gratis, más", per_month="/mes", per_year="/año", once="pago único", popular="El más popular", trial="14 días gratis", save="Ahorra un 44 %", lifetime_hint="Tuyo para siempre, con todas las actualizaciones", no_fees="Nunca una comisión sobre lo que ahorras. Cancela en tu cuenta de Apple cuando quieras.", prices_note="Precios en dólares; el App Store muestra tu precio local.", codes_h="Códigos de descuento", codes_soon="Próximamente", codes_body="Las ofertas de lanzamiento y los códigos promocionales están en camino. Los canjearás en la app en Billow Pro › Canjear código.", codes_hint="Los primeros códigos aparecerán aquí y en la página del App Store."),
+  "it": dict(nav="Prezzi", eyebrow="Prezzi", h="Gratis per iniziare. Pro quando vuoi tutto.", free="Gratis", free_desc="Tutto ciò che serve per smettere di dimenticare.", free_feats=["Fino a 7 abbonamenti", "Calendario, vista stipendio e previsione a 3 mesi", "Import da ricevute ed estratti conto, sul dispositivo", "Sincronizzazione iCloud tra i tuoi dispositivi"], plus="Tutto di Gratis, più", per_month="/mese", per_year="/anno", once="una tantum", popular="Il più scelto", trial="14 giorni gratis", save="Risparmi il 44%", lifetime_hint="Tuo per sempre, con tutti gli aggiornamenti", no_fees="Mai una commissione su ciò che risparmi. Disdici dal tuo account Apple quando vuoi.", prices_note="Prezzi in dollari USA; l'App Store mostra il prezzo locale.", codes_h="Codici sconto", codes_soon="In arrivo", codes_body="Offerte di lancio e codici promozionali sono in arrivo. Li riscatterai nell'app in Billow Pro › Riscatta codice.", codes_hint="I primi codici compariranno qui e sulla pagina dell'App Store."),
+  "sq": dict(nav="Çmimet", eyebrow="Çmimet", h="Falas për të filluar. Pro kur doni gjithçka.", free="Falas", free_desc="Gjithçka që ju duhet për të mos harruar më.", free_feats=["Ndiqni deri në 7 abonime", "Kalendari, pamja e ditës së pagës dhe parashikimi 3-mujor", "Import nga faturat dhe pasqyrat bankare, në pajisje", "Sinkronizim iCloud mes pajisjeve tuaja"], plus="Gjithçka nga Falas, plus", per_month="/muaj", per_year="/vit", once="pagesë e vetme", popular="Më i zgjedhuri", trial="14 ditë falas", save="Kurseni 44%", lifetime_hint="I juaji përgjithmonë, me çdo përditësim", no_fees="Asnjë tarifë mbi atë që kurseni, kurrë. Anuloni nga llogaria juaj Apple në çdo kohë.", prices_note="Çmimet në dollarë amerikanë; App Store tregon çmimin tuaj lokal.", codes_h="Kodet e zbritjes", codes_soon="Së shpejti", codes_body="Ofertat e nisjes dhe kodet promocionale janë rrugës. Do t'i përdorni në aplikacion te Billow Pro › Përdor kodin.", codes_hint="Kodet e para do të shfaqen këtu dhe në faqen e App Store."),
+}
+
+def pricing_section(lang, root):
+    p = PRICING[lang]; w = lambda k: e(PAYWALL[k][lang])
+    pro_feats = [w("paywall.feature.unlimited"), w("paywall.feature.trials"), w("paywall.feature.widgets"), w("paywall.feature.letters"), w("paywall.feature.family")]
+    free_lis = "".join(f"<li>{e(x)}</li>" for x in p["free_feats"])
+    pro_lis = "".join(f"<li>{x}</li>" for x in pro_feats)
+    yearly_line = e(PAYWALL["paywall.yearly.trial"][lang]).replace("%@", PRICES["yearly"], 1).replace("%@", PRICES["yearly_month"], 1)
+    return f"""<section class="pricing" id="pricing">
+  <div class="wrap">
+    <div class="head reveal">
+      <div class="eyebrow">{e(p["eyebrow"])}</div>
+      <h2>{e(p["h"])}</h2>
+      <p class="sub">{w("paywall.sub")}</p>
+    </div>
+    <div class="plans">
+      <div class="plan reveal">
+        <h3>{e(p["free"])}</h3>
+        <div class="price"><b>$0</b></div>
+        <p>{e(p["free_desc"])}</p>
+        <ul>{free_lis}</ul>
+      </div>
+      <div class="plan pro reveal d1">
+        <div class="ribbon">{e(p["popular"])} · {e(p["trial"])}</div>
+        <h3><span class="badge-pro">{w("paywall.badge")}</span>{w("paywall.plan.yearly")}</h3>
+        <div class="price"><b>{PRICES["yearly"]}</b><span>{e(p["per_year"])}</span><em>{e(p["save"])}</em></div>
+        <p>{yearly_line}</p>
+        <div class="plus">{e(p["plus"])}</div>
+        <ul>{pro_lis}</ul>
+      </div>
+      <div class="plan stack reveal d2">
+        <div class="mini">
+          <h3><span class="badge-pro">{w("paywall.badge")}</span>{w("paywall.plan.monthly")}</h3>
+          <div class="price"><b>{PRICES["monthly"]}</b><span>{e(p["per_month"])}</span></div>
+          <p>{w("paywall.monthly")}</p>
+        </div>
+        <div class="mini">
+          <h3><span class="badge-pro">{w("paywall.badge")}</span>{w("paywall.plan.lifetime")}</h3>
+          <div class="price"><b>{PRICES["lifetime"]}</b><span>{e(p["once"])}</span></div>
+          <p>{w("paywall.lifetime")}. {e(p["lifetime_hint"])}.</p>
+        </div>
+      </div>
+    </div>
+    <div class="codes reveal">
+      <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9V6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v3a2.5 2.5 0 0 0 0 5v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-3a2.5 2.5 0 0 0 0-5z"/><path d="M9 9l6 6M15 9l-6 6"/></svg></div>
+      <div class="text"><strong>{e(p["codes_h"])} <span class="soon">{e(p["codes_soon"])}</span></strong><span>{e(p["codes_body"])}</span><small>{e(p["codes_hint"])}</small></div>
+    </div>
+    <p class="note">{e(p["no_fees"])} {e(p["prices_note"])}</p>
+  </div>
+</section>"""
+
 def page(lang):
     t = T[lang]
     root = "" if lang == "en" else "../"
@@ -668,6 +834,7 @@ def page(lang):
     <nav>
       <a class="hide-sm" href="#features">{e(t["nav_features"])}</a>
       <a class="hide-sm" href="#try">{e(TRY[lang]["nav"])}</a>
+      <a class="hide-sm" href="#pricing">{e(PRICING[lang]["nav"])}</a>
       <a class="hide-sm" href="#privacy">{e(t["nav_privacy"])}</a>
       <a class="cta" href="{root}support.html">{e(t["nav_support"])}</a>
       <label class="lang"><span class="visually-hidden">{e(t["lang_label"])}</span><select id="lang" aria-label="{e(t["lang_label"])}">{options}</select></label>
@@ -715,6 +882,8 @@ def page(lang):
 </main>
 
 {more_section(lang, root)}
+
+{pricing_section(lang, root)}
 
 <section class="gallery">
   <div class="head reveal"><h2>{e(t["gallery"])}</h2></div>
