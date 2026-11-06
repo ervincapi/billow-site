@@ -425,4 +425,29 @@ footer .author:hover { color: var(--accent); text-decoration: none; }
 .theme-toggle[data-mode="system"] .i-system, .theme-toggle:not([data-mode]) .i-system { display: block; }
 .theme-toggle[data-mode="light"] .i-light { display: block; }
 .theme-toggle[data-mode="dark"] .i-dark { display: block; }
+
+/* ---------- "it's interactive" hint ---------- */
+.try .wrap { position: relative; }
+.try .hint { position: absolute; left: 41%; top: 54%; width: 230px; color: var(--accent); pointer-events: none; z-index: 2; }
+.hint-label { display: block; font-size: 16px; font-weight: 600; font-style: italic; letter-spacing: -.01em; transform: rotate(-5deg); transform-origin: left bottom; margin: 0 0 2px 6px; }
+.hint-arrow { width: 200px; height: auto; display: block; }
+.hint-arrow-down { display: none; width: 44px; height: auto; margin: 4px auto 0; }
+.js .hint .line { stroke-dasharray: 320; stroke-dashoffset: 320; transition: stroke-dashoffset 1.1s cubic-bezier(.3,.7,.2,1) .5s; }
+.js .hint .head { opacity: 0; transition: opacity .3s 1.4s; }
+.js .hint.in .line { stroke-dashoffset: 0; }
+.js .hint.in .head { opacity: 1; }
+.demo .phone .live { position: absolute; top: -15px; left: 50%; transform: translateX(-50%); z-index: 3; display: inline-flex; align-items: center; gap: 7px; white-space: nowrap; font-size: 12px; font-weight: 700; letter-spacing: .02em; color: var(--ground); background: var(--ink); border-radius: 999px; padding: 6px 13px; box-shadow: 0 8px 20px -8px rgba(0,0,0,.5); }
+.demo .phone .live i { width: 8px; height: 8px; border-radius: 50%; background: #34D399; animation: ping 1.8s ease-out infinite; }
+@keyframes ping { 0% { box-shadow: 0 0 0 0 rgba(52,211,153,.7); } 100% { box-shadow: 0 0 0 10px rgba(52,211,153,0); } }
+.demo .phone.nudge { animation: nudge 1s ease; }
+@keyframes nudge { 0%, 100% { transform: none; } 20% { transform: rotate(-2.5deg) scale(1.03); } 45% { transform: rotate(2deg) scale(1.03); } 70% { transform: rotate(-1deg) scale(1.01); } }
+@media (prefers-reduced-motion: reduce) { .demo .phone .live i, .demo .phone.nudge { animation: none; } .js .hint .line { stroke-dashoffset: 0; transition: none; } .js .hint .head { opacity: 1; transition: none; } }
+@media (max-width: 1100px) { .try .hint { left: 44%; top: 50%; width: 190px; } .hint-arrow { width: 160px; } }
+@media (max-width: 960px) {
+  .try .hint { position: static; width: auto; text-align: center; margin: -8px auto 0; }
+  .hint-label { transform: none; margin: 0; }
+  .hint-arrow { display: none; }
+  .hint-arrow-down { display: block; }
+  .js .hint .line { stroke-dasharray: 160; stroke-dashoffset: 160; }
+}
 </style>

@@ -146,3 +146,11 @@
   var reset = document.getElementById("demo-reset"); if (reset) reset.addEventListener("click", function () { seed(); render(); });
   seed(); render();
 })();
+
+/* Nudge the demo phone when someone arrives via a "Try it" link, so it reads as interactive, not a picture. */
+(function () {
+  var phone = document.querySelector(".demo .phone"); if (!phone) return;
+  function nudge() { phone.classList.remove("nudge"); void phone.offsetWidth; phone.classList.add("nudge"); setTimeout(function () { phone.classList.remove("nudge"); }, 1100); }
+  if (location.hash === "#try") setTimeout(nudge, 700);
+  document.querySelectorAll('a[href="#try"]').forEach(function (a) { a.addEventListener("click", function () { setTimeout(nudge, 650); }); });
+})();
