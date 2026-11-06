@@ -13,6 +13,7 @@ STYLE = theme_aware(pathlib.Path(sys.argv[2]).read_text())
 BASE = "https://billow-app.org/"
 DEMO_VER = hashlib.sha1((SITE / "demo.js").read_bytes()).hexdigest()[:8]
 THEME_VER = hashlib.sha1((SITE / "theme.js").read_bytes()).hexdigest()[:8]
+CONTACT_VER = hashlib.sha1((SITE / "contact.js").read_bytes()).hexdigest()[:8]
 
 LANGS = ["en", "de", "es", "it", "sq"]
 NAMES = {"en": "English", "de": "Deutsch", "es": "Español", "it": "Italiano", "sq": "Shqip"}
@@ -552,17 +553,17 @@ def try_section(lang, root):
 # ---- Contact form (FormSubmit relays to CONTACT_EMAIL; the first submission asks that mailbox to activate the form).
 CONTACT_EMAIL = "ecapi88@gmail.com"
 CONTACT = {
-  "en": dict(eyebrow="Contact", h="Get in touch.", sub="A question, an idea or a bug? Write to me and I'll reply within two working days.", name="Your name", email="Your email", message="Message", send="Send message", sending="Sending…", sent="Thanks, your message is on its way.", error="Couldn't send. Email me directly at {mail}.", direct="Or email", note="Delivered by FormSubmit and used only to reply to you.", nav="Contact", subject="Message from billow-app.org"),
-  "de": dict(eyebrow="Kontakt", h="Schreib mir.", sub="Eine Frage, eine Idee oder ein Fehler? Schreib mir und ich antworte innerhalb von zwei Werktagen.", name="Dein Name", email="Deine E-Mail", message="Nachricht", send="Nachricht senden", sending="Wird gesendet…", sent="Danke, deine Nachricht ist unterwegs.", error="Senden fehlgeschlagen. Schreib mir direkt an {mail}.", direct="Oder per E-Mail", note="Zugestellt über FormSubmit und nur für die Antwort verwendet.", nav="Kontakt", subject="Nachricht von billow-app.org"),
-  "es": dict(eyebrow="Contacto", h="Escríbeme.", sub="¿Una pregunta, una idea o un error? Escríbeme y te responderé en dos días laborables.", name="Tu nombre", email="Tu correo", message="Mensaje", send="Enviar mensaje", sending="Enviando…", sent="Gracias, tu mensaje está en camino.", error="No se pudo enviar. Escríbeme directamente a {mail}.", direct="O por correo", note="Entregado por FormSubmit y usado solo para responderte.", nav="Contacto", subject="Mensaje desde billow-app.org"),
-  "it": dict(eyebrow="Contatti", h="Scrivimi.", sub="Una domanda, un'idea o un bug? Scrivimi e ti rispondo entro due giorni lavorativi.", name="Il tuo nome", email="La tua email", message="Messaggio", send="Invia messaggio", sending="Invio in corso…", sent="Grazie, il tuo messaggio è in arrivo.", error="Invio non riuscito. Scrivimi direttamente a {mail}.", direct="Oppure via email", note="Consegnato da FormSubmit e usato solo per risponderti.", nav="Contatti", subject="Messaggio da billow-app.org"),
-  "sq": dict(eyebrow="Kontakt", h="Më shkruani.", sub="Një pyetje, një ide apo një gabim? Më shkruani dhe do t'ju përgjigjem brenda dy ditësh pune.", name="Emri juaj", email="Email-i juaj", message="Mesazhi", send="Dërgo mesazhin", sending="Po dërgohet…", sent="Faleminderit, mesazhi juaj është rrugës.", error="Dërgimi dështoi. Më shkruani drejtpërdrejt në {mail}.", direct="Ose me email", note="Dërgohet përmes FormSubmit dhe përdoret vetëm për t'ju përgjigjur.", nav="Kontakt", subject="Mesazh nga billow-app.org"),
+  "en": dict(open_mail="Open in your mail app", eyebrow="Contact", h="Get in touch.", sub="A question, an idea or a bug? Write to me and I'll reply within two working days.", name="Your name", email="Your email", message="Message", send="Send message", sending="Sending…", sent="Thanks, your message is on its way.", error="Couldn't send. Email me directly at {mail}.", direct="Or email", note="Delivered by FormSubmit and used only to reply to you.", nav="Contact", subject="Message from billow-app.org"),
+  "de": dict(open_mail="In deiner Mail-App öffnen", eyebrow="Kontakt", h="Schreib mir.", sub="Eine Frage, eine Idee oder ein Fehler? Schreib mir und ich antworte innerhalb von zwei Werktagen.", name="Dein Name", email="Deine E-Mail", message="Nachricht", send="Nachricht senden", sending="Wird gesendet…", sent="Danke, deine Nachricht ist unterwegs.", error="Senden fehlgeschlagen. Schreib mir direkt an {mail}.", direct="Oder per E-Mail", note="Zugestellt über FormSubmit und nur für die Antwort verwendet.", nav="Kontakt", subject="Nachricht von billow-app.org"),
+  "es": dict(open_mail="Abrir en tu app de correo", eyebrow="Contacto", h="Escríbeme.", sub="¿Una pregunta, una idea o un error? Escríbeme y te responderé en dos días laborables.", name="Tu nombre", email="Tu correo", message="Mensaje", send="Enviar mensaje", sending="Enviando…", sent="Gracias, tu mensaje está en camino.", error="No se pudo enviar. Escríbeme directamente a {mail}.", direct="O por correo", note="Entregado por FormSubmit y usado solo para responderte.", nav="Contacto", subject="Mensaje desde billow-app.org"),
+  "it": dict(open_mail="Apri nella tua app di posta", eyebrow="Contatti", h="Scrivimi.", sub="Una domanda, un'idea o un bug? Scrivimi e ti rispondo entro due giorni lavorativi.", name="Il tuo nome", email="La tua email", message="Messaggio", send="Invia messaggio", sending="Invio in corso…", sent="Grazie, il tuo messaggio è in arrivo.", error="Invio non riuscito. Scrivimi direttamente a {mail}.", direct="Oppure via email", note="Consegnato da FormSubmit e usato solo per risponderti.", nav="Contatti", subject="Messaggio da billow-app.org"),
+  "sq": dict(open_mail="Hape në aplikacionin e postës", eyebrow="Kontakt", h="Më shkruani.", sub="Një pyetje, një ide apo një gabim? Më shkruani dhe do t'ju përgjigjem brenda dy ditësh pune.", name="Emri juaj", email="Email-i juaj", message="Mesazhi", send="Dërgo mesazhin", sending="Po dërgohet…", sent="Faleminderit, mesazhi juaj është rrugës.", error="Dërgimi dështoi. Më shkruani drejtpërdrejt në {mail}.", direct="Ose me email", note="Dërgohet përmes FormSubmit dhe përdoret vetëm për t'ju përgjigjur.", nav="Kontakt", subject="Mesazh nga billow-app.org"),
 }
 
 def contact_form(lang, root, next_url):
     c = CONTACT[lang]
     mail_link = f'<a href="mailto:{CONTACT_EMAIL}">{CONTACT_EMAIL}</a>'
-    return f"""<form id="contact-form" class="contact-form" action="https://formsubmit.co/{CONTACT_EMAIL}" method="POST" data-sending="{e(c["sending"])}" data-sent="{e(c["sent"])}" data-error="{e(c["error"]).replace("{mail}", e(mail_link))}">
+    return f"""<form id="contact-form" class="contact-form" action="https://formsubmit.co/{CONTACT_EMAIL}" method="POST" data-sending="{e(c["sending"])}" data-sent="{e(c["sent"])}" data-error="{e(c["error"]).replace("{mail}", e(mail_link))}" data-open="{e(c["open_mail"])}">
         <input type="hidden" name="_subject" value="{e(c["subject"])}">
         <input type="hidden" name="_template" value="table">
         <input type="hidden" name="_captcha" value="false">
@@ -596,7 +597,7 @@ def contact_section(lang, root):
     </div>
   </div>
 </section>
-<script src="{root}contact.js" defer></script>
+<script src="{root}contact.js?v={CONTACT_VER}" defer></script>
 <script src="{root}theme.js?v={THEME_VER}" defer></script>"""
 
 # ---- Pricing: plan names, Pro features and the Free/Pro split come from the app's String Catalog; prices from App/Billow.storekit.

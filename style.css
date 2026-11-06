@@ -34,3 +34,4 @@ nav { align-items: center; }
 .theme-toggle[data-mode="system"] .i-system, .theme-toggle:not([data-mode]) .i-system { display: block; }
 .theme-toggle[data-mode="light"] .i-light { display: block; }
 .theme-toggle[data-mode="dark"] .i-dark { display: block; }
+.contact-form .open-mail { display: inline-block; margin-left: 8px; font-weight: 600; color: var(--accent); border: 1px solid var(--accent); border-radius: 999px; padding: 3px 12px; }

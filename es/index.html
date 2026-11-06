@@ -401,6 +401,8 @@ footer .author:hover { color: var(--accent); text-decoration: none; }
 .contact-form .status { margin: 0; font-size: 14px; min-height: 1.4em; color: var(--muted); }
 .contact-form .status.ok { color: #15803D; font-weight: 600; }
 .contact-form .status.err { color: #B91C1C; }
+.contact-form .open-mail { display: inline-block; margin-left: 8px; font-weight: 600; color: var(--accent); border: 1px solid var(--accent); border-radius: 999px; padding: 3px 12px; }
+.contact-form .open-mail:hover { background: var(--tint); text-decoration: none; }
 .contact-form .note { margin: 0; font-size: 12px; color: var(--muted); }
 @media (max-width: 960px) { .contact .wrap { grid-template-columns: 1fr; gap: 28px; } }
 @media (max-width: 640px) { .contact-form { padding: 20px; border-radius: 18px; } .contact-form .two { grid-template-columns: 1fr; } }
@@ -742,7 +744,7 @@ footer .author:hover { color: var(--accent); text-decoration: none; }
       <p>¿Una pregunta, una idea o un error? Escríbeme y te responderé en dos días laborables.</p>
     </div>
     <div class="reveal d1">
-      <form id="contact-form" class="contact-form" action="https://formsubmit.co/ecapi88@gmail.com" method="POST" data-sending="Enviando…" data-sent="Gracias, tu mensaje está en camino." data-error="No se pudo enviar. Escríbeme directamente a &lt;a href=&quot;mailto:ecapi88@gmail.com&quot;&gt;ecapi88@gmail.com&lt;/a&gt;.">
+      <form id="contact-form" class="contact-form" action="https://formsubmit.co/ecapi88@gmail.com" method="POST" data-sending="Enviando…" data-sent="Gracias, tu mensaje está en camino." data-error="No se pudo enviar. Escríbeme directamente a &lt;a href=&quot;mailto:ecapi88@gmail.com&quot;&gt;ecapi88@gmail.com&lt;/a&gt;." data-open="Abrir en tu app de correo">
         <input type="hidden" name="_subject" value="Mensaje desde billow-app.org">
         <input type="hidden" name="_template" value="table">
         <input type="hidden" name="_captcha" value="false">
@@ -763,7 +765,7 @@ footer .author:hover { color: var(--accent); text-decoration: none; }
     </div>
   </div>
 </section>
-<script src="../contact.js" defer></script>
+<script src="../contact.js?v=a01d2277" defer></script>
 <script src="../theme.js?v=e9f8b050" defer></script>
 
 <section class="closing">
