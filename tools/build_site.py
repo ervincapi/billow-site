@@ -436,8 +436,9 @@ def page(lang):
     </div>
     <div class="visual">
       <div class="ring" aria-hidden="true"></div>
+      <div class="glow" aria-hidden="true"></div>
       <div class="stage">
-        <div class="phone"><div class="screen"><img src="{root}img/home.jpg" alt="{e(t["alt_home"])}" width="414" height="900" fetchpriority="high"></div></div>
+        <div class="phone"><div class="screen"><img src="{root}img/home.jpg" alt="{e(t["alt_home"])}" width="414" height="900" fetchpriority="high"><img src="{root}img/calendar.jpg" alt="" width="414" height="900" loading="lazy"><img src="{root}img/insights.jpg" alt="" width="414" height="900" loading="lazy"><img src="{root}img/detail.jpg" alt="" width="414" height="900" loading="lazy"></div></div>
         {cards}
       </div>
     </div>
