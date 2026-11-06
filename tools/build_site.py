@@ -289,28 +289,6 @@ document.getElementById("lang").addEventListener("change", function (e) {
 })();
 (function () {
   var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  var bar = document.querySelector(".progress");
-  function onScroll() {
-    var h = document.documentElement, max = h.scrollHeight - h.clientHeight;
-    bar.style.setProperty("--p", max > 0 ? (h.scrollTop / max).toFixed(4) : 0);
-  }
-  window.addEventListener("scroll", onScroll, { passive: true }); onScroll();
-  var hero = document.getElementById("hero");
-  if (hero && !reduce && window.matchMedia("(pointer: fine)").matches) {
-    hero.addEventListener("pointermove", function (ev) {
-      var r = hero.getBoundingClientRect();
-      hero.style.setProperty("--mx", ((ev.clientX - r.left) / r.width * 2 - 1).toFixed(3));
-      hero.style.setProperty("--my", ((ev.clientY - r.top) / r.height * 2 - 1).toFixed(3));
-    });
-    hero.addEventListener("pointerleave", function () { hero.style.setProperty("--mx", 0); hero.style.setProperty("--my", 0); });
-  }
-  document.querySelectorAll(".tile").forEach(function (tile) {
-    tile.addEventListener("pointermove", function (ev) {
-      var r = tile.getBoundingClientRect();
-      tile.style.setProperty("--x", (ev.clientX - r.left) + "px");
-      tile.style.setProperty("--y", (ev.clientY - r.top) + "px");
-    });
-  });
   var counters = document.querySelectorAll("[data-count]");
   if (counters.length && "IntersectionObserver" in window && !reduce) {
     var cio = new IntersectionObserver(function (entries) {
@@ -392,7 +370,7 @@ def page(lang):
         sections.append(f"""<section class="feature{flip}">
   <div class="wrap">
     <div class="text reveal">
-      <div class="eyebrow"><span class="num">{i + 1:02d}</span>{e(eyebrow)}</div>
+      <div class="eyebrow">{e(eyebrow)}</div>
       <h2>{e(h2)}</h2>
       <p>{p}</p>
       <ul>
@@ -431,7 +409,6 @@ def page(lang):
 {style}
 </head>
 <body>
-<div class="progress" aria-hidden="true"></div>
 
 <header class="top">
   <div class="wrap">
@@ -446,12 +423,9 @@ def page(lang):
 </header>
 
 <section class="hero" id="hero">
-  <div class="orbs" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
-  <div class="floor" aria-hidden="true"></div>
-  <div class="beam" aria-hidden="true"></div>
   <div class="wrap">
     <div>
-      <span class="kicker"><i>{SPARK}</i>{e(kicker)}</span>
+      <span class="kicker"><i></i>{e(kicker)}</span>
       <h1>{e(t["h1a"])} <span>{e(t["h1b"])}</span></h1>
       <p class="lead">{e(t["lead"])}</p>
       <div class="cta-row">
@@ -477,8 +451,6 @@ def page(lang):
     </div>
   </div>
 </section>
-
-<div class="ticker" aria-hidden="true"><div class="track">{ticker}{ticker}</div></div>
 
 <main id="features">
 
