@@ -5,7 +5,7 @@ import sys
 
 SITE = pathlib.Path(sys.argv[1])
 STYLE = pathlib.Path(sys.argv[2]).read_text()
-BASE = "https://ervincapi.github.io/billow-site/"
+BASE = "https://billow-app.org/"
 
 LANGS = ["en", "de", "es", "it", "sq"]
 NAMES = {"en": "English", "de": "Deutsch", "es": "Español", "it": "Italiano", "sq": "Shqip"}
