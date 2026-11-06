@@ -5,10 +5,14 @@ import json
 import pathlib
 import sys
 
+sys.path.insert(0, str(pathlib.Path(__file__).parent))
+from theme_css import theme_aware
+
 SITE = pathlib.Path(sys.argv[1])
-STYLE = pathlib.Path(sys.argv[2]).read_text()
+STYLE = theme_aware(pathlib.Path(sys.argv[2]).read_text())
 BASE = "https://billow-app.org/"
 DEMO_VER = hashlib.sha1((SITE / "demo.js").read_bytes()).hexdigest()[:8]
+THEME_VER = hashlib.sha1((SITE / "theme.js").read_bytes()).hexdigest()[:8]
 
 LANGS = ["en", "de", "es", "it", "sq"]
 NAMES = {"en": "English", "de": "Deutsch", "es": "Español", "it": "Italiano", "sq": "Shqip"}
@@ -319,7 +323,7 @@ e = html.escape
 
 
 
-JS_FLAG = '<script>document.documentElement.classList.add("js")</script>'
+JS_FLAG = '<script>document.documentElement.classList.add("js");try{var t=localStorage.getItem("billow-theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>'
 ARROW = '<svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12l7 7 7-7"/></svg>'
 SPARK = '<svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/></svg>'
 CARD_ICONS = [
@@ -592,7 +596,8 @@ def contact_section(lang, root):
     </div>
   </div>
 </section>
-<script src="{root}contact.js" defer></script>"""
+<script src="{root}contact.js" defer></script>
+<script src="{root}theme.js?v={THEME_VER}" defer></script>"""
 
 # ---- Pricing: plan names, Pro features and the Free/Pro split come from the app's String Catalog; prices from App/Billow.storekit.
 PAYWALL = {
@@ -760,6 +765,21 @@ def pricing_section(lang, root):
   </div>
 </section>"""
 
+THEME = {
+  "en": dict(name="Appearance", system="System", light="Light", dark="Dark"),
+  "de": dict(name="Darstellung", system="System", light="Hell", dark="Dunkel"),
+  "es": dict(name="Apariencia", system="Sistema", light="Claro", dark="Oscuro"),
+  "it": dict(name="Aspetto", system="Sistema", light="Chiaro", dark="Scuro"),
+  "sq": dict(name="Pamja", system="Sistemi", light="E çelët", dark="E errët"),
+}
+THEME_ICONS = ('<svg class="i-system" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor" stroke="none"/></svg>'
+               '<svg class="i-light" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>'
+               '<svg class="i-dark" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>')
+
+def theme_button(lang):
+    labels = json.dumps(THEME[lang], ensure_ascii=False).replace("'", "&#39;")
+    return f"""<button type="button" class="theme-toggle" data-labels='{labels}' aria-label="{e(THEME[lang]["name"])}">{THEME_ICONS}</button>"""
+
 def page(lang):
     t = T[lang]
     root = "" if lang == "en" else "../"
@@ -838,6 +858,7 @@ def page(lang):
       <a class="hide-sm" href="#privacy">{e(t["nav_privacy"])}</a>
       <a class="cta" href="{root}support.html">{e(t["nav_support"])}</a>
       <label class="lang"><span class="visually-hidden">{e(t["lang_label"])}</span><select id="lang" aria-label="{e(t["lang_label"])}">{options}</select></label>
+      {theme_button(lang)}
     </nav>
   </div>
 </header>

@@ -220,6 +220,7 @@ footer .author:hover { color: var(--accent); text-decoration: none; }
   .closing .box { padding: 56px 22px; border-radius: 24px; }
   footer .wrap { justify-content: center; text-align: center; }
 }
+@media (max-width: 420px) { header.top .brand { font-size: 0; gap: 0; } header.top nav { gap: 2px; } header.top nav a.cta { padding: 8px 12px; } .lang select { padding: 7px 24px 7px 10px; } .theme-toggle { width: 34px; height: 34px; } }
 @media (max-width: 400px) { .grid4 { grid-template-columns: 1fr; } }
 
 /* ---------- "And there's more" bento ---------- */
@@ -414,4 +415,12 @@ footer .author:hover { color: var(--accent); text-decoration: none; }
 .pricing .note { text-align: center; color: var(--muted); font-size: 13px; margin: 20px auto 0; max-width: 70ch; }
 @media (max-width: 960px) { .plans { grid-template-columns: 1fr; } .plan.pro { order: -1; margin-top: 12px; } .plan.stack { flex-direction: row; } }
 @media (max-width: 640px) { .plan.stack { flex-direction: column; } .plan { padding: 24px 20px; border-radius: 20px; } .codes { padding: 18px; gap: 14px; } }
+
+/* ---------- appearance toggle ---------- */
+.theme-toggle { flex: none; width: 36px; height: 36px; margin-left: 4px; border-radius: 999px; border: 1px solid var(--line); background: transparent; color: var(--muted); display: grid; place-items: center; cursor: pointer; transition: color .2s, border-color .2s, background .2s; }
+.theme-toggle:hover { color: var(--ink); border-color: var(--accent); background: var(--soft); }
+.theme-toggle svg { width: 18px; height: 18px; stroke: currentColor; display: none; }
+.theme-toggle[data-mode="system"] .i-system, .theme-toggle:not([data-mode]) .i-system { display: block; }
+.theme-toggle[data-mode="light"] .i-light { display: block; }
+.theme-toggle[data-mode="dark"] .i-dark { display: block; }
 </style>

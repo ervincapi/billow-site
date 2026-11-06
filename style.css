@@ -1,5 +1,6 @@
 :root { --bg: #f7f9fb; --fg: #14202b; --muted: #5b6b78; --accent: #1f7a99; --card: #ffffff; --line: #e1e7ec; }
-@media (prefers-color-scheme: dark) { :root { --bg: #0f171e; --fg: #e8eef2; --muted: #9aabb8; --accent: #7dd3e6; --card: #16212a; --line: #24323d; } }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg: #0f171e; --fg: #e8eef2; --muted: #9aabb8; --accent: #7dd3e6; --card: #16212a; --line: #24323d; } }
+:root[data-theme="dark"] { --bg: #0f171e; --fg: #e8eef2; --muted: #9aabb8; --accent: #7dd3e6; --card: #16212a; --line: #24323d; }
 * { box-sizing: border-box; }
 body { margin: 0; background: var(--bg); color: var(--fg); font: 17px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
 main { max-width: 720px; margin: 0 auto; padding: 40px 16px 64px; }
@@ -25,3 +26,11 @@ footer { margin-top: 48px; font-size: 14px; color: var(--muted); }
 .contact-form .status.err { color: #B91C1C; }
 .contact-form .note { font-size: 12px; }
 @media (max-width: 520px) { .contact-form .two { grid-template-columns: 1fr; } }
+
+nav { align-items: center; }
+.theme-toggle { margin-left: auto; width: 34px; height: 34px; border-radius: 999px; border: 1px solid var(--line); background: transparent; color: var(--muted); display: grid; place-items: center; cursor: pointer; }
+.theme-toggle:hover { color: var(--fg); border-color: var(--accent); }
+.theme-toggle svg { width: 17px; height: 17px; stroke: currentColor; display: none; }
+.theme-toggle[data-mode="system"] .i-system, .theme-toggle:not([data-mode]) .i-system { display: block; }
+.theme-toggle[data-mode="light"] .i-light { display: block; }
+.theme-toggle[data-mode="dark"] .i-dark { display: block; }
