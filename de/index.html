@@ -6,6 +6,7 @@
 <title>Billow — Abo-Tracker</title>
 <meta name="description" content="Behalte jedes Abo, jede Verlängerung und jede Testphase auf deinem iPhone im Blick. Wisse vor dem Zahltag, was von deinem Konto abgeht. Kein Konto, kein Bank-Login, privat in deiner iCloud.">
 <meta name="theme-color" content="#06202A">
+
 <link rel="canonical" href="https://billow-app.org/de/">
 <link rel="alternate" hreflang="en" href="https://billow-app.org/">
 <link rel="alternate" hreflang="de" href="https://billow-app.org/de/">
@@ -31,6 +32,7 @@
 <meta name="twitter:image" content="https://billow-app.org/img/og-de.png">
 
 <script>document.documentElement.classList.add("js");try{var t=localStorage.getItem("billow-theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "Billow", "alternateName": "Billow.al", "operatingSystem": "iOS", "applicationCategory": "FinanceApplication", "url": "https://billow-app.org/de/", "image": "https://billow-app.org/img/og-de.png", "description": "Behalte jedes Abo, jede Verlängerung und jede Testphase auf deinem iPhone im Blick. Wisse vor dem Zahltag, was von deinem Konto abgeht. Kein Konto, kein Bank-Login, privat in deiner iCloud.", "inLanguage": "de", "author": {"@type": "Person", "name": "Ervin Capi", "url": "https://www.linkedin.com/in/ervin-capi/"}, "offers": [{"@type": "Offer", "name": "Free", "price": "0", "priceCurrency": "USD"}, {"@type": "Offer", "name": "Billow Pro Monthly", "price": "2.99", "priceCurrency": "USD"}, {"@type": "Offer", "name": "Billow Pro Yearly", "price": "19.99", "priceCurrency": "USD"}, {"@type": "Offer", "name": "Billow Pro Lifetime", "price": "49.99", "priceCurrency": "USD"}]}</script>
 <style>
 :root {
   --ground: #FFFFFF; --surface: #F7F9FB; --ink: #0B1220; --muted: #66737F; --soft: #EEF2F5;
@@ -530,6 +532,72 @@ body.lb-open { overflow: hidden; }
 
 /* ---------- demo focus styles ---------- */
 .app button:focus-visible, .app input:focus-visible, .app select:focus-visible { outline: 2px solid #0E7490; outline-offset: 2px; }
+
+/* ---------- store badge + demo actions ---------- */
+.badge.store { padding: 9px 20px 9px 16px; text-decoration: none; gap: 10px; }
+.badge.store .two { display: flex; flex-direction: column; line-height: 1.05; text-align: left; }
+.badge.store small { font-size: 10px; font-weight: 500; letter-spacing: .02em; opacity: .85; }
+.badge.store b { font-size: 19px; font-weight: 600; letter-spacing: -.01em; }
+.badge.store svg { width: 24px; height: 24px; }
+.demo-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.reset.share { display: inline-flex; align-items: center; gap: 7px; }
+.reset.share svg { width: 15px; height: 15px; stroke: currentColor; }
+.reset.share.done { color: #15803D; border-color: #15803D; }
+
+/* ---------- savings calculator ---------- */
+.calc { padding: 48px 0 24px; }
+.calc .head { text-align: center; max-width: 60ch; margin: 0 auto 32px; }
+.calc h2 { font-size: clamp(30px, 3.8vw, 42px); margin: 0 0 12px; }
+.calc .sub { color: var(--muted); font-size: 18px; margin: 0; }
+.calc-box { max-width: 760px; margin: 0 auto; background: var(--surface); border: 1px solid var(--line); border-radius: 24px; padding: 28px; }
+.calc-rows { display: grid; gap: 12px; }
+.calc-row { display: grid; grid-template-columns: 1.4fr 1fr .9fr; gap: 12px; }
+.calc-row label { display: grid; gap: 6px; font-size: 13px; font-weight: 600; color: var(--muted); }
+.calc-row input, .calc-row select { font: inherit; font-size: 16px; color: var(--ink); background: var(--ground); border: 1px solid var(--line); border-radius: 12px; padding: 11px 14px; width: 100%; outline: none; transition: border-color .2s, box-shadow .2s; }
+.calc-row select { align-self: end; }
+.calc-row input:focus, .calc-row select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 20%, transparent); }
+.calc-result { margin: 22px 0 0; padding: 18px 20px; border-radius: 16px; background: var(--tint); color: var(--muted); font-size: 15px; text-align: center; }
+.calc-result.on { display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--ink); background: linear-gradient(160deg, var(--abyss), var(--deep)); }
+.calc-result.on b { font-size: clamp(34px, 4.5vw, 48px); font-weight: 800; letter-spacing: -.03em; line-height: 1.05; background: linear-gradient(92deg, #7DD3E6, #A7F3D0); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.calc-result.on span { color: #B9D7DF; font-size: 15px; max-width: 46ch; }
+.calc-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 12px; margin-top: 16px; }
+.calc-cta { display: inline-flex; align-items: center; padding: 10px 18px; border-radius: 999px; font-weight: 600; font-size: 14px; color: #fff; background: var(--accent); }
+.calc-cta:hover { text-decoration: none; background: color-mix(in srgb, var(--accent) 85%, #000); }
+@media (max-width: 640px) { .calc-box { padding: 18px; border-radius: 18px; } .calc-row { grid-template-columns: 1fr 1fr; } .calc-row label:first-child { grid-column: 1 / -1; } }
+
+/* ---------- guides ---------- */
+.guides { padding: 24px 0 48px; }
+.guides .head { text-align: center; max-width: 60ch; margin: 0 auto 32px; }
+.guides h2 { font-size: clamp(30px, 3.8vw, 42px); margin: 0 0 12px; }
+.guides .sub { color: var(--muted); font-size: 18px; margin: 0; }
+.guide-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.guide-card { display: flex; flex-direction: column; gap: 8px; background: var(--surface); border: 1px solid var(--line); border-radius: 20px; padding: 24px; color: var(--ink); transition: transform .3s, border-color .3s; }
+.guide-card:hover { text-decoration: none; transform: translateY(-4px); border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); }
+.guide-card strong { font-size: 18px; line-height: 1.3; letter-spacing: -.01em; }
+.guide-card span { color: var(--muted); font-size: 15px; flex: 1; }
+.guide-card em { font-style: normal; font-size: 13px; font-weight: 600; color: var(--accent); }
+main.guide { padding: 48px 0 72px; }
+main.guide .wrap { max-width: 760px; }
+main.guide.index .wrap { max-width: 1120px; }
+main.guide .head { text-align: center; margin: 16px auto 36px; max-width: 60ch; }
+main.guide .head .sub { color: var(--muted); font-size: 18px; }
+.crumbs { display: flex; gap: 8px; align-items: center; font-size: 14px; color: var(--muted); margin-bottom: 20px; }
+.crumbs a { color: var(--muted); }
+main.guide h1 { font-size: clamp(32px, 4.4vw, 48px); line-height: 1.08; margin: 0 0 10px; }
+main.guide .meta { color: var(--muted); font-size: 14px; margin: 0 0 28px; }
+main.guide .lead { font-size: 20px; line-height: 1.55; color: var(--muted); margin: 0 0 24px; }
+main.guide article h2 { font-size: 24px; margin: 36px 0 10px; }
+main.guide article p, main.guide article li { font-size: 17px; line-height: 1.65; }
+main.guide article ul { padding-left: 22px; }
+main.guide article li { margin: 6px 0; }
+.guide-cta { margin: 48px 0 0; display: grid; grid-template-columns: 1fr auto; gap: 20px; align-items: center; background: linear-gradient(160deg, var(--abyss), var(--deep)); color: #EAF6F9; border-radius: 24px; padding: 28px 30px; }
+.guide-cta strong { display: block; font-size: 22px; letter-spacing: -.02em; margin-bottom: 4px; }
+.guide-cta span { color: #B9D7DF; }
+.guide-cta .ghost.dark { color: #EAF6F9; background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.18); }
+.guide-more { margin-top: 48px; }
+.guide-more h2 { font-size: 22px; margin: 0 0 16px; }
+.guide-more .guide-grid { grid-template-columns: 1fr 1fr; }
+@media (max-width: 960px) { .guide-grid { grid-template-columns: 1fr; } .guide-cta { grid-template-columns: 1fr; } .guide-more .guide-grid { grid-template-columns: 1fr; } }
 </style>
 
 </head>
@@ -596,7 +664,10 @@ body.lb-open { overflow: hidden; }
         <li><span>2</span>Setze deinen Zahltag und sieh die Summe „vor dem Zahltag“</li>
         <li><span>3</span>Markiere eines als Testphase und erhalte eine „Kündigen bis“-Frist</li>
       </ol>
-      <button type="button" class="reset" id="demo-reset">Neu starten</button>
+      <div class="demo-actions">
+        <button type="button" class="reset" id="demo-reset">Neu starten</button>
+        <button type="button" class="reset share" id="demo-share" data-copied="Link kopiert"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3M7 8l5-5 5 5"/></svg>Demo teilen</button>
+      </div>
     </div>
     <div class="hint reveal d2" aria-hidden="true">
       <span class="hint-label">Es ist interaktiv, tipp dich durch</span>
@@ -610,7 +681,7 @@ body.lb-open { overflow: hidden; }
   </div>
 </section>
 <script>window.BILLOW_DEMO = {"lang": "de", "currency": "EUR", "t": {"this_month": "Diesen Monat", "per_month": "/Monat", "per_year": "/Jahr", "trials_add": "Testphasen würden {x}/Monat hinzufügen", "attention_one": "1 Sache braucht deine Aufmerksamkeit", "attention_many": "{n} Dinge brauchen deine Aufmerksamkeit", "all_good": "Alles unter Kontrolle", "before_payday": "Vor dem Zahltag", "payday": "Zahltag", "next7": "Nächste 7 Tage", "all_subs": "Alle Abos", "empty": "Noch nichts. Füge dein erstes Abo hinzu.", "home": "Start", "add": "Hinzufügen", "calendar": "Kalender", "search": "500+ Dienste durchsuchen", "price": "Preis", "billing": "Abrechnung", "monthly": "Monatlich", "yearly": "Jährlich", "next_charge": "Nächste Abbuchung", "trial": "Testphase", "trial_hint": "14 Tage gratis, dann {x}", "add_btn": "Abo hinzufügen", "back": "Zurück", "added": "{name} hinzugefügt", "trial_ends_in": "Testphase endet in {n} Tagen", "trial_ends_today": "Testphase endet heute", "cancel_by": "Kündigen bis {d} oder {x} zahlen", "price_up": "Preis gestiegen", "price_up_body": "{old} → {new} · +{diff}/Monat", "converts": "wird zu {x}", "today": "Heute", "tomorrow": "Morgen", "in_days": "in {n} Tagen", "trial_tag": "TEST", "remove": "Entfernen", "day": "Tag"}};</script>
-<script src="../demo.js?v=ed83f0ca" defer></script>
+<script src="../demo.js?v=5d84f9af" defer></script>
 
 <main id="features">
 
@@ -739,6 +810,40 @@ body.lb-open { overflow: hidden; }
   </div>
 </section>
 
+<section class="calc" id="calc">
+  <div class="wrap">
+    <div class="head reveal">
+      <div class="eyebrow">Sparrechner</div>
+      <h2>Was kosten dich vergessene Abos?</h2>
+      <p class="sub">Trag bis zu drei ein, die du kaum nutzt. Billow findet sie für dich und hilft beim Kündigen, in zwei Tipps.</p>
+    </div>
+    <div class="calc-box reveal d1" data-cfg='{"lang": "de", "currency": "EUR", "t": {"result": "im Jahr, also {m} jeden Monat, für Dinge, die du nicht nutzt.", "empty": "Gib einen Preis ein, um die Summe zu sehen.", "copied": "In die Zwischenablage kopiert", "share_text": "Ich verschwende {y} im Jahr für Abos, die ich nicht nutze. Billow hat sie gefunden: billow-app.org"}}' id="calc-box">
+      <div class="calc-rows">
+        <div class="calc-row">
+          <label><span>Dienst</span><input type="text" data-name placeholder="Netflix" maxlength="40" autocomplete="off"></label>
+          <label><span>Preis</span><input type="number" data-price min="0" step="0.01" inputmode="decimal" placeholder="0.00"></label>
+          <label><span class="visually-hidden">Monatlich / Jährlich</span><select data-cycle><option value="m">Monatlich</option><option value="y">Jährlich</option></select></label>
+        </div>
+        <div class="calc-row">
+          <label><span>Dienst</span><input type="text" data-name placeholder="Fitnessstudio" maxlength="40" autocomplete="off"></label>
+          <label><span>Preis</span><input type="number" data-price min="0" step="0.01" inputmode="decimal" placeholder="0.00"></label>
+          <label><span class="visually-hidden">Monatlich / Jährlich</span><select data-cycle><option value="m">Monatlich</option><option value="y">Jährlich</option></select></label>
+        </div>
+        <div class="calc-row">
+          <label><span>Dienst</span><input type="text" data-name placeholder="Disney+" maxlength="40" autocomplete="off"></label>
+          <label><span>Preis</span><input type="number" data-price min="0" step="0.01" inputmode="decimal" placeholder="0.00"></label>
+          <label><span class="visually-hidden">Monatlich / Jährlich</span><select data-cycle><option value="m">Monatlich</option><option value="y">Jährlich</option></select></label>
+        </div>
+      </div>
+      <p class="calc-result" aria-live="polite">Gib einen Preis ein, um die Summe zu sehen.</p>
+      <div class="calc-actions">
+        <button type="button" class="calc-share reset" hidden>Teilen</button>
+        <a class="calc-cta" href="#pricing">Lass Billow den Rest finden</a>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="pricing" id="pricing">
   <div class="wrap">
     <div class="head reveal">
@@ -816,6 +921,20 @@ body.lb-open { overflow: hidden; }
   </div>
 </section>
 
+<section class="guides" id="guides">
+  <div class="wrap">
+    <div class="head reveal">
+      <h2>Ratgeber</h2>
+      <p class="sub">Kurze, praktische Texte zu Abos, Testphasen und Kündigen.</p>
+    </div>
+    <div class="guide-grid">
+      <a class="guide-card reveal d0" href="../de/guides/cancel-netflix/"><strong>Netflix kündigen – und deine Rechte in Deutschland und Italien</strong><span>Wo sich der Kündigen-Button versteckt, je nachdem wer abrechnet, was mit dem Rest des Monats passiert und welche Regeln dich in Deutschland und Italien schützen.</span><em>Ratgeber lesen · 2 Min. Lesezeit</em></a>
+      <a class="guide-card reveal d1" href="../de/guides/what-a-free-trial-really-costs/"><strong>Was eine kostenlose Testphase wirklich kostet</strong><span>Die Rechnung hinter „14 Tage kostenlos“, warum Testphasen darauf angelegt sind, vergessen zu werden, und eine einfache Gewohnheit, die sie kostenlos hält.</span><em>Ratgeber lesen · 2 Min. Lesezeit</em></a>
+      <a class="guide-card reveal d2" href="../de/guides/find-your-subscriptions-on-iphone/"><strong>Wo du jedes Abo auf deinem iPhone findest</strong><span>Sechs Orte, an denen sich Abos verstecken, von Apples eigener Liste bis zu PayPal und deinem Kontoauszug, und wie du sie an einem Ort sammelst.</span><em>Ratgeber lesen · 2 Min. Lesezeit</em></a>
+    </div>
+  </div>
+</section>
+
 <section class="faq" id="faq">
   <div class="wrap">
     <div class="head reveal">
@@ -865,6 +984,8 @@ body.lb-open { overflow: hidden; }
 <script src="../contact.js?v=e89cdd1a" defer></script>
 <script src="../theme.js?v=e9f8b050" defer></script>
 <script src="../gallery.js?v=0a5d86e7" defer></script>
+<script src="../calc.js?v=95747e22" defer></script>
+<script src="../stats.js?v=badab134" data-relay="https://script.google.com/macros/s/AKfycbwyyLMU7Jk-GYlnWHQQom6_0QEGJDzTC4GAfF0sRChL-YQVGXAbD-aO3emt8ghBGWHNZA/exec" defer></script>
 
 <section class="closing">
   <div class="wrap">
@@ -879,7 +1000,7 @@ body.lb-open { overflow: hidden; }
 <footer>
   <div class="wrap">
     <a class="brand" href="../de/index.html"><img src="../img/icon.png" alt="">Billow</a>
-    <nav><a href="../support.html">Support</a><a href="#faq">FAQ</a><a href="#contact">Kontakt</a><a href="../privacy.html">Datenschutzerklärung</a><a href="../terms.html">Nutzungsbedingungen</a></nav>
+    <nav><a href="../support.html">Support</a><a href="../de/guides/">Ratgeber</a><a href="#faq">FAQ</a><a href="#contact">Kontakt</a><a href="../privacy.html">Datenschutzerklärung</a><a href="../terms.html">Nutzungsbedingungen</a></nav>
     <span>© 2026 <a class="author" href="https://www.linkedin.com/in/ervin-capi/" rel="me noopener" target="_blank">Ervin Capi<svg viewBox="0 0 24 24" aria-label="LinkedIn" role="img"><path d="M20.4 2H3.6A1.6 1.6 0 0 0 2 3.6v16.8A1.6 1.6 0 0 0 3.6 22h16.8a1.6 1.6 0 0 0 1.6-1.6V3.6A1.6 1.6 0 0 0 20.4 2zM8 19H5v-9h3zM6.5 8.7a1.7 1.7 0 1 1 0-3.4 1.7 1.7 0 0 1 0 3.4zM19 19h-3v-4.6c0-1.1 0-2.5-1.5-2.5S12.7 13 12.7 14.3V19h-3v-9h2.9v1.2a3.2 3.2 0 0 1 2.9-1.6c3.1 0 3.6 2 3.6 4.7z"/></svg></a> · Händlerlogos von <a href="https://logo.dev">Logo.dev</a></span>
   </div>
 </footer>

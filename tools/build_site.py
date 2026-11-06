@@ -7,6 +7,7 @@ import sys
 
 sys.path.insert(0, str(pathlib.Path(__file__).parent))
 from theme_css import theme_aware
+from guides import GUIDES, GUIDES_META
 
 SITE = pathlib.Path(sys.argv[1])
 STYLE = theme_aware(pathlib.Path(sys.argv[2]).read_text())
@@ -15,6 +16,9 @@ DEMO_VER = hashlib.sha1((SITE / "demo.js").read_bytes()).hexdigest()[:8]
 THEME_VER = hashlib.sha1((SITE / "theme.js").read_bytes()).hexdigest()[:8]
 CONTACT_VER = hashlib.sha1((SITE / "contact.js").read_bytes()).hexdigest()[:8]
 GALLERY_VER = hashlib.sha1((SITE / "gallery.js").read_bytes()).hexdigest()[:8]
+CALC_VER = hashlib.sha1((SITE / "calc.js").read_bytes()).hexdigest()[:8]
+STATS_VER = hashlib.sha1((SITE / "stats.js").read_bytes()).hexdigest()[:8]
+TODAY = __import__("datetime").date.today().isoformat()
 
 LANGS = ["en", "de", "es", "it", "sq"]
 NAMES = {"en": "English", "de": "Deutsch", "es": "Español", "it": "Italiano", "sq": "Shqip"}
@@ -477,11 +481,11 @@ MORE_ICONS = {
 
 # ---- "Try it now" section and the in-page demo app.
 TRY = {
-  "en": dict(hint="It's interactive, tap around", live="Live demo", eyebrow="Interactive demo", h="Try Billow right here.", sub="A small simulation of the app in your browser. Add a service, set your payday, start a trial. Nothing is saved and nothing leaves this page.", steps=["Add a subscription from the catalog", "Set your payday and watch the “before payday” total", "Mark one as a free trial to get a cancel-by deadline"], reset="Start over", nav="Try it"),
-  "de": dict(hint="Es ist interaktiv, tipp dich durch", live="Live-Demo", eyebrow="Interaktive Demo", h="Probiere Billow gleich hier aus.", sub="Eine kleine Simulation der App in deinem Browser. Füge einen Dienst hinzu, setze deinen Zahltag, starte eine Testphase. Nichts wird gespeichert, nichts verlässt diese Seite.", steps=["Füge ein Abo aus dem Katalog hinzu", "Setze deinen Zahltag und sieh die Summe „vor dem Zahltag“", "Markiere eines als Testphase und erhalte eine „Kündigen bis“-Frist"], reset="Neu starten", nav="Ausprobieren"),
-  "es": dict(hint="Es interactivo, toca y prueba", live="Demo en vivo", eyebrow="Demo interactiva", h="Prueba Billow aquí mismo.", sub="Una pequeña simulación de la app en tu navegador. Añade un servicio, fija tu día de cobro, empieza una prueba. No se guarda nada y nada sale de esta página.", steps=["Añade una suscripción del catálogo", "Fija tu día de cobro y mira el total «antes del día de pago»", "Marca una como prueba gratis para obtener un plazo «cancelar antes del»"], reset="Empezar de nuevo", nav="Pruébalo"),
-  "it": dict(hint="È interattivo, tocca e prova", live="Demo dal vivo", eyebrow="Demo interattiva", h="Prova Billow qui.", sub="Una piccola simulazione dell'app nel tuo browser. Aggiungi un servizio, imposta il giorno dello stipendio, avvia una prova. Niente viene salvato e niente lascia questa pagina.", steps=["Aggiungi un abbonamento dal catalogo", "Imposta il giorno dello stipendio e guarda il totale «prima dello stipendio»", "Segna uno come prova gratuita per avere una scadenza «disdici entro»"], reset="Ricomincia", nav="Provalo"),
-  "sq": dict(hint="Është interaktiv, prekeni dhe provoni", live="Demo e drejtpërdrejtë", eyebrow="Demo interaktive", h="Provoni Billow këtu.", sub="Një simulim i vogël i aplikacionit në shfletuesin tuaj. Shtoni një shërbim, caktoni ditën e pagës, nisni një provë. Asgjë nuk ruhet dhe asgjë nuk del nga kjo faqe.", steps=["Shtoni një abonim nga katalogu", "Caktoni ditën e pagës dhe shihni totalin “para pagës”", "Shënoni një si provë falas për të marrë afatin “anuloni deri”"], reset="Filloni nga e para", nav="Provojeni"),
+  "en": dict(share="Share this demo", copied="Link copied", hint="It's interactive, tap around", live="Live demo", eyebrow="Interactive demo", h="Try Billow right here.", sub="A small simulation of the app in your browser. Add a service, set your payday, start a trial. Nothing is saved and nothing leaves this page.", steps=["Add a subscription from the catalog", "Set your payday and watch the “before payday” total", "Mark one as a free trial to get a cancel-by deadline"], reset="Start over", nav="Try it"),
+  "de": dict(share="Demo teilen", copied="Link kopiert", hint="Es ist interaktiv, tipp dich durch", live="Live-Demo", eyebrow="Interaktive Demo", h="Probiere Billow gleich hier aus.", sub="Eine kleine Simulation der App in deinem Browser. Füge einen Dienst hinzu, setze deinen Zahltag, starte eine Testphase. Nichts wird gespeichert, nichts verlässt diese Seite.", steps=["Füge ein Abo aus dem Katalog hinzu", "Setze deinen Zahltag und sieh die Summe „vor dem Zahltag“", "Markiere eines als Testphase und erhalte eine „Kündigen bis“-Frist"], reset="Neu starten", nav="Ausprobieren"),
+  "es": dict(share="Compartir esta demo", copied="Enlace copiado", hint="Es interactivo, toca y prueba", live="Demo en vivo", eyebrow="Demo interactiva", h="Prueba Billow aquí mismo.", sub="Una pequeña simulación de la app en tu navegador. Añade un servicio, fija tu día de cobro, empieza una prueba. No se guarda nada y nada sale de esta página.", steps=["Añade una suscripción del catálogo", "Fija tu día de cobro y mira el total «antes del día de pago»", "Marca una como prueba gratis para obtener un plazo «cancelar antes del»"], reset="Empezar de nuevo", nav="Pruébalo"),
+  "it": dict(share="Condividi questa demo", copied="Link copiato", hint="È interattivo, tocca e prova", live="Demo dal vivo", eyebrow="Demo interattiva", h="Prova Billow qui.", sub="Una piccola simulazione dell'app nel tuo browser. Aggiungi un servizio, imposta il giorno dello stipendio, avvia una prova. Niente viene salvato e niente lascia questa pagina.", steps=["Aggiungi un abbonamento dal catalogo", "Imposta il giorno dello stipendio e guarda il totale «prima dello stipendio»", "Segna uno come prova gratuita per avere una scadenza «disdici entro»"], reset="Ricomincia", nav="Provalo"),
+  "sq": dict(share="Ndaje këtë demo", copied="Lidhja u kopjua", hint="Është interaktiv, prekeni dhe provoni", live="Demo e drejtpërdrejtë", eyebrow="Demo interaktive", h="Provoni Billow këtu.", sub="Një simulim i vogël i aplikacionit në shfletuesin tuaj. Shtoni një shërbim, caktoni ditën e pagës, nisni një provë. Asgjë nuk ruhet dhe asgjë nuk del nga kjo faqe.", steps=["Shtoni një abonim nga katalogu", "Caktoni ditën e pagës dhe shihni totalin “para pagës”", "Shënoni një si provë falas për të marrë afatin “anuloni deri”"], reset="Filloni nga e para", nav="Provojeni"),
 }
 DEMO_UI = {
   "en": dict(this_month="This month", per_month="/month", per_year="/year", trials_add="Trials would add {x}/month", attention_one="1 thing needs your attention", attention_many="{n} things need your attention", all_good="Everything is under control", before_payday="Before payday", payday="Payday", next7="Next 7 days", all_subs="All subscriptions", empty="Nothing yet. Add your first subscription.", home="Home", add="Add", calendar="Calendar", search="Search 500+ services", price="Price", billing="Billing", monthly="Monthly", yearly="Yearly", next_charge="Next charge", trial="Free trial", trial_hint="14 days free, then {x}", add_btn="Add subscription", back="Back", added="{name} added", trial_ends_in="Trial ends in {n} days", trial_ends_today="Trial ends today", cancel_by="Cancel by {d} or pay {x}", price_up="Price went up", price_up_body="{old} → {new} · +{diff}/month", converts="converts to {x}", today="Today", tomorrow="Tomorrow", in_days="in {n} days", trial_tag="TRIAL", remove="Remove", day="day"),
@@ -541,7 +545,10 @@ def try_section(lang, root):
       <ol class="steps">
         {steps}
       </ol>
-      <button type="button" class="reset" id="demo-reset">{e(t["reset"])}</button>
+      <div class="demo-actions">
+        <button type="button" class="reset" id="demo-reset">{e(t["reset"])}</button>
+        <button type="button" class="reset share" id="demo-share" data-copied="{e(t["copied"])}"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3M7 8l5-5 5 5"/></svg>{e(t["share"])}</button>
+      </div>
     </div>
     <div class="hint reveal d2" aria-hidden="true">
       <span class="hint-label">{e(t["hint"])}</span>
@@ -604,7 +611,9 @@ def contact_section(lang, root):
 </section>
 <script src="{root}contact.js?v={CONTACT_VER}" defer></script>
 <script src="{root}theme.js?v={THEME_VER}" defer></script>
-<script src="{root}gallery.js?v={GALLERY_VER}" defer></script>"""
+<script src="{root}gallery.js?v={GALLERY_VER}" defer></script>
+<script src="{root}calc.js?v={CALC_VER}" defer></script>
+{stats_tag(root)}"""
 
 # ---- Pricing: plan names, Pro features and the Free/Pro split come from the app's String Catalog; prices from App/Billow.storekit.
 PAYWALL = {
@@ -866,6 +875,275 @@ LIGHTBOX = {
   "sq": dict(close="Mbyll", prev="Ekrani i mëparshëm", next="Ekrani tjetër", open="Hap {0} në madhësi të plotë"),
 }
 
+# ---- App Store: flip APP_STORE_LIVE to True once Apple approves; the hero and closing badges become store links
+# and iPhone Safari shows the smart app banner.
+APP_STORE_ID = "6830713677"
+APP_STORE_URL = f"https://apps.apple.com/app/id{APP_STORE_ID}"
+APP_STORE_LIVE = False
+STORE_BADGE = {"en": ("Download on the", "App Store"), "de": ("Laden im", "App Store"), "es": ("Consíguelo en el", "App Store"), "it": ("Scarica su", "App Store"), "sq": ("Shkarkoje në", "App Store")}
+
+def store_badge(lang, fallback_text):
+    if not APP_STORE_LIVE:
+        return f'<span class="badge">{APPLE}{e(fallback_text)}</span>'
+    small, big = STORE_BADGE[lang]
+    return f'<a class="badge store" href="{APP_STORE_URL}" rel="noopener">{APPLE}<span class="two"><small>{e(small)}</small><b>{e(big)}</b></span></a>'
+
+def app_jsonld(lang, t):
+    data = {
+        "@context": "https://schema.org", "@type": "SoftwareApplication", "name": "Billow", "alternateName": "Billow.al",
+        "operatingSystem": "iOS", "applicationCategory": "FinanceApplication", "url": BASE if lang == "en" else f"{BASE}{lang}/",
+        "image": f"{BASE}img/og-{lang}.png", "description": t["desc"], "inLanguage": lang,
+        "author": {"@type": "Person", "name": "Ervin Capi", "url": "https://www.linkedin.com/in/ervin-capi/"},
+        "offers": [
+            {"@type": "Offer", "name": "Free", "price": "0", "priceCurrency": "USD"},
+            {"@type": "Offer", "name": "Billow Pro Monthly", "price": "2.99", "priceCurrency": "USD"},
+            {"@type": "Offer", "name": "Billow Pro Yearly", "price": "19.99", "priceCurrency": "USD"},
+            {"@type": "Offer", "name": "Billow Pro Lifetime", "price": "49.99", "priceCurrency": "USD"},
+        ],
+    }
+    if APP_STORE_LIVE:
+        data["installUrl"] = APP_STORE_URL; data["downloadUrl"] = APP_STORE_URL
+    return '<script type="application/ld+json">' + json.dumps(data, ensure_ascii=False) + "</script>"
+
+# ---- Savings calculator
+CALC = {
+  "en": dict(nav="Calculator", eyebrow="Savings calculator", h="What are forgotten subscriptions costing you?", sub="Add up to three you don't really use. Billow finds these for you and helps you cancel in two taps.", service="Service", price="Price", monthly="Monthly", yearly="Yearly", result="a year, or {m} every month, for things you don't use.", empty="Add a price to see the total.", share="Share this", copied="Copied to clipboard", share_text="I'm wasting {y} a year on subscriptions I don't use. Billow found them: billow-app.org", cta="Let Billow find the rest", ph=["Netflix", "Gym", "Disney+"]),
+  "de": dict(nav="Rechner", eyebrow="Sparrechner", h="Was kosten dich vergessene Abos?", sub="Trag bis zu drei ein, die du kaum nutzt. Billow findet sie für dich und hilft beim Kündigen, in zwei Tipps.", service="Dienst", price="Preis", monthly="Monatlich", yearly="Jährlich", result="im Jahr, also {m} jeden Monat, für Dinge, die du nicht nutzt.", empty="Gib einen Preis ein, um die Summe zu sehen.", share="Teilen", copied="In die Zwischenablage kopiert", share_text="Ich verschwende {y} im Jahr für Abos, die ich nicht nutze. Billow hat sie gefunden: billow-app.org", cta="Lass Billow den Rest finden", ph=["Netflix", "Fitnessstudio", "Disney+"]),
+  "es": dict(nav="Calculadora", eyebrow="Calculadora de ahorro", h="¿Cuánto te cuestan las suscripciones olvidadas?", sub="Añade hasta tres que apenas uses. Billow las encuentra por ti y te ayuda a cancelar en dos toques.", service="Servicio", price="Precio", monthly="Mensual", yearly="Anual", result="al año, o {m} cada mes, en cosas que no usas.", empty="Añade un precio para ver el total.", share="Compartir", copied="Copiado al portapapeles", share_text="Gasto {y} al año en suscripciones que no uso. Billow las encontró: billow-app.org", cta="Deja que Billow encuentre el resto", ph=["Netflix", "Gimnasio", "Disney+"]),
+  "it": dict(nav="Calcolatore", eyebrow="Calcolatore del risparmio", h="Quanto ti costano gli abbonamenti dimenticati?", sub="Aggiungi fino a tre che usi poco. Billow li trova per te e ti aiuta a disdire in due tocchi.", service="Servizio", price="Prezzo", monthly="Mensile", yearly="Annuale", result="all'anno, cioè {m} ogni mese, per cose che non usi.", empty="Inserisci un prezzo per vedere il totale.", share="Condividi", copied="Copiato negli appunti", share_text="Spreco {y} all'anno in abbonamenti che non uso. Billow li ha trovati: billow-app.org", cta="Lascia che Billow trovi il resto", ph=["Netflix", "Palestra", "Disney+"]),
+  "sq": dict(nav="Llogaritësi", eyebrow="Llogaritësi i kursimeve", h="Sa ju kushtojnë abonimet e harruara?", sub="Shtoni deri në tre që nuk i përdorni vërtet. Billow i gjen për ju dhe ju ndihmon t'i anuloni me dy prekje.", service="Shërbimi", price="Çmimi", monthly="Mujor", yearly="Vjetor", result="në vit, ose {m} çdo muaj, për gjëra që nuk i përdorni.", empty="Shtoni një çmim për të parë totalin.", share="Ndaje", copied="U kopjua", share_text="Po humbas {y} në vit për abonime që nuk i përdor. Billow i gjeti: billow-app.org", cta="Lëreni Billow të gjejë të tjerat", ph=["Netflix", "Palestra", "Disney+"]),
+}
+
+def calc_section(lang, root):
+    c = CALC[lang]
+    cfg = json.dumps({"lang": lang, "currency": CURRENCY[lang], "t": {k: c[k] for k in ("result", "empty", "copied", "share_text")}}, ensure_ascii=False).replace("'", "&#39;")
+    rows = "\n        ".join(f"""<div class="calc-row">
+          <label><span>{e(c["service"])}</span><input type="text" data-name placeholder="{e(c["ph"][i])}" maxlength="40" autocomplete="off"></label>
+          <label><span>{e(c["price"])}</span><input type="number" data-price min="0" step="0.01" inputmode="decimal" placeholder="0.00"></label>
+          <label><span class="visually-hidden">{e(c["monthly"])} / {e(c["yearly"])}</span><select data-cycle><option value="m">{e(c["monthly"])}</option><option value="y">{e(c["yearly"])}</option></select></label>
+        </div>""" for i in range(3))
+    return f"""<section class="calc" id="calc">
+  <div class="wrap">
+    <div class="head reveal">
+      <div class="eyebrow">{e(c["eyebrow"])}</div>
+      <h2>{e(c["h"])}</h2>
+      <p class="sub">{e(c["sub"])}</p>
+    </div>
+    <div class="calc-box reveal d1" data-cfg='{cfg}' id="calc-box">
+      <div class="calc-rows">
+        {rows}
+      </div>
+      <p class="calc-result" aria-live="polite">{e(c["empty"])}</p>
+      <div class="calc-actions">
+        <button type="button" class="calc-share reset" hidden>{e(c["share"])}</button>
+        <a class="calc-cta" href="#pricing">{e(c["cta"])}</a>
+      </div>
+    </div>
+  </div>
+</section>"""
+
+def stats_tag(root):
+    return f'<script src="{root}stats.js?v={STATS_VER}" data-relay="{CONTACT_RELAY}" defer></script>'
+
+def guides_url(lang, slug=None):
+    base = BASE if lang == "en" else f"{BASE}{lang}/"
+    return base + "guides/" + (f"{slug}/" if slug else "")
+
+def guides_href(lang, root, slug=None):
+    # root-relative path from the current page to a guide (or the index) in the same language
+    base = root if lang == "en" else f"{root}{lang}/"
+    return base + "guides/" + (f"{slug}/" if slug else "")
+
+def read_minutes(g):
+    words = len((g["intro"] + " " + " ".join(p for _, ps in g["sections"] for p in ps)).split())
+    return max(2, round(words / 180))
+
+def site_header(lang, root, lang_href):
+    t = T[lang]
+    options = "".join(f'<option value="{l}" data-href="{lang_href(l)}"{" selected" if l == lang else ""}>{NAMES[l]}</option>' for l in LANGS)
+    home = f"{root}index.html" if lang == "en" else f"{root}{lang}/index.html"
+    return f"""<header class="top">
+  <div class="wrap">
+    <a class="brand" href="{home}"><img src="{root}img/icon.png" alt="">Billow</a>
+    <nav>
+      <a class="hide-sm" href="{home}#features">{e(t["nav_features"])}</a>
+      <a class="hide-sm" href="{home}#try">{e(TRY[lang]["nav"])}</a>
+      <a class="hide-sm" href="{home}#pricing">{e(PRICING[lang]["nav"])}</a>
+      <a class="cta" href="{root}support.html">{e(t["nav_support"])}</a>
+      <label class="lang"><span class="visually-hidden">{e(t["lang_label"])}</span><select id="lang" aria-label="{e(t["lang_label"])}">{options}</select></label>
+      {theme_button(lang)}
+    </nav>
+  </div>
+</header>"""
+
+def site_footer(lang, root):
+    t = T[lang]
+    home = f"{root}index.html" if lang == "en" else f"{root}{lang}/index.html"
+    return f"""<footer>
+  <div class="wrap">
+    <a class="brand" href="{home}"><img src="{root}img/icon.png" alt="">Billow</a>
+    <nav><a href="{root}support.html">{e(t["nav_support"])}</a><a href="{guides_href(lang, root)}">{e(GUIDES_META[lang]["nav"])}</a><a href="{home}#faq">FAQ</a><a href="{home}#contact">{e(CONTACT[lang]["nav"])}</a><a href="{root}privacy.html">{e(t["privacy_policy"])}</a><a href="{root}terms.html">{e(TERMS[lang])}</a></nav>
+    <span>© 2026 <a class="author" href="https://www.linkedin.com/in/ervin-capi/" rel="me noopener" target="_blank">Ervin Capi</a> · {e(t["logos_by"])} <a href="https://logo.dev">Logo.dev</a></span>
+  </div>
+</footer>"""
+
+def head_common(lang, root, title, desc, canonical, alts, og_image_alt):
+    alt_links = "\n".join(f'<link rel="alternate" hreflang="{l}" href="{u}">' for l, u in alts) + f'\n<link rel="alternate" hreflang="x-default" href="{dict(alts)["en"]}">'
+    return f"""<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{e(title)}</title>
+<meta name="description" content="{e(desc)}">
+<meta name="theme-color" content="#06202A">
+<link rel="canonical" href="{canonical}">
+{alt_links}
+<link rel="icon" href="{root}img/icon.png">
+<link rel="apple-touch-icon" href="{root}img/icon.png">
+<meta property="og:type" content="article">
+<meta property="og:url" content="{canonical}">
+<meta property="og:site_name" content="Billow">
+<meta property="og:title" content="{e(title)}">
+<meta property="og:description" content="{e(desc)}">
+<meta property="og:locale" content="{OG[lang]}">
+<meta property="og:image" content="{BASE}img/og-{lang}.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="{e(og_image_alt)}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="{BASE}img/og-{lang}.png">
+{JS_FLAG}
+{STYLE.replace("</style>", EXTRA_CSS + "</style>")}"""
+
+def guide_body(g):
+    out = [f'<p class="lead">{e(g["intro"])}</p>']
+    for h2, parts in g["sections"]:
+        out.append(f"<h2>{e(h2)}</h2>")
+        items = []
+        for p in parts:
+            if p.startswith("- "):
+                items.append(f"<li>{e(p[2:])}</li>")
+            else:
+                if items: out.append("<ul>" + "".join(items) + "</ul>"); items = []
+                out.append(f"<p>{e(p)}</p>")
+        if items: out.append("<ul>" + "".join(items) + "</ul>")
+    return "\n      ".join(out)
+
+def guide_page(slug, lang):
+    g = GUIDES[slug][lang]; m = GUIDES_META[lang]
+    root = "../../" if lang == "en" else "../../../"
+    canonical = guides_url(lang, slug)
+    alts = [(l, guides_url(l, slug)) for l in LANGS]
+    ld = json.dumps({"@context": "https://schema.org", "@type": "Article", "headline": g["title"], "description": g["desc"], "inLanguage": lang, "datePublished": "2026-11-06", "dateModified": TODAY,
+                     "author": {"@type": "Person", "name": "Ervin Capi", "url": "https://www.linkedin.com/in/ervin-capi/"}, "publisher": {"@type": "Organization", "name": "Billow", "logo": {"@type": "ImageObject", "url": f"{BASE}img/icon.png"}},
+                     "image": f"{BASE}img/og-{lang}.png", "mainEntityOfPage": canonical}, ensure_ascii=False)
+    others = [s for s in GUIDES if s != slug]
+    more = "\n        ".join(f'<a class="guide-card" href="{guides_href(lang, root, s)}"><strong>{e(GUIDES[s][lang]["title"])}</strong><span>{e(GUIDES[s][lang]["desc"])}</span><em>{e(m["read"])} →</em></a>' for s in others)
+    return f"""<!doctype html>
+<html lang="{lang}">
+<head>
+{head_common(lang, root, g["title"] + " · Billow", g["desc"], canonical, alts, g["title"])}
+<script type="application/ld+json">{ld}</script>
+</head>
+<body>
+
+{site_header(lang, root, lambda l: guides_href(l, root, slug))}
+
+<main class="guide">
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="{root if lang == "en" else root + lang + "/"}index.html">Billow</a><span>›</span><a href="{guides_href(lang, root)}">{e(m["h"])}</a></nav>
+    <article>
+      <div class="eyebrow">{e(m["h"])} · {e(m["minutes"].format(n=read_minutes(g)))}</div>
+      <h1>{e(g["title"])}</h1>
+      <p class="meta">{e(m["updated"])} {TODAY}</p>
+      {guide_body(g)}
+    </article>
+    <aside class="guide-cta">
+      <div>
+        <strong>{e(m["cta_h"])}</strong>
+        <span>{e(m["cta_p"])}</span>
+      </div>
+      <div class="cta-row">{store_badge(lang, T[lang]["badge"])}<a class="ghost dark" href="{root if lang == "en" else root + lang + "/"}index.html#try">{e(TRY[lang]["nav"])}</a></div>
+    </aside>
+    <section class="guide-more">
+      <h2>{e(m["back"])}</h2>
+      <div class="guide-grid">
+        {more}
+      </div>
+    </section>
+  </div>
+</main>
+
+{site_footer(lang, root)}
+
+{REMEMBER}
+<script src="{root}theme.js?v={THEME_VER}" defer></script>
+{stats_tag(root)}
+</body>
+</html>
+"""
+
+def guides_index(lang):
+    m = GUIDES_META[lang]
+    root = "../" if lang == "en" else "../../"
+    canonical = guides_url(lang)
+    alts = [(l, guides_url(l)) for l in LANGS]
+    cards = "\n        ".join(f'<a class="guide-card" href="{guides_href(lang, root, s)}"><strong>{e(GUIDES[s][lang]["title"])}</strong><span>{e(GUIDES[s][lang]["desc"])}</span><em>{e(m["read"])} · {e(m["minutes"].format(n=read_minutes(GUIDES[s][lang])))}</em></a>' for s in GUIDES)
+    return f"""<!doctype html>
+<html lang="{lang}">
+<head>
+{head_common(lang, root, m["h"] + " · Billow", m["sub"], canonical, alts, m["h"])}
+</head>
+<body>
+
+{site_header(lang, root, lambda l: guides_href(l, root))}
+
+<main class="guide index">
+  <div class="wrap">
+    <div class="head">
+      <h1>{e(m["h"])}</h1>
+      <p class="sub">{e(m["sub"])}</p>
+    </div>
+    <div class="guide-grid">
+      {cards}
+    </div>
+  </div>
+</main>
+
+{site_footer(lang, root)}
+
+{REMEMBER}
+<script src="{root}theme.js?v={THEME_VER}" defer></script>
+{stats_tag(root)}
+</body>
+</html>
+"""
+
+def guides_strip(lang, root):
+    m = GUIDES_META[lang]
+    cards = "\n      ".join(f'<a class="guide-card reveal d{i}" href="{guides_href(lang, root, s)}"><strong>{e(GUIDES[s][lang]["title"])}</strong><span>{e(GUIDES[s][lang]["desc"])}</span><em>{e(m["read"])} · {e(m["minutes"].format(n=read_minutes(GUIDES[s][lang])))}</em></a>' for i, s in enumerate(GUIDES))
+    return f"""<section class="guides" id="guides">
+  <div class="wrap">
+    <div class="head reveal">
+      <h2>{e(m["h"])}</h2>
+      <p class="sub">{e(m["sub"])}</p>
+    </div>
+    <div class="guide-grid">
+      {cards}
+    </div>
+  </div>
+</section>"""
+
+def write_sitemap():
+    def entry(loc, alts=None, freq="weekly", prio="0.8"):
+        a = "".join(f'\n    <xhtml:link rel="alternate" hreflang="{l}" href="{u}"/>' for l, u in alts) + f'\n    <xhtml:link rel="alternate" hreflang="x-default" href="{dict(alts)["en"]}"/>' if alts else ""
+        return f"\n  <url>\n    <loc>{loc}</loc>\n    <lastmod>{TODAY}</lastmod>\n    <changefreq>{freq}</changefreq>\n    <priority>{prio}</priority>{a}\n  </url>"
+    pages = [(BASE if l == "en" else f"{BASE}{l}/") for l in LANGS]
+    body = "".join(entry(u, [(l, BASE if l == "en" else f"{BASE}{l}/") for l in LANGS], prio="1.0" if i == 0 else "0.9") for i, u in enumerate(pages))
+    body += "".join(entry(guides_url(l), [(x, guides_url(x)) for x in LANGS], prio="0.7") for l in LANGS)
+    for slug in GUIDES:
+        body += "".join(entry(guides_url(l, slug), [(x, guides_url(x, slug)) for x in LANGS], freq="monthly", prio="0.7") for l in LANGS)
+    body += "".join(entry(BASE + p, None, "monthly", "0.5") for p in ["support.html", "privacy.html", "terms.html"])
+    (SITE / "sitemap.xml").write_text('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">' + body + "\n</urlset>\n")
+
 def page(lang):
     t = T[lang]
     root = "" if lang == "en" else "../"
@@ -920,6 +1198,7 @@ def page(lang):
 <title>{e(t["title"])}</title>
 <meta name="description" content="{e(t["desc"])}">
 <meta name="theme-color" content="#06202A">
+{f'<meta name="apple-itunes-app" content="app-id={APP_STORE_ID}">' if APP_STORE_LIVE else ''}
 <link rel="canonical" href="{url(lang)}">
 {alts}
 <link rel="alternate" hreflang="x-default" href="{BASE}">
@@ -941,6 +1220,7 @@ def page(lang):
 <meta name="twitter:image" content="{BASE}img/og-{lang}.png">
 {DETECT if lang == "en" else ""}
 {JS_FLAG}
+{app_jsonld(lang, t)}
 {style}
 </head>
 <body>
@@ -967,7 +1247,7 @@ def page(lang):
       <h1>{e(t["h1a"])} <span>{e(t["h1b"])}</span></h1>
       <p class="lead">{e(t["lead"])}</p>
       <div class="cta-row">
-        <span class="badge">{APPLE}{e(t["badge"])}</span>
+        {store_badge(lang, t["badge"])}
         <a class="ghost" href="#try">{e(TRY[lang]["nav"])}{ARROW}</a>
       </div>
       <div class="pills">{pills}</div>
@@ -1001,6 +1281,8 @@ def page(lang):
 
 {more_section(lang, root)}
 
+{calc_section(lang, root)}
+
 {pricing_section(lang, root)}
 
 <section class="gallery">
@@ -1029,6 +1311,8 @@ def page(lang):
   </div>
 </section>
 
+{guides_strip(lang, root)}
+
 {faq_section(lang, root)}
 
 {contact_section(lang, root)}
@@ -1038,7 +1322,7 @@ def page(lang):
     <div class="box reveal">
       <h2>{e(t["h1a"])} <span>{e(t["h1b"])}</span></h2>
       <p>{e(t["priv_sub"])}</p>
-      <div class="cta-row"><span class="badge">{APPLE}{e(t["badge"])}</span></div>
+      <div class="cta-row">{store_badge(lang, t["badge"])}</div>
     </div>
   </div>
 </section>
@@ -1046,7 +1330,7 @@ def page(lang):
 <footer>
   <div class="wrap">
     <a class="brand" href="{href(lang)}"><img src="{root}img/icon.png" alt="">Billow</a>
-    <nav><a href="{root}support.html">{e(t["nav_support"])}</a><a href="#faq">FAQ</a><a href="#contact">{e(CONTACT[lang]["nav"])}</a><a href="{root}privacy.html">{e(t["privacy_policy"])}</a><a href="{root}terms.html">{e(TERMS[lang])}</a></nav>
+    <nav><a href="{root}support.html">{e(t["nav_support"])}</a><a href="{guides_href(lang, root)}">{e(GUIDES_META[lang]["nav"])}</a><a href="#faq">FAQ</a><a href="#contact">{e(CONTACT[lang]["nav"])}</a><a href="{root}privacy.html">{e(t["privacy_policy"])}</a><a href="{root}terms.html">{e(TERMS[lang])}</a></nav>
     <span>© 2026 <a class="author" href="https://www.linkedin.com/in/ervin-capi/" rel="me noopener" target="_blank">Ervin Capi<svg viewBox="0 0 24 24" aria-label="LinkedIn" role="img"><path d="M20.4 2H3.6A1.6 1.6 0 0 0 2 3.6v16.8A1.6 1.6 0 0 0 3.6 22h16.8a1.6 1.6 0 0 0 1.6-1.6V3.6A1.6 1.6 0 0 0 20.4 2zM8 19H5v-9h3zM6.5 8.7a1.7 1.7 0 1 1 0-3.4 1.7 1.7 0 0 1 0 3.4zM19 19h-3v-4.6c0-1.1 0-2.5-1.5-2.5S12.7 13 12.7 14.3V19h-3v-9h2.9v1.2a3.2 3.2 0 0 1 2.9-1.6c3.1 0 3.6 2 3.6 4.7z"/></svg></a> · {e(t["logos_by"])} <a href="https://logo.dev">Logo.dev</a></span>
   </div>
 </footer>
@@ -1062,3 +1346,11 @@ for lang in LANGS:
     out.parent.mkdir(exist_ok=True)
     out.write_text(page(lang))
     print(out)
+    gdir = (SITE if lang == "en" else SITE / lang) / "guides"
+    gdir.mkdir(parents=True, exist_ok=True)
+    (gdir / "index.html").write_text(guides_index(lang))
+    for slug in GUIDES:
+        (gdir / slug).mkdir(exist_ok=True)
+        (gdir / slug / "index.html").write_text(guide_page(slug, lang))
+write_sitemap()
+print(SITE / "sitemap.xml")

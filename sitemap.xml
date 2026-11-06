@@ -61,6 +61,246 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://billow-app.org/"/>
   </url>
   <url>
+    <loc>https://billow-app.org/guides/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://billow-app.org/guides/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://billow-app.org/de/guides/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://billow-app.org/es/guides/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://billow-app.org/it/guides/"/>
+    <xhtml:link rel="alternate" hreflang="sq" href="https://billow-app.org/sq/guides/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://billow-app.org/guides/"/>
+  </url>
+  <url>
+    <loc>https://billow-app.org/de/guides/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://billow-app.org/guides/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://billow-app.org/de/guides/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://billow-app.org/es/guides/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://billow-app.org/it/guides/"/>
+    <xhtml:link rel="alternate" hreflang="sq" href="https://billow-app.org/sq/guides/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://billow-app.org/guides/"/>
+  </url>
+  <url>
+    <loc>https://billow-app.org/es/guides/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://billow-app.org/guides/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://billow-app.org/de/guides/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://billow-app.org/es/guides/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://billow-app.org/it/guides/"/>
+    <xhtml:link rel="alternate" hreflang="sq" href="https://billow-app.org/sq/guides/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://billow-app.org/guides/"/>
+  </url>
+  <url>
+    <loc>https://billow-app.org/it/guides/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://billow-app.org/guides/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://billow-app.org/de/guides/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://billow-app.org/es/guides/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://billow-app.org/it/guides/"/>
+    <xhtml:link rel="alternate" hreflang="sq" href="https://billow-app.org/sq/guides/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://billow-app.org/guides/"/>
+  </url>
+  <url>
+    <loc>https://billow-app.org/sq/guides/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://billow-app.org/guides/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://billow-app.org/de/guides/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://billow-app.org/es/guides/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://billow-app.org/it/guides/"/>
+    <xhtml:link rel="alternate" hreflang="sq" href="https://billow-app.org/sq/guides/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://billow-app.org/guides/"/>
+  </url>
+  <url>
+    <loc>https://billow-app.org/guides/cancel-netflix/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://billow-app.org/guides/cancel-netflix/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://billow-app.org/de/guides/cancel-netflix/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://billow-app.org/es/guides/cancel-netflix/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://billow-app.org/it/guides/cancel-netflix/"/>
+    <xhtml:link rel="alternate" hreflang="sq" href="https://billow-app.org/sq/guides/cancel-netflix/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://billow-app.org/guides/cancel-netflix/"/>
+  </url>
+  <url>
+    <loc>https://billow-app.org/de/guides/cancel-netflix/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://billow-app.org/guides/cancel-netflix/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://billow-app.org/de/guides/cancel-netflix/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://billow-app.org/es/guides/cancel-netflix/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://billow-app.org/it/guides/cancel-netflix/"/>
+    <xhtml:link rel="alternate" hreflang="sq" href="https://billow-app.org/sq/guides/cancel-netflix/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://billow-app.org/guides/cancel-netflix/"/>
+  </url>
+  <url>
+    <loc>https://billow-app.org/es/guides/cancel-netflix/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://billow-app.org/guides/cancel-netflix/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://billow-app.org/de/guides/cancel-netflix/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://billow-app.org/es/guides/cancel-netflix/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://billow-app.org/it/guides/cancel-netflix/"/>
+    <xhtml:link rel="alternate" hreflang="sq" href="https://billow-app.org/sq/guides/cancel-netflix/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://billow-app.org/guides/cancel-netflix/"/>
+  </url>
+  <url>
+    <loc>https://billow-app.org/it/guides/cancel-netflix/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://billow-app.org/guides/cancel-netflix/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://billow-app.org/de/guides/cancel-netflix/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://billow-app.org/es/guides/cancel-netflix/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://billow-app.org/it/guides/cancel-netflix/"/>
+    <xhtml:link rel="alternate" hreflang="sq" href="https://billow-app.org/sq/guides/cancel-netflix/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://billow-app.org/guides/cancel-netflix/"/>
+  </url>
+  <url>
+    <loc>https://billow-app.org/sq/guides/cancel-netflix/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://billow-app.org/guides/cancel-netflix/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://billow-app.org/de/guides/cancel-netflix/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://billow-app.org/es/guides/cancel-netflix/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://billow-app.org/it/guides/cancel-netflix/"/>
+    <xhtml:link rel="alternate" hreflang="sq" href="https://billow-app.org/sq/guides/cancel-netflix/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://billow-app.org/guides/cancel-netflix/"/>
+  </url>
+  <url>
+    <loc>https://billow-app.org/guides/what-a-free-trial-really-costs/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://billow-app.org/guides/what-a-free-trial-really-costs/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://billow-app.org/de/guides/what-a-free-trial-really-costs/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://billow-app.org/es/guides/what-a-free-trial-really-costs/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://billow-app.org/it/guides/what-a-free-trial-really-costs/"/>
+    <xhtml:link rel="alternate" hreflang="sq" href="https://billow-app.org/sq/guides/what-a-free-trial-really-costs/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://billow-app.org/guides/what-a-free-trial-really-costs/"/>
+  </url>
+  <url>
+    <loc>https://billow-app.org/de/guides/what-a-free-trial-really-costs/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://billow-app.org/guides/what-a-free-trial-really-costs/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://billow-app.org/de/guides/what-a-free-trial-really-costs/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://billow-app.org/es/guides/what-a-free-trial-really-costs/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://billow-app.org/it/guides/what-a-free-trial-really-costs/"/>
+    <xhtml:link rel="alternate" hreflang="sq" href="https://billow-app.org/sq/guides/what-a-free-trial-really-costs/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://billow-app.org/guides/what-a-free-trial-really-costs/"/>
+  </url>
+  <url>
+    <loc>https://billow-app.org/es/guides/what-a-free-trial-really-costs/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://billow-app.org/guides/what-a-free-trial-really-costs/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://billow-app.org/de/guides/what-a-free-trial-really-costs/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://billow-app.org/es/guides/what-a-free-trial-really-costs/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://billow-app.org/it/guides/what-a-free-trial-really-costs/"/>
+    <xhtml:link rel="alternate" hreflang="sq" href="https://billow-app.org/sq/guides/what-a-free-trial-really-costs/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://billow-app.org/guides/what-a-free-trial-really-costs/"/>
+  </url>
+  <url>
+    <loc>https://billow-app.org/it/guides/what-a-free-trial-really-costs/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://billow-app.org/guides/what-a-free-trial-really-costs/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://billow-app.org/de/guides/what-a-free-trial-really-costs/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://billow-app.org/es/guides/what-a-free-trial-really-costs/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://billow-app.org/it/guides/what-a-free-trial-really-costs/"/>
+    <xhtml:link rel="alternate" hreflang="sq" href="https://billow-app.org/sq/guides/what-a-free-trial-really-costs/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://billow-app.org/guides/what-a-free-trial-really-costs/"/>
+  </url>
+  <url>
+    <loc>https://billow-app.org/sq/guides/what-a-free-trial-really-costs/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://billow-app.org/guides/what-a-free-trial-really-costs/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://billow-app.org/de/guides/what-a-free-trial-really-costs/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://billow-app.org/es/guides/what-a-free-trial-really-costs/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://billow-app.org/it/guides/what-a-free-trial-really-costs/"/>
+    <xhtml:link rel="alternate" hreflang="sq" href="https://billow-app.org/sq/guides/what-a-free-trial-really-costs/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://billow-app.org/guides/what-a-free-trial-really-costs/"/>
+  </url>
+  <url>
+    <loc>https://billow-app.org/guides/find-your-subscriptions-on-iphone/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://billow-app.org/guides/find-your-subscriptions-on-iphone/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://billow-app.org/de/guides/find-your-subscriptions-on-iphone/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://billow-app.org/es/guides/find-your-subscriptions-on-iphone/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://billow-app.org/it/guides/find-your-subscriptions-on-iphone/"/>
+    <xhtml:link rel="alternate" hreflang="sq" href="https://billow-app.org/sq/guides/find-your-subscriptions-on-iphone/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://billow-app.org/guides/find-your-subscriptions-on-iphone/"/>
+  </url>
+  <url>
+    <loc>https://billow-app.org/de/guides/find-your-subscriptions-on-iphone/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://billow-app.org/guides/find-your-subscriptions-on-iphone/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://billow-app.org/de/guides/find-your-subscriptions-on-iphone/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://billow-app.org/es/guides/find-your-subscriptions-on-iphone/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://billow-app.org/it/guides/find-your-subscriptions-on-iphone/"/>
+    <xhtml:link rel="alternate" hreflang="sq" href="https://billow-app.org/sq/guides/find-your-subscriptions-on-iphone/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://billow-app.org/guides/find-your-subscriptions-on-iphone/"/>
+  </url>
+  <url>
+    <loc>https://billow-app.org/es/guides/find-your-subscriptions-on-iphone/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://billow-app.org/guides/find-your-subscriptions-on-iphone/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://billow-app.org/de/guides/find-your-subscriptions-on-iphone/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://billow-app.org/es/guides/find-your-subscriptions-on-iphone/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://billow-app.org/it/guides/find-your-subscriptions-on-iphone/"/>
+    <xhtml:link rel="alternate" hreflang="sq" href="https://billow-app.org/sq/guides/find-your-subscriptions-on-iphone/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://billow-app.org/guides/find-your-subscriptions-on-iphone/"/>
+  </url>
+  <url>
+    <loc>https://billow-app.org/it/guides/find-your-subscriptions-on-iphone/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://billow-app.org/guides/find-your-subscriptions-on-iphone/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://billow-app.org/de/guides/find-your-subscriptions-on-iphone/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://billow-app.org/es/guides/find-your-subscriptions-on-iphone/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://billow-app.org/it/guides/find-your-subscriptions-on-iphone/"/>
+    <xhtml:link rel="alternate" hreflang="sq" href="https://billow-app.org/sq/guides/find-your-subscriptions-on-iphone/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://billow-app.org/guides/find-your-subscriptions-on-iphone/"/>
+  </url>
+  <url>
+    <loc>https://billow-app.org/sq/guides/find-your-subscriptions-on-iphone/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://billow-app.org/guides/find-your-subscriptions-on-iphone/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://billow-app.org/de/guides/find-your-subscriptions-on-iphone/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://billow-app.org/es/guides/find-your-subscriptions-on-iphone/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://billow-app.org/it/guides/find-your-subscriptions-on-iphone/"/>
+    <xhtml:link rel="alternate" hreflang="sq" href="https://billow-app.org/sq/guides/find-your-subscriptions-on-iphone/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://billow-app.org/guides/find-your-subscriptions-on-iphone/"/>
+  </url>
+  <url>
     <loc>https://billow-app.org/support.html</loc>
     <lastmod>2026-11-06</lastmod>
     <changefreq>monthly</changefreq>

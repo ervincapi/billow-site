@@ -151,14 +151,38 @@
     if (f === "price") { var hint = root.querySelector(".toggle small"); if (hint) hint.textContent = fmt(T.trial_hint, { x: money.format(+ev.target.value || 0) }); }
   });
   root.addEventListener("change", function (ev) { if (ev.target.getAttribute("data-act") === "payday") { state.payday = +ev.target.value; render(); } });
-  var reset = document.getElementById("demo-reset"); if (reset) reset.addEventListener("click", function () { seed(); render(); });
-  seed(); render();
+  var reset = document.getElementById("demo-reset"); if (reset) reset.addEventListener("click", function () { seed(); render(); history.replaceState(null, "", location.pathname + location.search + "#try"); });
+  /* Share: the demo state travels in the URL hash (#try=...), nothing is stored anywhere. */
+  function encodeState() {
+    var t = today();
+    return btoa(unescape(encodeURIComponent(JSON.stringify({ p: state.payday, s: state.subs.map(function (s) { return [s.name, s.price, s.cycle, s.color, days(s.next), s.trial ? 1 : 0, s.oldPrice || 0]; }) })))).replace(/=+$/, "");
+  }
+  function decodeState(str) {
+    try {
+      var o = JSON.parse(decodeURIComponent(escape(atob(str)))); if (!o || !o.s) return false;
+      state.payday = Math.min(28, Math.max(1, +o.p || 28));
+      state.subs = o.s.slice(0, 30).map(function (a) { return { id: nextId++, name: String(a[0]).slice(0, 60), price: Math.max(0, +a[1] || 0), cycle: a[2] === "y" ? "y" : "m", color: /^#[0-9a-fA-F]{6}$/.test(a[3]) ? a[3] : "#0E7490", next: addDays(today(), Math.max(0, Math.min(365, +a[4] || 0))), trial: !!a[5], oldPrice: +a[6] || undefined }; });
+      return true;
+    } catch (e) { return false; }
+  }
+  var share = document.getElementById("demo-share");
+  if (share) share.addEventListener("click", function () {
+    var url = location.origin + location.pathname + "#try=" + encodeState();
+    var done = function () { share.classList.add("done"); var label = share.lastChild.textContent; share.lastChild.textContent = share.getAttribute("data-copied"); setTimeout(function () { share.classList.remove("done"); share.lastChild.textContent = label; }, 1800); };
+    if (navigator.share) { navigator.share({ title: document.title, url: url }).then(done).catch(function () {}); }
+    else if (navigator.clipboard) { navigator.clipboard.writeText(url).then(done); }
+    else { prompt("URL", url); }
+  });
+  seed();
+  var m = location.hash.match(/^#try=(.+)$/);
+  if (m && decodeState(m[1])) { setTimeout(function () { var el = document.getElementById("try"); if (el) el.scrollIntoView(); }, 50); }
+  render();
 })();
 
 /* Nudge the demo phone when someone arrives via a "Try it" link, so it reads as interactive, not a picture. */
 (function () {
   var phone = document.querySelector(".demo .phone"); if (!phone) return;
   function nudge() { phone.classList.remove("nudge"); void phone.offsetWidth; phone.classList.add("nudge"); setTimeout(function () { phone.classList.remove("nudge"); }, 1100); }
-  if (location.hash === "#try") setTimeout(nudge, 700);
+  if (location.hash.indexOf("#try") === 0) setTimeout(nudge, 700);
   document.querySelectorAll('a[href="#try"]').forEach(function (a) { a.addEventListener("click", function () { setTimeout(nudge, 650); }); });
 })();
