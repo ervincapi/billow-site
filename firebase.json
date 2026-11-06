@@ -37,6 +37,31 @@
         "source": "/billow-site/:path*",
         "destination": "/:path",
         "type": 301
+      },
+      {
+        "source": "/guides/cancel-netflix{,/**}",
+        "destination": "/guides/how-to-cancel-a-subscription/",
+        "type": 301
+      },
+      {
+        "source": "/de/guides/cancel-netflix{,/**}",
+        "destination": "/de/guides/how-to-cancel-a-subscription/",
+        "type": 301
+      },
+      {
+        "source": "/es/guides/cancel-netflix{,/**}",
+        "destination": "/es/guides/how-to-cancel-a-subscription/",
+        "type": 301
+      },
+      {
+        "source": "/it/guides/cancel-netflix{,/**}",
+        "destination": "/it/guides/how-to-cancel-a-subscription/",
+        "type": 301
+      },
+      {
+        "source": "/sq/guides/cancel-netflix{,/**}",
+        "destination": "/sq/guides/how-to-cancel-a-subscription/",
+        "type": 301
       }
     ]
   }
