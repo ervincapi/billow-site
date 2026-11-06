@@ -218,4 +218,133 @@ footer nav a:hover { color: var(--ink); }
   footer .wrap { justify-content: center; text-align: center; }
 }
 @media (max-width: 400px) { .grid4 { grid-template-columns: 1fr; } }
+
+/* ---------- "And there's more" bento ---------- */
+.more { padding: 24px 0 72px; }
+.more .head { text-align: center; max-width: 60ch; margin: 0 auto 44px; }
+.more h2 { font-size: clamp(30px, 3.8vw, 42px); margin: 0 0 12px; }
+.more .sub { color: var(--muted); font-size: 18px; margin: 0; }
+.bento { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.bento .tile { display: flex; flex-direction: column; }
+.bento .tile.wide { grid-column: span 2; }
+.bento .tile span { flex: 1; }
+.bento .note { text-align: center; color: var(--muted); font-size: 15px; margin: 28px 0 0; }
+.split { margin-top: 20px; background: var(--ground); border: 1px solid var(--line); border-radius: 14px; padding: 6px 14px; font-size: 14px; }
+.split .row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-top: 1px solid var(--line); }
+.split .row.sum { border-top: 0; justify-content: space-between; font-size: 15px; }
+.split .row span { flex: 1; color: var(--muted); }
+.split .row b { font-variant-numeric: tabular-nums; }
+.split .row i { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; color: #fff; font: 700 12px/1 -apple-system, BlinkMacSystemFont, sans-serif; font-style: normal; }
+.widgets { margin-top: 20px; display: flex; gap: 12px; align-items: flex-start; flex-wrap: wrap; }
+.widgets .w.small { width: 132px; aspect-ratio: 1; border-radius: 22px; padding: 14px; background: linear-gradient(160deg, #0B3C4A, #0E7490); color: #fff; display: flex; flex-direction: column; box-shadow: var(--shadow); }
+.widgets .w.small small { font-size: 11px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: #9ED9E6; }
+.widgets .w.small b { font-size: 19px; margin-top: auto; letter-spacing: -.02em; }
+.widgets .w.small em { font-style: normal; font-size: 13px; color: #CFE9F0; }
+.widgets .w.inline { display: inline-flex; align-items: center; gap: 8px; padding: 9px 14px; border-radius: 999px; background: var(--ink); color: var(--ground); font-size: 13px; font-weight: 600; }
+.widgets .w.inline i { width: 14px; height: 14px; border-radius: 4px; background: linear-gradient(135deg, #7DD3E6, #0E7490); }
+
+/* ---------- Try it now ---------- */
+.try { padding: 96px 0 24px; }
+.try .wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+.try h2 { font-size: clamp(30px, 3.8vw, 42px); line-height: 1.1; margin: 0 0 16px; }
+.try .text > p { color: var(--muted); margin: 0 0 24px; max-width: 46ch; }
+.steps { list-style: none; padding: 0; margin: 0 0 26px; display: grid; gap: 12px; }
+.steps li { display: flex; gap: 12px; align-items: flex-start; font-size: 16px; }
+.steps li span { flex: none; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; background: var(--tint); color: var(--accent); font-size: 13px; font-weight: 700; margin-top: 1px; }
+.reset { font: inherit; font-size: 14px; font-weight: 600; color: var(--muted); background: none; border: 1px solid var(--line); border-radius: 999px; padding: 8px 16px; cursor: pointer; }
+.reset:hover { color: var(--ink); border-color: var(--accent); }
+.demo { display: grid; place-items: center; }
+.demo .phone { width: 320px; max-width: 92vw; }
+.demo .screen { aspect-ratio: 414 / 860; position: relative; }
+.app { position: absolute; inset: 0; display: flex; flex-direction: column; background: #F2F4F7; color: #0B1220; font-size: 13px; line-height: 1.35; -webkit-font-smoothing: antialiased; }
+.app * { box-sizing: border-box; }
+.app .view { flex: 1; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none; display: flex; flex-direction: column; }
+.app .view::-webkit-scrollbar { display: none; }
+.app .hd { padding: 44px 16px 14px; background: linear-gradient(180deg, #06202A, #0B3C4A); color: #fff; flex: none; }
+.app .hd.light { background: #F2F4F7; color: #0B1220; padding-bottom: 8px; }
+.app .dbrand { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 15px; margin-bottom: 14px; }
+.app .dbrand i { width: 22px; height: 22px; border-radius: 6px; background: #0E7490 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2.4' stroke-linecap='round'%3E%3Cpath d='M3 15c3-4 6-4 9 0s6 4 9 0'/%3E%3Cpath d='M3 9c3-4 6-4 9 0s6 4 9 0'/%3E%3C/svg%3E") center/14px no-repeat; }
+.app .greet b { display: block; font-size: 17px; font-weight: 700; }
+.app .greet small { font-size: 12px; color: #9ED9E6; }
+.app .greet small.amber { color: #F2A33A; }
+.app .body { padding: 12px 12px 72px; display: flex; flex-direction: column; gap: 10px; }
+.app .dcard { background: #fff; border-radius: 16px; padding: 12px 14px; }
+.app .total small { font-size: 10px; font-weight: 700; letter-spacing: .08em; color: #66737F; }
+.app .total div { display: flex; align-items: baseline; gap: 5px; }
+.app .total b { font-size: 28px; font-weight: 800; letter-spacing: -.03em; }
+.app .total span { color: #66737F; }
+.app .total em { display: block; font-style: normal; font-size: 12px; margin-top: 2px; }
+.app .amber { color: #B45309; }
+.app .payday { display: flex; align-items: center; justify-content: space-between; gap: 10px; border: 1px solid #DCEFF3; background: #EAF6F9; }
+.app .payday small { display: block; font-size: 11px; color: #0E7490; font-weight: 600; }
+.app .payday b { font-size: 18px; font-weight: 800; letter-spacing: -.02em; }
+.app .payday label { font-size: 11px; color: #66737F; display: flex; align-items: center; gap: 6px; }
+.app .payday select { font: inherit; font-size: 13px; font-weight: 600; color: #0B1220; background: #fff; border: 1px solid #DCE4EA; border-radius: 8px; padding: 4px 6px; }
+.app .alerts { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; margin: 0 -12px; padding: 0 12px; }
+.app .alerts::-webkit-scrollbar { display: none; }
+.app .alert { flex: 0 0 78%; border-radius: 14px; padding: 10px 12px; background: #fff; border: 1px solid #E6EBF0; }
+.app .alert.amber { background: #FFF4DD; border-color: #F7E2B8; }
+.app .alert small { display: block; font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #B45309; }
+.app .alert.teal small { color: #0E7490; }
+.app .alert b { display: block; font-size: 15px; margin: 2px 0; }
+.app .alert span { font-size: 12px; color: #5B6B7A; }
+.app h4 { margin: 8px 2px 0; font-size: 15px; font-weight: 700; display: flex; justify-content: space-between; }
+.app h4 span { color: #66737F; font-weight: 500; font-size: 13px; }
+.app .list { background: #fff; border-radius: 16px; overflow: hidden; }
+.app .item { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-top: 1px solid #EEF2F5; width: 100%; text-align: left; font: inherit; color: inherit; background: none; border-left: 0; border-right: 0; border-bottom: 0; }
+.app .item:first-child { border-top: 0; }
+.app .item.pick { cursor: pointer; }
+.app .item.pick:hover { background: #F7F9FB; }
+.app .item.pick > span { color: #0E7490; font-size: 20px; font-weight: 600; }
+.app .logo { flex: none; width: 34px; height: 34px; border-radius: 9px; display: grid; place-items: center; color: #fff; font: 700 12px/1 -apple-system, BlinkMacSystemFont, sans-serif; font-style: normal; }
+.app .logo.big { width: 52px; height: 52px; border-radius: 14px; font-size: 18px; }
+.app .meta { flex: 1; min-width: 0; }
+.app .meta b { display: block; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.app .meta small { color: #66737F; font-size: 12px; }
+.app .tag { font-style: normal; font-size: 9px; font-weight: 700; letter-spacing: .05em; color: #B45309; background: #FFF4DD; border-radius: 5px; padding: 1px 5px; vertical-align: 2px; margin-left: 4px; }
+.app .item strong { font-size: 14px; font-variant-numeric: tabular-nums; }
+.app .x { font: inherit; font-size: 16px; line-height: 1; color: #98A3AD; background: #F2F4F7; border: 0; width: 24px; height: 24px; border-radius: 50%; cursor: pointer; }
+.app .x:hover { color: #B91C1C; background: #FEE2E2; }
+.app .empty { margin: 0; padding: 18px 14px; color: #66737F; text-align: center; }
+.app input[type="search"] { width: 100%; font: inherit; font-size: 14px; padding: 9px 12px; border-radius: 12px; border: 0; background: #fff; box-shadow: 0 1px 2px rgba(11,18,32,.06); outline: none; }
+.app .form label { display: flex; align-items: center; justify-content: space-between; gap: 10px; background: #fff; border-radius: 14px; padding: 10px 14px; font-size: 14px; }
+.app .form label input { font: inherit; font-size: 15px; font-weight: 600; text-align: right; border: 0; background: none; width: 46%; outline: none; color: #0B1220; }
+.app .form .svc { display: flex; align-items: center; gap: 12px; padding: 4px 2px 8px; }
+.app .form .svc b { font-size: 18px; }
+.app .seg { display: flex; align-items: center; justify-content: space-between; background: #fff; border-radius: 14px; padding: 8px 10px 8px 14px; font-size: 14px; }
+.app .seg div { display: flex; background: #EEF2F5; border-radius: 10px; padding: 3px; }
+.app .seg button { font: inherit; font-size: 13px; font-weight: 600; color: #66737F; background: none; border: 0; border-radius: 8px; padding: 5px 12px; cursor: pointer; }
+.app .seg button.on { background: #fff; color: #0B1220; box-shadow: 0 1px 3px rgba(11,18,32,.12); }
+.app .toggle span small { display: block; font-size: 11px; color: #66737F; font-weight: 400; }
+.app .toggle input { position: absolute; opacity: 0; width: 0; height: 0; }
+.app .toggle i { flex: none; width: 44px; height: 26px; border-radius: 999px; background: #D5DDE3; position: relative; transition: background .2s; }
+.app .toggle i::after { content: ""; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.25); transition: transform .2s; }
+.app .toggle input:checked + i { background: #0E7490; }
+.app .toggle input:checked + i::after { transform: translateX(18px); }
+.app .primary { font: inherit; font-size: 15px; font-weight: 700; color: #fff; background: #0E7490; border: 0; border-radius: 14px; padding: 13px; cursor: pointer; margin-top: 6px; }
+.app .back { font: inherit; font-size: 15px; color: #0E7490; background: none; border: 0; padding: 0; cursor: pointer; }
+.app .grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; background: #fff; border-radius: 16px; padding: 10px; }
+.app .grid > span { text-align: center; font-size: 10px; font-weight: 700; color: #98A3AD; }
+.app .cell { aspect-ratio: 1; border-radius: 9px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 12px; }
+.app .cell b { font-weight: 500; }
+.app .cell small { font-size: 9px; color: #0E7490; font-weight: 700; }
+.app .cell.today { background: #EAF6F9; }
+.app .cell.today b { font-weight: 800; color: #0E7490; }
+.app .cell.payday { box-shadow: inset 0 0 0 2px #0E7490; }
+.app .tabs { position: absolute; left: 10px; right: 10px; bottom: 10px; display: flex; background: rgba(255,255,255,.92); backdrop-filter: blur(10px); border-radius: 22px; padding: 6px; box-shadow: 0 6px 20px -8px rgba(11,18,32,.3); }
+.app .tabs button { flex: 1; font: inherit; font-size: 10px; font-weight: 600; color: #66737F; background: none; border: 0; border-radius: 16px; padding: 6px 0 5px; display: flex; flex-direction: column; align-items: center; gap: 2px; cursor: pointer; }
+.app .tabs button svg { width: 20px; height: 20px; stroke: currentColor; }
+.app .tabs button.on { color: #0E7490; background: #EAF6F9; }
+.app .toast { position: absolute; left: 50%; bottom: 72px; transform: translateX(-50%); background: #0B1220; color: #fff; font-size: 12px; font-weight: 600; padding: 8px 14px; border-radius: 999px; white-space: nowrap; box-shadow: 0 8px 20px -8px rgba(0,0,0,.5); }
+@media (prefers-color-scheme: dark) { .app .hd.light { background: #F2F4F7; } }
+@media (max-width: 960px) {
+  .try .wrap { grid-template-columns: 1fr; gap: 36px; }
+  .bento { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 640px) {
+  .bento { grid-template-columns: 1fr; }
+  .bento .tile.wide { grid-column: auto; }
+  .try { padding-top: 72px; }
+  .demo .phone { width: 300px; }
+}
 </style>

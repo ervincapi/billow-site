@@ -1,11 +1,14 @@
 """Generates the Billow landing page in five languages into billow-site/."""
+import hashlib
 import html
+import json
 import pathlib
 import sys
 
 SITE = pathlib.Path(sys.argv[1])
 STYLE = pathlib.Path(sys.argv[2]).read_text()
 BASE = "https://billow-app.org/"
+DEMO_VER = hashlib.sha1((SITE / "demo.js").read_bytes()).hexdigest()[:8]
 
 LANGS = ["en", "de", "es", "it", "sq"]
 NAMES = {"en": "English", "de": "Deutsch", "es": "Español", "it": "Italiano", "sq": "Shqip"}
@@ -342,6 +345,206 @@ STATS = {
   "sq": [("500+", "shërbime me logo"), ("5", "gjuhë, çdo monedhë"), ("0", "llogari, serverë apo gjurmues")],
 }
 
+# ---- "And there's more" section: strings reused from the app's own String Catalog (Localizable.xcstrings).
+APP_STRINGS = {
+ "guide.everywhere.title": {
+  "en": "Widgets, Siri and Spotlight",
+  "de": "Widgets, Siri und Spotlight",
+  "es": "Widgets, Siri y Spotlight",
+  "it": "Widget, Siri e Spotlight",
+  "sq": "Widget-e, Siri dhe Spotlight"
+ },
+ "guide.everywhere.body": {
+  "en": "Home and Lock Screen widgets with Mark paid, “What's due this week?” in Siri, and every subscription in Spotlight.",
+  "de": "Home- und Sperrbildschirm-Widgets mit „Als bezahlt markieren“, „Was wird diese Woche fällig?“ in Siri und jedes Abo in Spotlight.",
+  "es": "Widgets de inicio y pantalla de bloqueo con Marcar como pagado, “¿Qué vence esta semana?” en Siri y cada suscripción en Spotlight.",
+  "it": "Widget per Home e schermata di blocco con Segna come pagato, “Cosa scade questa settimana?” in Siri e ogni abbonamento in Spotlight.",
+  "sq": "Widget-e për ekranin kryesor dhe të kyçur me Shëno si të paguar, “Çfarë ka afat këtë javë?” në Siri, dhe çdo abonim në Spotlight."
+ },
+ "guide.cancel.title": {
+  "en": "Cancel in two taps",
+  "de": "In zwei Tipps kündigen",
+  "es": "Cancela con dos toques",
+  "it": "Disdici con due tocchi",
+  "sq": "Anuloni me dy prekje"
+ },
+ "guide.cancel.body": {
+  "en": "Routed to the right place for App Store, Google Play, PayPal, Amazon or the merchant, with guided steps, letters for five countries and a signature on device.",
+  "de": "Zum richtigen Ort für App Store, Google Play, PayPal, Amazon oder den Anbieter, mit Schritt-für-Schritt-Anleitung, Schreiben für fünf Länder und Unterschrift am Gerät.",
+  "es": "Dirigido al lugar correcto para App Store, Google Play, PayPal, Amazon o el proveedor, con pasos guiados, cartas para cinco países y firma en el dispositivo.",
+  "it": "Instradato al posto giusto per App Store, Google Play, PayPal, Amazon o il fornitore, con passi guidati, lettere per cinque paesi e firma sul dispositivo.",
+  "sq": "Drejtuar në vendin e duhur për App Store, Google Play, PayPal, Amazon ose tregtarin, me hapa të udhëzuar, letra për pesë vende dhe nënshkrim në pajisje."
+ },
+ "guide.insights.title": {
+  "en": "Insights and a yearly recap",
+  "de": "Einblicke und ein Jahresrückblick",
+  "es": "Análisis y un resumen anual",
+  "it": "Analisi e un recap annuale",
+  "sq": "Analiza dhe një përmbledhje vjetore"
+ },
+ "guide.insights.body": {
+  "en": "Spend by category and payment method, a 12-month trend, what you saved, and a shareable recap each December.",
+  "de": "Ausgaben nach Kategorie und Zahlungsmethode, 12-Monats-Trend, Ersparnisse und ein teilbarer Rückblick jeden Dezember.",
+  "es": "Gasto por categoría y método de pago, tendencia de 12 meses, lo ahorrado y un resumen para compartir cada diciembre.",
+  "it": "Spesa per categoria e metodo di pagamento, trend a 12 mesi, quanto hai risparmiato e un recap condivisibile ogni dicembre.",
+  "sq": "Shpenzimet sipas kategorisë dhe mënyrës së pagesës, trendi 12-mujor, çfarë kursyet, dhe një përmbledhje për ndarje çdo dhjetor."
+ },
+ "guide.prices.title": {
+  "en": "Price rises, explained",
+  "de": "Preiserhöhungen, erklärt",
+  "es": "Subidas de precio, explicadas",
+  "it": "Aumenti di prezzo, spiegati",
+  "sq": "Rritjet e çmimeve, të shpjeguara"
+ },
+ "guide.prices.body": {
+  "en": "Old price, new price and the yearly impact, with cheaper tiers, annual plans and your rights in Germany and Italy.",
+  "de": "Alter Preis, neuer Preis und die Jahreswirkung, mit günstigeren Tarifen, Jahresabos und deinen Rechten in Deutschland und Italien.",
+  "es": "Precio anterior, nuevo e impacto anual, con planes más baratos, planes anuales y tus derechos en Alemania e Italia.",
+  "it": "Prezzo vecchio, nuovo e impatto annuo, con piani più economici, piani annuali e i tuoi diritti in Germania e Italia.",
+  "sq": "Çmimi i vjetër, i riu dhe ndikimi vjetor, me plane më të lira, plane vjetore dhe të drejtat tuaja në Gjermani dhe Itali."
+ },
+ "household.intro.title": {
+  "en": "Share subscriptions with your household",
+  "de": "Abos mit deinem Haushalt teilen",
+  "es": "Comparte suscripciones con tu hogar",
+  "it": "Condividi gli abbonamenti con la tua famiglia",
+  "sq": "Ndani abonimet me familjen"
+ },
+ "household.intro.body": {
+  "en": "Invite up to 5 people by link. Everyone joins with their own Apple ID and keeps their own list private; only the subscriptions you share are visible.",
+  "de": "Lade bis zu 5 Personen per Link ein. Alle treten mit ihrer eigenen Apple-ID bei und ihre eigene Liste bleibt privat; sichtbar sind nur die Abos, die geteilt werden.",
+  "es": "Invita hasta a 5 personas con un enlace. Cada persona se une con su propio Apple ID y su lista sigue siendo privada; solo se ven las suscripciones compartidas.",
+  "it": "Invita fino a 5 persone con un link. Ognuno entra con il proprio Apple ID e la propria lista resta privata; si vedono solo gli abbonamenti condivisi.",
+  "sq": "Ftoni deri në 5 persona me një lidhje. Secili hyn me Apple ID-në e vet dhe lista e tij mbetet private; shihen vetëm abonimet që ndani."
+ },
+ "paywall.feature.family": {
+  "en": "Shared with your family via Family Sharing",
+  "de": "Mit der Familie über Familienfreigabe geteilt",
+  "es": "Compartido con tu familia mediante En familia",
+  "it": "Condiviso con la famiglia tramite In famiglia",
+  "sq": "Ndahet me familjen përmes Family Sharing"
+ },
+ "widget.next.title": {
+  "en": "Next charge",
+  "de": "Nächste Abbuchung",
+  "es": "Próximo cobro",
+  "it": "Prossimo addebito",
+  "sq": "Pagesa e radhës"
+ },
+ "widget.inline.month": {
+  "en": "This month %@",
+  "de": "Diesen Monat %@",
+  "es": "Este mes %@",
+  "it": "Questo mese %@",
+  "sq": "Këtë muaj %@"
+ },
+ "widget.inDays.placeholder": {
+  "en": "in 3 days",
+  "de": "in 3 Tagen",
+  "es": "en 3 días",
+  "it": "tra 3 giorni",
+  "sq": "pas 3 ditësh"
+ },
+ "guide.price": {
+  "en": "Free to start; no fees on what you save, ever",
+  "de": "Kostenlos zum Start; nie eine Gebühr auf deine Ersparnis",
+  "es": "Gratis para empezar; nunca una comisión sobre lo que ahorras",
+  "it": "Gratis per iniziare; mai una commissione su ciò che risparmi",
+  "sq": "Falas për të filluar; asnjë tarifë mbi atë që kurseni, kurrë"
+ }
+}
+MORE = {
+  "en": ("And there's more", "Share bills with your household, see everything from your Lock Screen, and cancel without the runaround.", "Family Sharing", "You", "Pro"),
+  "de": ("Und da ist noch mehr", "Teile Rechnungen mit deinem Haushalt, sieh alles vom Sperrbildschirm aus und kündige ohne Umwege.", "Familienfreigabe", "Du", "Pro"),
+  "es": ("Y hay más", "Comparte gastos con tu hogar, mira todo desde la pantalla bloqueada y cancela sin rodeos.", "En familia", "Tú", "Pro"),
+  "it": ("E c'è di più", "Dividi le spese con chi vive con te, vedi tutto dalla schermata di blocco e disdici senza giri di parole.", "In famiglia", "Tu", "Pro"),
+  "sq": ("Dhe ka më shumë", "Ndani faturat me familjen, shihni gjithçka nga ekrani i kyçur dhe anuloni pa rrugë të gjata.", "Family Sharing", "Ju", "Pro"),
+}
+MORE_ICONS = {
+  "household": '<path d="M16 11a4 4 0 1 0-8 0 4 4 0 0 0 8 0z"/><path d="M4 21c1.2-3.5 4-5.5 8-5.5s6.8 2 8 5.5"/><path d="M19 8a3 3 0 1 0-2.2-5"/><path d="M5 8a3 3 0 1 1 2.2-5"/>',
+  "family": '<path d="M12 21s-7-4.6-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.4-7 10-7 10z"/>',
+  "widgets": '<rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="8" rx="2"/><rect x="3" y="13" width="8" height="8" rx="2"/><rect x="13" y="13" width="8" height="8" rx="2"/>',
+  "cancel": '<circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/>',
+  "insights": '<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
+  "prices": '<path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/>',
+}
+
+# ---- "Try it now" section and the in-page demo app.
+TRY = {
+  "en": dict(eyebrow="Interactive demo", h="Try Billow right here.", sub="A small simulation of the app in your browser. Add a service, set your payday, start a trial. Nothing is saved and nothing leaves this page.", steps=["Add a subscription from the catalog", "Set your payday and watch the “before payday” total", "Mark one as a free trial to get a cancel-by deadline"], reset="Start over", nav="Try it"),
+  "de": dict(eyebrow="Interaktive Demo", h="Probiere Billow gleich hier aus.", sub="Eine kleine Simulation der App in deinem Browser. Füge einen Dienst hinzu, setze deinen Zahltag, starte eine Testphase. Nichts wird gespeichert, nichts verlässt diese Seite.", steps=["Füge ein Abo aus dem Katalog hinzu", "Setze deinen Zahltag und sieh die Summe „vor dem Zahltag“", "Markiere eines als Testphase und erhalte eine „Kündigen bis“-Frist"], reset="Neu starten", nav="Ausprobieren"),
+  "es": dict(eyebrow="Demo interactiva", h="Prueba Billow aquí mismo.", sub="Una pequeña simulación de la app en tu navegador. Añade un servicio, fija tu día de cobro, empieza una prueba. No se guarda nada y nada sale de esta página.", steps=["Añade una suscripción del catálogo", "Fija tu día de cobro y mira el total «antes del día de pago»", "Marca una como prueba gratis para obtener un plazo «cancelar antes del»"], reset="Empezar de nuevo", nav="Pruébalo"),
+  "it": dict(eyebrow="Demo interattiva", h="Prova Billow qui.", sub="Una piccola simulazione dell'app nel tuo browser. Aggiungi un servizio, imposta il giorno dello stipendio, avvia una prova. Niente viene salvato e niente lascia questa pagina.", steps=["Aggiungi un abbonamento dal catalogo", "Imposta il giorno dello stipendio e guarda il totale «prima dello stipendio»", "Segna uno come prova gratuita per avere una scadenza «disdici entro»"], reset="Ricomincia", nav="Provalo"),
+  "sq": dict(eyebrow="Demo interaktive", h="Provoni Billow këtu.", sub="Një simulim i vogël i aplikacionit në shfletuesin tuaj. Shtoni një shërbim, caktoni ditën e pagës, nisni një provë. Asgjë nuk ruhet dhe asgjë nuk del nga kjo faqe.", steps=["Shtoni një abonim nga katalogu", "Caktoni ditën e pagës dhe shihni totalin “para pagës”", "Shënoni një si provë falas për të marrë afatin “anuloni deri”"], reset="Filloni nga e para", nav="Provojeni"),
+}
+DEMO_UI = {
+  "en": dict(this_month="This month", per_month="/month", per_year="/year", trials_add="Trials would add {x}/month", attention_one="1 thing needs your attention", attention_many="{n} things need your attention", all_good="Everything is under control", before_payday="Before payday", payday="Payday", next7="Next 7 days", all_subs="All subscriptions", empty="Nothing yet. Add your first subscription.", home="Home", add="Add", calendar="Calendar", search="Search 500+ services", price="Price", billing="Billing", monthly="Monthly", yearly="Yearly", next_charge="Next charge", trial="Free trial", trial_hint="14 days free, then {x}", add_btn="Add subscription", back="Back", added="{name} added", trial_ends_in="Trial ends in {n} days", trial_ends_today="Trial ends today", cancel_by="Cancel by {d} or pay {x}", price_up="Price went up", price_up_body="{old} → {new} · +{diff}/month", converts="converts to {x}", today="Today", tomorrow="Tomorrow", in_days="in {n} days", trial_tag="TRIAL", remove="Remove", day="day"),
+  "de": dict(this_month="Diesen Monat", per_month="/Monat", per_year="/Jahr", trials_add="Testphasen würden {x}/Monat hinzufügen", attention_one="1 Sache braucht deine Aufmerksamkeit", attention_many="{n} Dinge brauchen deine Aufmerksamkeit", all_good="Alles unter Kontrolle", before_payday="Vor dem Zahltag", payday="Zahltag", next7="Nächste 7 Tage", all_subs="Alle Abos", empty="Noch nichts. Füge dein erstes Abo hinzu.", home="Start", add="Hinzufügen", calendar="Kalender", search="500+ Dienste durchsuchen", price="Preis", billing="Abrechnung", monthly="Monatlich", yearly="Jährlich", next_charge="Nächste Abbuchung", trial="Testphase", trial_hint="14 Tage gratis, dann {x}", add_btn="Abo hinzufügen", back="Zurück", added="{name} hinzugefügt", trial_ends_in="Testphase endet in {n} Tagen", trial_ends_today="Testphase endet heute", cancel_by="Kündigen bis {d} oder {x} zahlen", price_up="Preis gestiegen", price_up_body="{old} → {new} · +{diff}/Monat", converts="wird zu {x}", today="Heute", tomorrow="Morgen", in_days="in {n} Tagen", trial_tag="TEST", remove="Entfernen", day="Tag"),
+  "es": dict(this_month="Este mes", per_month="/mes", per_year="/año", trials_add="Las pruebas añadirían {x}/mes", attention_one="1 cosa necesita tu atención", attention_many="{n} cosas necesitan tu atención", all_good="Todo bajo control", before_payday="Antes del día de pago", payday="Día de pago", next7="Próximos 7 días", all_subs="Todas las suscripciones", empty="Nada todavía. Añade tu primera suscripción.", home="Inicio", add="Añadir", calendar="Calendario", search="Busca entre 500+ servicios", price="Precio", billing="Cobro", monthly="Mensual", yearly="Anual", next_charge="Próximo cobro", trial="Prueba gratis", trial_hint="14 días gratis, luego {x}", add_btn="Añadir suscripción", back="Atrás", added="{name} añadido", trial_ends_in="La prueba termina en {n} días", trial_ends_today="La prueba termina hoy", cancel_by="Cancela antes del {d} o paga {x}", price_up="Subida de precio", price_up_body="{old} → {new} · +{diff}/mes", converts="pasa a {x}", today="Hoy", tomorrow="Mañana", in_days="en {n} días", trial_tag="PRUEBA", remove="Quitar", day="día"),
+  "it": dict(this_month="Questo mese", per_month="/mese", per_year="/anno", trials_add="Le prove aggiungerebbero {x}/mese", attention_one="1 cosa richiede attenzione", attention_many="{n} cose richiedono attenzione", all_good="Tutto sotto controllo", before_payday="Prima dello stipendio", payday="Stipendio", next7="Prossimi 7 giorni", all_subs="Tutti gli abbonamenti", empty="Ancora niente. Aggiungi il primo abbonamento.", home="Home", add="Aggiungi", calendar="Calendario", search="Cerca tra 500+ servizi", price="Prezzo", billing="Fatturazione", monthly="Mensile", yearly="Annuale", next_charge="Prossimo addebito", trial="Prova gratuita", trial_hint="14 giorni gratis, poi {x}", add_btn="Aggiungi abbonamento", back="Indietro", added="{name} aggiunto", trial_ends_in="La prova finisce tra {n} giorni", trial_ends_today="La prova finisce oggi", cancel_by="Disdici entro il {d} o paghi {x}", price_up="Prezzo aumentato", price_up_body="{old} → {new} · +{diff}/mese", converts="diventa {x}", today="Oggi", tomorrow="Domani", in_days="tra {n} giorni", trial_tag="PROVA", remove="Rimuovi", day="giorno"),
+  "sq": dict(this_month="Këtë muaj", per_month="/muaj", per_year="/vit", trials_add="Provat do të shtonin {x}/muaj", attention_one="1 gjë ka nevojë për vëmendje", attention_many="{n} gjëra kanë nevojë për vëmendje", all_good="Gjithçka nën kontroll", before_payday="Para pagës", payday="Dita e pagës", next7="7 ditët e ardhshme", all_subs="Të gjitha abonimet", empty="Asgjë ende. Shtoni abonimin e parë.", home="Kreu", add="Shto", calendar="Kalendari", search="Kërkoni në 500+ shërbime", price="Çmimi", billing="Faturimi", monthly="Mujor", yearly="Vjetor", next_charge="Pagesa e ardhshme", trial="Provë falas", trial_hint="14 ditë falas, pastaj {x}", add_btn="Shto abonimin", back="Prapa", added="{name} u shtua", trial_ends_in="Prova mbaron pas {n} ditësh", trial_ends_today="Prova mbaron sot", cancel_by="Anuloni deri më {d} ose paguani {x}", price_up="Çmimi u rrit", price_up_body="{old} → {new} · +{diff}/muaj", converts="bëhet {x}", today="Sot", tomorrow="Nesër", in_days="pas {n} ditësh", trial_tag="PROVË", remove="Hiq", day="dita"),
+}
+CURRENCY = {"en": "USD", "de": "EUR", "es": "EUR", "it": "EUR", "sq": "EUR"}
+
+def more_section(lang, root):
+    a = lambda k: e(APP_STRINGS[k][lang])
+    h, sub, family_title, you, pro = MORE[lang]
+    ico = lambda k: f'<div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">{MORE_ICONS[k]}</svg></div>'
+    return f"""<section class="more" id="more">
+  <div class="wrap">
+    <div class="reveal head">
+      <h2>{e(h)}</h2>
+      <p class="sub">{e(sub)}</p>
+    </div>
+    <div class="bento">
+      <div class="tile wide reveal">
+        {ico("household")}<strong>{a("household.intro.title")}</strong><span>{a("household.intro.body")}</span>
+        <div class="split" aria-hidden="true">
+          <div class="row sum"><b>Netflix</b><b>17,99 €</b></div>
+          <div class="row"><i style="background:#0E7490">{e(you[:1])}</i><span>{e(you)}</span><b>6,00 €</b></div>
+          <div class="row"><i style="background:#D97706">A</i><span>Ana</span><b>6,00 €</b></div>
+          <div class="row"><i style="background:#059669">L</i><span>Luca</span><b>5,99 €</b></div>
+        </div>
+      </div>
+      <div class="tile reveal d1">{ico("family")}<strong>{e(family_title)}</strong><span>{a("paywall.feature.family")}</span></div>
+      <div class="tile reveal d2">{ico("cancel")}<strong>{a("guide.cancel.title")}</strong><span>{a("guide.cancel.body")}</span></div>
+      <div class="tile wide reveal">
+        {ico("widgets")}<strong>{a("guide.everywhere.title")}</strong><span>{a("guide.everywhere.body")}</span>
+        <div class="widgets" aria-hidden="true">
+          <div class="w small"><small>{a("widget.next.title")}</small><b>Spotify</b><em>{a("widget.inDays.placeholder")}</em></div>
+          <div class="w inline"><i></i>{e(APP_STRINGS["widget.inline.month"][lang].replace("%@", "108,88 €"))}</div>
+        </div>
+      </div>
+      <div class="tile reveal d1">{ico("insights")}<strong>{a("guide.insights.title")}</strong><span>{a("guide.insights.body")}</span></div>
+      <div class="tile reveal d2">{ico("prices")}<strong>{a("guide.prices.title")}</strong><span>{a("guide.prices.body")}</span></div>
+    </div>
+    <p class="note reveal">{a("guide.price")}.</p>
+  </div>
+</section>"""
+
+def try_section(lang, root):
+    t = TRY[lang]
+    steps = "\n        ".join(f"<li><span>{i + 1}</span>{e(s)}</li>" for i, s in enumerate(t["steps"]))
+    cfg = json.dumps({"lang": lang, "currency": CURRENCY[lang], "t": DEMO_UI[lang]}, ensure_ascii=False)
+    return f"""<section class="try" id="try">
+  <div class="wrap">
+    <div class="text reveal">
+      <div class="eyebrow">{e(t["eyebrow"])}</div>
+      <h2>{e(t["h"])}</h2>
+      <p>{e(t["sub"])}</p>
+      <ol class="steps">
+        {steps}
+      </ol>
+      <button type="button" class="reset" id="demo-reset">{e(t["reset"])}</button>
+    </div>
+    <div class="demo reveal d1">
+      <div class="phone"><div class="screen"><div class="app" id="demo" lang="{lang}"></div></div></div>
+    </div>
+  </div>
+</section>
+<script>window.BILLOW_DEMO = {cfg};</script>
+<script src="{root}demo.js?v={DEMO_VER}" defer></script>"""
+
 def page(lang):
     t = T[lang]
     root = "" if lang == "en" else "../"
@@ -415,6 +618,7 @@ def page(lang):
     <a class="brand" href="{href(lang)}"><img src="{root}img/icon.png" alt="">Billow</a>
     <nav>
       <a class="hide-sm" href="#features">{e(t["nav_features"])}</a>
+      <a class="hide-sm" href="#try">{e(TRY[lang]["nav"])}</a>
       <a class="hide-sm" href="#privacy">{e(t["nav_privacy"])}</a>
       <a class="cta" href="{root}support.html">{e(t["nav_support"])}</a>
       <label class="lang"><span class="visually-hidden">{e(t["lang_label"])}</span><select id="lang" aria-label="{e(t["lang_label"])}">{options}</select></label>
@@ -430,7 +634,7 @@ def page(lang):
       <p class="lead">{e(t["lead"])}</p>
       <div class="cta-row">
         <span class="badge">{APPLE}{e(t["badge"])}</span>
-        <a class="ghost" href="#features">{e(t["nav_features"])}{ARROW}</a>
+        <a class="ghost" href="#try">{e(TRY[lang]["nav"])}{ARROW}</a>
       </div>
       <div class="pills">{pills}</div>
     </div>
@@ -453,11 +657,15 @@ def page(lang):
   </div>
 </section>
 
+{try_section(lang, root)}
+
 <main id="features">
 
 {chr(10).join(sections)}
 
 </main>
+
+{more_section(lang, root)}
 
 <section class="gallery">
   <div class="head reveal"><h2>{e(t["gallery"])}</h2></div>
