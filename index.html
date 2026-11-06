@@ -18,7 +18,17 @@
 <meta property="og:title" content="Billow — Subscription Tracker">
 <meta property="og:description" content="Know what leaves your account before payday.">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://billow-app.org/img/icon.png">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://billow-app.org/">
+<meta property="og:site_name" content="Billow">
+<meta property="og:image" content="https://billow-app.org/img/og-en.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Know what leaves your account before payday.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Billow — Subscription Tracker">
+<meta name="twitter:description" content="Know what leaves your account before payday.">
+<meta name="twitter:image" content="https://billow-app.org/img/og-en.png">
 <script>
 (function () {
   var supported = ["de", "es", "it", "sq"], key = "billow-lang";
@@ -493,6 +503,45 @@ footer .author:hover { color: var(--accent); text-decoration: none; }
   .hint-arrow-down { display: block; }
   .js .hint .line { stroke-dasharray: 160; stroke-dashoffset: 160; }
 }
+
+/* ---------- FAQ ---------- */
+.faq { padding: 24px 0 72px; }
+.faq .head { text-align: center; max-width: 60ch; margin: 0 auto 32px; }
+.faq h2 { font-size: clamp(30px, 3.8vw, 42px); margin: 0 0 12px; }
+.faq .sub { color: var(--muted); font-size: 18px; margin: 0; }
+.faq-list { max-width: 760px; margin: 0 auto; display: grid; gap: 10px; }
+.faq-item { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 0 20px; transition: border-color .2s; }
+.faq-item[open] { border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); }
+.faq-item summary { list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 0; font-weight: 600; font-size: 17px; }
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 8px; }
+.faq-item .chev { flex: none; width: 26px; height: 26px; border-radius: 50%; background: var(--tint); position: relative; transition: transform .25s; }
+.faq-item .chev::after { content: ""; position: absolute; left: 9px; top: 7px; width: 7px; height: 7px; border-right: 2px solid var(--accent); border-bottom: 2px solid var(--accent); transform: rotate(45deg); }
+.faq-item[open] .chev { transform: rotate(180deg); }
+.faq-item .answer { padding: 0 0 18px; color: var(--muted); font-size: 16px; }
+.faq-item .answer p { margin: 0; max-width: 64ch; }
+
+/* ---------- lightbox ---------- */
+.shot-btn { display: block; padding: 0; border: 0; background: none; cursor: zoom-in; border-radius: 36px; font: inherit; }
+.shot-btn:focus-visible { outline: 3px solid var(--accent); outline-offset: 6px; }
+.lightbox { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; }
+.lightbox[hidden] { display: none; }
+.lb-backdrop { position: absolute; inset: 0; background: rgba(4, 12, 18, .78); backdrop-filter: blur(10px); }
+.lb-frame { position: relative; display: flex; align-items: center; gap: 18px; padding: 24px; }
+.lb-fig { margin: 0; text-align: center; }
+.lb-fig .phone { width: min(360px, 78vw); max-width: none; border-radius: 52px; padding: 11px; }
+.lb-fig .phone::before { top: 22px; height: 26px; }
+.lb-fig .phone img { border-radius: 42px; }
+.lb-fig figcaption { color: #CFE9F0; font-weight: 600; margin-top: 16px; font-size: 15px; }
+.lightbox button { font: inherit; cursor: pointer; border: 1px solid rgba(255,255,255,.2); background: rgba(255,255,255,.1); color: #fff; width: 48px; height: 48px; border-radius: 50%; font-size: 30px; line-height: 1; display: grid; place-items: center; backdrop-filter: blur(8px); transition: background .2s; }
+.lightbox button:hover { background: rgba(255,255,255,.2); }
+.lightbox button:focus-visible { outline: 3px solid #7DD3E6; outline-offset: 3px; }
+.lb-close { position: fixed; top: 18px; right: 18px; font-size: 26px; }
+body.lb-open { overflow: hidden; }
+@media (max-width: 640px) { .lb-frame { gap: 8px; padding: 12px; } .lightbox .lb-prev, .lightbox .lb-next { width: 40px; height: 40px; font-size: 24px; } }
+
+/* ---------- demo focus styles ---------- */
+.app button:focus-visible, .app input:focus-visible, .app select:focus-visible { outline: 2px solid #0E7490; outline-offset: 2px; }
 </style>
 
 </head>
@@ -567,12 +616,13 @@ footer .author:hover { color: var(--accent); text-decoration: none; }
       <svg class="hint-arrow-down" viewBox="0 0 60 120" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path class="line" d="M30 8 C 10 40, 50 70, 30 108"/><path class="head" d="M16 94 L 30 110 L 44 94"/></svg>
     </div>
     <div class="demo reveal d1">
-      <div class="phone"><div class="live"><i></i>Live demo</div><div class="screen"><div class="app" id="demo" lang="en"></div></div></div>
+      <div class="phone"><div class="live"><i></i>Live demo</div><div class="screen"><div class="app" id="demo" lang="en" role="region" aria-label="Interactive demo"></div></div></div>
+      <div id="demo-live" class="visually-hidden" aria-live="polite"></div>
     </div>
   </div>
 </section>
 <script>window.BILLOW_DEMO = {"lang": "en", "currency": "USD", "t": {"this_month": "This month", "per_month": "/month", "per_year": "/year", "trials_add": "Trials would add {x}/month", "attention_one": "1 thing needs your attention", "attention_many": "{n} things need your attention", "all_good": "Everything is under control", "before_payday": "Before payday", "payday": "Payday", "next7": "Next 7 days", "all_subs": "All subscriptions", "empty": "Nothing yet. Add your first subscription.", "home": "Home", "add": "Add", "calendar": "Calendar", "search": "Search 500+ services", "price": "Price", "billing": "Billing", "monthly": "Monthly", "yearly": "Yearly", "next_charge": "Next charge", "trial": "Free trial", "trial_hint": "14 days free, then {x}", "add_btn": "Add subscription", "back": "Back", "added": "{name} added", "trial_ends_in": "Trial ends in {n} days", "trial_ends_today": "Trial ends today", "cancel_by": "Cancel by {d} or pay {x}", "price_up": "Price went up", "price_up_body": "{old} → {new} · +{diff}/month", "converts": "converts to {x}", "today": "Today", "tomorrow": "Tomorrow", "in_days": "in {n} days", "trial_tag": "TRIAL", "remove": "Remove", "day": "day"}};</script>
-<script src="demo.js?v=1ce2f435" defer></script>
+<script src="demo.js?v=ed83f0ca" defer></script>
 
 <main id="features">
 
@@ -746,13 +796,13 @@ footer .author:hover { color: var(--accent); text-decoration: none; }
 
 <section class="gallery">
   <div class="head reveal"><h2>A closer look</h2></div>
-  <div class="strip">
-    <figure><div class="phone"><img src="img/onboarding.jpg" alt="Welcome" loading="lazy" width="414" height="900"></div><figcaption>Welcome</figcaption></figure>
-    <figure><div class="phone"><img src="img/home.jpg" alt="Home" loading="lazy" width="414" height="900"></div><figcaption>Home</figcaption></figure>
-    <figure><div class="phone"><img src="img/calendar.jpg" alt="Calendar" loading="lazy" width="414" height="900"></div><figcaption>Calendar</figcaption></figure>
-    <figure><div class="phone"><img src="img/insights.jpg" alt="Insights" loading="lazy" width="414" height="900"></div><figcaption>Insights</figcaption></figure>
-    <figure><div class="phone"><img src="img/detail.jpg" alt="Detail" loading="lazy" width="414" height="900"></div><figcaption>Detail</figcaption></figure>
-    <figure><div class="phone"><img src="img/add.jpg" alt="Add" loading="lazy" width="414" height="900"></div><figcaption>Add</figcaption></figure>
+  <div class="strip" data-labels='{"close": "Close", "prev": "Previous screen", "next": "Next screen"}'>
+    <figure><button type="button" class="shot-btn" aria-label="Open Welcome full size"><div class="phone"><img src="img/onboarding.jpg" alt="Welcome" loading="lazy" width="414" height="900"></div></button><figcaption>Welcome</figcaption></figure>
+    <figure><button type="button" class="shot-btn" aria-label="Open Home full size"><div class="phone"><img src="img/home.jpg" alt="Home" loading="lazy" width="414" height="900"></div></button><figcaption>Home</figcaption></figure>
+    <figure><button type="button" class="shot-btn" aria-label="Open Calendar full size"><div class="phone"><img src="img/calendar.jpg" alt="Calendar" loading="lazy" width="414" height="900"></div></button><figcaption>Calendar</figcaption></figure>
+    <figure><button type="button" class="shot-btn" aria-label="Open Insights full size"><div class="phone"><img src="img/insights.jpg" alt="Insights" loading="lazy" width="414" height="900"></div></button><figcaption>Insights</figcaption></figure>
+    <figure><button type="button" class="shot-btn" aria-label="Open Detail full size"><div class="phone"><img src="img/detail.jpg" alt="Detail" loading="lazy" width="414" height="900"></div></button><figcaption>Detail</figcaption></figure>
+    <figure><button type="button" class="shot-btn" aria-label="Open Add full size"><div class="phone"><img src="img/add.jpg" alt="Add" loading="lazy" width="414" height="900"></div></button><figcaption>Add</figcaption></figure>
   </div>
 </section>
 
@@ -777,6 +827,26 @@ footer .author:hover { color: var(--accent); text-decoration: none; }
     <div class="flags"><a href="index.html" lang="en" aria-current="page">English</a><a href="de/index.html" lang="de">Deutsch</a><a href="es/index.html" lang="es">Español</a><a href="it/index.html" lang="it">Italiano</a><a href="sq/index.html" lang="sq">Shqip</a></div>
   </div>
 </section>
+
+<section class="faq" id="faq">
+  <div class="wrap">
+    <div class="head reveal">
+      <h2>Questions, answered</h2>
+      <p class="sub">Still wondering? Ask below. <a href="#contact">Contact</a></p>
+    </div>
+    <div class="faq-list">
+      <details class="faq-item reveal" open><summary>Do I need to connect my bank?<span class="chev" aria-hidden="true"></span></summary><div class="answer"><p>No. Add subscriptions from the catalog of 500+ services, type them in, or share a receipt, screenshot, PDF or bank statement. Everything is read on your iPhone; Billow never asks for bank credentials.</p></div></details>
+      <details class="faq-item reveal"><summary>Where is my data stored?<span class="chev" aria-hidden="true"></span></summary><div class="answer"><p>On your iPhone and in your own private iCloud database, which also syncs your other devices. Billow has no account, no server and no analytics.</p></div></details>
+      <details class="faq-item reveal"><summary>What is free and what needs Pro?<span class="chev" aria-hidden="true"></span></summary><div class="answer"><p>Free tracks up to 7 subscriptions with the calendar, payday view and on-device import. Pro removes the limit and adds trial countdowns, price-change alerts, all widgets, export, household sharing and cancellation letters. The yearly plan starts with 14 days free.</p></div></details>
+      <details class="faq-item reveal"><summary>What happens if I stop paying for Pro?<span class="chev" aria-hidden="true"></span></summary><div class="answer"><p>Nothing is deleted. Your subscriptions stay, and the Free limits apply again until you resubscribe.</p></div></details>
+      <details class="faq-item reveal"><summary>How do I cancel Pro?<span class="chev" aria-hidden="true"></span></summary><div class="answer"><p>In your Apple account: Settings › your name › Subscriptions › Billow. Cancel at least 24 hours before the renewal date and you won&#x27;t be charged again.</p></div></details>
+      <details class="faq-item reveal"><summary>Which countries and languages?<span class="chev" aria-hidden="true"></span></summary><div class="answer"><p>Built for the United States, Albania, Germany, Italy and Spain, in English, Albanian, German, Italian and Spanish, with every currency and your home currency for totals.</p></div></details>
+      <details class="faq-item reveal"><summary>How do free trials work in Billow?<span class="chev" aria-hidden="true"></span></summary><div class="answer"><p>Mark a subscription as a trial and Billow sets a cancel-by deadline one day before it converts, reminds you at 3 days, 1 day and on the deadline, and shows a Live Activity countdown on your Lock Screen.</p></div></details>
+      <details class="faq-item reveal"><summary>Can I share with my family or household?<span class="chev" aria-hidden="true"></span></summary><div class="answer"><p>Yes. Household sharing lets up to 5 people join by link, each with their own Apple ID, and only the subscriptions you choose are shared. Pro yearly and lifetime also work with Apple Family Sharing.</p></div></details>
+    </div>
+  </div>
+</section>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Do I need to connect my bank?", "acceptedAnswer": {"@type": "Answer", "text": "No. Add subscriptions from the catalog of 500+ services, type them in, or share a receipt, screenshot, PDF or bank statement. Everything is read on your iPhone; Billow never asks for bank credentials."}}, {"@type": "Question", "name": "Where is my data stored?", "acceptedAnswer": {"@type": "Answer", "text": "On your iPhone and in your own private iCloud database, which also syncs your other devices. Billow has no account, no server and no analytics."}}, {"@type": "Question", "name": "What is free and what needs Pro?", "acceptedAnswer": {"@type": "Answer", "text": "Free tracks up to 7 subscriptions with the calendar, payday view and on-device import. Pro removes the limit and adds trial countdowns, price-change alerts, all widgets, export, household sharing and cancellation letters. The yearly plan starts with 14 days free."}}, {"@type": "Question", "name": "What happens if I stop paying for Pro?", "acceptedAnswer": {"@type": "Answer", "text": "Nothing is deleted. Your subscriptions stay, and the Free limits apply again until you resubscribe."}}, {"@type": "Question", "name": "How do I cancel Pro?", "acceptedAnswer": {"@type": "Answer", "text": "In your Apple account: Settings › your name › Subscriptions › Billow. Cancel at least 24 hours before the renewal date and you won't be charged again."}}, {"@type": "Question", "name": "Which countries and languages?", "acceptedAnswer": {"@type": "Answer", "text": "Built for the United States, Albania, Germany, Italy and Spain, in English, Albanian, German, Italian and Spanish, with every currency and your home currency for totals."}}, {"@type": "Question", "name": "How do free trials work in Billow?", "acceptedAnswer": {"@type": "Answer", "text": "Mark a subscription as a trial and Billow sets a cancel-by deadline one day before it converts, reminds you at 3 days, 1 day and on the deadline, and shows a Live Activity countdown on your Lock Screen."}}, {"@type": "Question", "name": "Can I share with my family or household?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Household sharing lets up to 5 people join by link, each with their own Apple ID, and only the subscriptions you choose are shared. Pro yearly and lifetime also work with Apple Family Sharing."}}]}</script>
 
 <section class="contact" id="contact">
   <div class="wrap">
@@ -806,6 +876,7 @@ footer .author:hover { color: var(--accent); text-decoration: none; }
 </section>
 <script src="contact.js?v=e89cdd1a" defer></script>
 <script src="theme.js?v=e9f8b050" defer></script>
+<script src="gallery.js?v=0a5d86e7" defer></script>
 
 <section class="closing">
   <div class="wrap">
@@ -820,7 +891,7 @@ footer .author:hover { color: var(--accent); text-decoration: none; }
 <footer>
   <div class="wrap">
     <a class="brand" href="index.html"><img src="img/icon.png" alt="">Billow</a>
-    <nav><a href="support.html">Support</a><a href="#contact">Contact</a><a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms of Use</a></nav>
+    <nav><a href="support.html">Support</a><a href="#faq">FAQ</a><a href="#contact">Contact</a><a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms of Use</a></nav>
     <span>© 2026 <a class="author" href="https://www.linkedin.com/in/ervin-capi/" rel="me noopener" target="_blank">Ervin Capi<svg viewBox="0 0 24 24" aria-label="LinkedIn" role="img"><path d="M20.4 2H3.6A1.6 1.6 0 0 0 2 3.6v16.8A1.6 1.6 0 0 0 3.6 22h16.8a1.6 1.6 0 0 0 1.6-1.6V3.6A1.6 1.6 0 0 0 20.4 2zM8 19H5v-9h3zM6.5 8.7a1.7 1.7 0 1 1 0-3.4 1.7 1.7 0 0 1 0 3.4zM19 19h-3v-4.6c0-1.1 0-2.5-1.5-2.5S12.7 13 12.7 14.3V19h-3v-9h2.9v1.2a3.2 3.2 0 0 1 2.9-1.6c3.1 0 3.6 2 3.6 4.7z"/></svg></a> · Merchant logos by <a href="https://logo.dev">Logo.dev</a></span>
   </div>
 </footer>

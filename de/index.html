@@ -18,7 +18,17 @@
 <meta property="og:title" content="Billow — Abo-Tracker">
 <meta property="og:description" content="Wisse vor dem Zahltag, was von deinem Konto abgeht.">
 <meta property="og:locale" content="de_DE">
-<meta property="og:image" content="https://billow-app.org/img/icon.png">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://billow-app.org/de/">
+<meta property="og:site_name" content="Billow">
+<meta property="og:image" content="https://billow-app.org/img/og-de.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Wisse vor dem Zahltag, was von deinem Konto abgeht.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Billow — Abo-Tracker">
+<meta name="twitter:description" content="Wisse vor dem Zahltag, was von deinem Konto abgeht.">
+<meta name="twitter:image" content="https://billow-app.org/img/og-de.png">
 
 <script>document.documentElement.classList.add("js");try{var t=localStorage.getItem("billow-theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
 <style>
@@ -481,6 +491,45 @@ footer .author:hover { color: var(--accent); text-decoration: none; }
   .hint-arrow-down { display: block; }
   .js .hint .line { stroke-dasharray: 160; stroke-dashoffset: 160; }
 }
+
+/* ---------- FAQ ---------- */
+.faq { padding: 24px 0 72px; }
+.faq .head { text-align: center; max-width: 60ch; margin: 0 auto 32px; }
+.faq h2 { font-size: clamp(30px, 3.8vw, 42px); margin: 0 0 12px; }
+.faq .sub { color: var(--muted); font-size: 18px; margin: 0; }
+.faq-list { max-width: 760px; margin: 0 auto; display: grid; gap: 10px; }
+.faq-item { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 0 20px; transition: border-color .2s; }
+.faq-item[open] { border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); }
+.faq-item summary { list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 0; font-weight: 600; font-size: 17px; }
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 8px; }
+.faq-item .chev { flex: none; width: 26px; height: 26px; border-radius: 50%; background: var(--tint); position: relative; transition: transform .25s; }
+.faq-item .chev::after { content: ""; position: absolute; left: 9px; top: 7px; width: 7px; height: 7px; border-right: 2px solid var(--accent); border-bottom: 2px solid var(--accent); transform: rotate(45deg); }
+.faq-item[open] .chev { transform: rotate(180deg); }
+.faq-item .answer { padding: 0 0 18px; color: var(--muted); font-size: 16px; }
+.faq-item .answer p { margin: 0; max-width: 64ch; }
+
+/* ---------- lightbox ---------- */
+.shot-btn { display: block; padding: 0; border: 0; background: none; cursor: zoom-in; border-radius: 36px; font: inherit; }
+.shot-btn:focus-visible { outline: 3px solid var(--accent); outline-offset: 6px; }
+.lightbox { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; }
+.lightbox[hidden] { display: none; }
+.lb-backdrop { position: absolute; inset: 0; background: rgba(4, 12, 18, .78); backdrop-filter: blur(10px); }
+.lb-frame { position: relative; display: flex; align-items: center; gap: 18px; padding: 24px; }
+.lb-fig { margin: 0; text-align: center; }
+.lb-fig .phone { width: min(360px, 78vw); max-width: none; border-radius: 52px; padding: 11px; }
+.lb-fig .phone::before { top: 22px; height: 26px; }
+.lb-fig .phone img { border-radius: 42px; }
+.lb-fig figcaption { color: #CFE9F0; font-weight: 600; margin-top: 16px; font-size: 15px; }
+.lightbox button { font: inherit; cursor: pointer; border: 1px solid rgba(255,255,255,.2); background: rgba(255,255,255,.1); color: #fff; width: 48px; height: 48px; border-radius: 50%; font-size: 30px; line-height: 1; display: grid; place-items: center; backdrop-filter: blur(8px); transition: background .2s; }
+.lightbox button:hover { background: rgba(255,255,255,.2); }
+.lightbox button:focus-visible { outline: 3px solid #7DD3E6; outline-offset: 3px; }
+.lb-close { position: fixed; top: 18px; right: 18px; font-size: 26px; }
+body.lb-open { overflow: hidden; }
+@media (max-width: 640px) { .lb-frame { gap: 8px; padding: 12px; } .lightbox .lb-prev, .lightbox .lb-next { width: 40px; height: 40px; font-size: 24px; } }
+
+/* ---------- demo focus styles ---------- */
+.app button:focus-visible, .app input:focus-visible, .app select:focus-visible { outline: 2px solid #0E7490; outline-offset: 2px; }
 </style>
 
 </head>
@@ -555,12 +604,13 @@ footer .author:hover { color: var(--accent); text-decoration: none; }
       <svg class="hint-arrow-down" viewBox="0 0 60 120" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path class="line" d="M30 8 C 10 40, 50 70, 30 108"/><path class="head" d="M16 94 L 30 110 L 44 94"/></svg>
     </div>
     <div class="demo reveal d1">
-      <div class="phone"><div class="live"><i></i>Live-Demo</div><div class="screen"><div class="app" id="demo" lang="de"></div></div></div>
+      <div class="phone"><div class="live"><i></i>Live-Demo</div><div class="screen"><div class="app" id="demo" lang="de" role="region" aria-label="Interaktive Demo"></div></div></div>
+      <div id="demo-live" class="visually-hidden" aria-live="polite"></div>
     </div>
   </div>
 </section>
 <script>window.BILLOW_DEMO = {"lang": "de", "currency": "EUR", "t": {"this_month": "Diesen Monat", "per_month": "/Monat", "per_year": "/Jahr", "trials_add": "Testphasen würden {x}/Monat hinzufügen", "attention_one": "1 Sache braucht deine Aufmerksamkeit", "attention_many": "{n} Dinge brauchen deine Aufmerksamkeit", "all_good": "Alles unter Kontrolle", "before_payday": "Vor dem Zahltag", "payday": "Zahltag", "next7": "Nächste 7 Tage", "all_subs": "Alle Abos", "empty": "Noch nichts. Füge dein erstes Abo hinzu.", "home": "Start", "add": "Hinzufügen", "calendar": "Kalender", "search": "500+ Dienste durchsuchen", "price": "Preis", "billing": "Abrechnung", "monthly": "Monatlich", "yearly": "Jährlich", "next_charge": "Nächste Abbuchung", "trial": "Testphase", "trial_hint": "14 Tage gratis, dann {x}", "add_btn": "Abo hinzufügen", "back": "Zurück", "added": "{name} hinzugefügt", "trial_ends_in": "Testphase endet in {n} Tagen", "trial_ends_today": "Testphase endet heute", "cancel_by": "Kündigen bis {d} oder {x} zahlen", "price_up": "Preis gestiegen", "price_up_body": "{old} → {new} · +{diff}/Monat", "converts": "wird zu {x}", "today": "Heute", "tomorrow": "Morgen", "in_days": "in {n} Tagen", "trial_tag": "TEST", "remove": "Entfernen", "day": "Tag"}};</script>
-<script src="../demo.js?v=1ce2f435" defer></script>
+<script src="../demo.js?v=ed83f0ca" defer></script>
 
 <main id="features">
 
@@ -734,13 +784,13 @@ footer .author:hover { color: var(--accent); text-decoration: none; }
 
 <section class="gallery">
   <div class="head reveal"><h2>Ein genauerer Blick</h2></div>
-  <div class="strip">
-    <figure><div class="phone"><img src="../img/onboarding.jpg" alt="Willkommen" loading="lazy" width="414" height="900"></div><figcaption>Willkommen</figcaption></figure>
-    <figure><div class="phone"><img src="../img/home.jpg" alt="Start" loading="lazy" width="414" height="900"></div><figcaption>Start</figcaption></figure>
-    <figure><div class="phone"><img src="../img/calendar.jpg" alt="Kalender" loading="lazy" width="414" height="900"></div><figcaption>Kalender</figcaption></figure>
-    <figure><div class="phone"><img src="../img/insights.jpg" alt="Einblicke" loading="lazy" width="414" height="900"></div><figcaption>Einblicke</figcaption></figure>
-    <figure><div class="phone"><img src="../img/detail.jpg" alt="Details" loading="lazy" width="414" height="900"></div><figcaption>Details</figcaption></figure>
-    <figure><div class="phone"><img src="../img/add.jpg" alt="Hinzufügen" loading="lazy" width="414" height="900"></div><figcaption>Hinzufügen</figcaption></figure>
+  <div class="strip" data-labels='{"close": "Schließen", "prev": "Vorheriger Bildschirm", "next": "Nächster Bildschirm"}'>
+    <figure><button type="button" class="shot-btn" aria-label="Willkommen in voller Größe öffnen"><div class="phone"><img src="../img/onboarding.jpg" alt="Willkommen" loading="lazy" width="414" height="900"></div></button><figcaption>Willkommen</figcaption></figure>
+    <figure><button type="button" class="shot-btn" aria-label="Start in voller Größe öffnen"><div class="phone"><img src="../img/home.jpg" alt="Start" loading="lazy" width="414" height="900"></div></button><figcaption>Start</figcaption></figure>
+    <figure><button type="button" class="shot-btn" aria-label="Kalender in voller Größe öffnen"><div class="phone"><img src="../img/calendar.jpg" alt="Kalender" loading="lazy" width="414" height="900"></div></button><figcaption>Kalender</figcaption></figure>
+    <figure><button type="button" class="shot-btn" aria-label="Einblicke in voller Größe öffnen"><div class="phone"><img src="../img/insights.jpg" alt="Einblicke" loading="lazy" width="414" height="900"></div></button><figcaption>Einblicke</figcaption></figure>
+    <figure><button type="button" class="shot-btn" aria-label="Details in voller Größe öffnen"><div class="phone"><img src="../img/detail.jpg" alt="Details" loading="lazy" width="414" height="900"></div></button><figcaption>Details</figcaption></figure>
+    <figure><button type="button" class="shot-btn" aria-label="Hinzufügen in voller Größe öffnen"><div class="phone"><img src="../img/add.jpg" alt="Hinzufügen" loading="lazy" width="414" height="900"></div></button><figcaption>Hinzufügen</figcaption></figure>
   </div>
 </section>
 
@@ -765,6 +815,26 @@ footer .author:hover { color: var(--accent); text-decoration: none; }
     <div class="flags"><a href="../index.html" lang="en">English</a><a href="../de/index.html" lang="de" aria-current="page">Deutsch</a><a href="../es/index.html" lang="es">Español</a><a href="../it/index.html" lang="it">Italiano</a><a href="../sq/index.html" lang="sq">Shqip</a></div>
   </div>
 </section>
+
+<section class="faq" id="faq">
+  <div class="wrap">
+    <div class="head reveal">
+      <h2>Fragen und Antworten</h2>
+      <p class="sub">Noch Fragen? Schreib mir unten. <a href="#contact">Kontakt</a></p>
+    </div>
+    <div class="faq-list">
+      <details class="faq-item reveal" open><summary>Muss ich meine Bank verbinden?<span class="chev" aria-hidden="true"></span></summary><div class="answer"><p>Nein. Füge Abos aus dem Katalog mit über 500 Diensten hinzu, tippe sie ein oder teile einen Beleg, Screenshot, ein PDF oder einen Kontoauszug. Alles wird auf deinem iPhone gelesen; Billow fragt nie nach Bankzugangsdaten.</p></div></details>
+      <details class="faq-item reveal"><summary>Wo werden meine Daten gespeichert?<span class="chev" aria-hidden="true"></span></summary><div class="answer"><p>Auf deinem iPhone und in deiner eigenen privaten iCloud-Datenbank, die auch deine anderen Geräte synchronisiert. Billow hat kein Konto, keinen Server und keine Analytik.</p></div></details>
+      <details class="faq-item reveal"><summary>Was ist kostenlos und wofür brauche ich Pro?<span class="chev" aria-hidden="true"></span></summary><div class="answer"><p>Kostenlos verwaltet bis zu 7 Abos mit Kalender, Zahltag-Ansicht und Import auf dem Gerät. Pro hebt das Limit auf und ergänzt Testphasen-Countdowns, Preiswarnungen, alle Widgets, Export, Haushalt-Teilen und Kündigungsschreiben. Das Jahresabo beginnt mit 14 Tagen kostenlos.</p></div></details>
+      <details class="faq-item reveal"><summary>Was passiert, wenn ich Pro nicht mehr bezahle?<span class="chev" aria-hidden="true"></span></summary><div class="answer"><p>Es wird nichts gelöscht. Deine Abos bleiben, und die Limits der kostenlosen Version gelten wieder, bis du erneut abonnierst.</p></div></details>
+      <details class="faq-item reveal"><summary>Wie kündige ich Pro?<span class="chev" aria-hidden="true"></span></summary><div class="answer"><p>In deinem Apple-Konto: Einstellungen › dein Name › Abonnements › Billow. Kündige mindestens 24 Stunden vor der Verlängerung, dann wird nichts mehr abgebucht.</p></div></details>
+      <details class="faq-item reveal"><summary>Welche Länder und Sprachen?<span class="chev" aria-hidden="true"></span></summary><div class="answer"><p>Gemacht für die USA, Albanien, Deutschland, Italien und Spanien, auf Deutsch, Englisch, Albanisch, Italienisch und Spanisch, mit jeder Währung und deiner Hauptwährung für Summen.</p></div></details>
+      <details class="faq-item reveal"><summary>Wie funktionieren Testphasen in Billow?<span class="chev" aria-hidden="true"></span></summary><div class="answer"><p>Markiere ein Abo als Testphase und Billow setzt eine „Kündigen bis“-Frist einen Tag vor der Umwandlung, erinnert dich 3 Tage, 1 Tag vorher und am Stichtag und zeigt einen Live-Activity-Countdown auf dem Sperrbildschirm.</p></div></details>
+      <details class="faq-item reveal"><summary>Kann ich mit Familie oder Haushalt teilen?<span class="chev" aria-hidden="true"></span></summary><div class="answer"><p>Ja. Beim Haushalt-Teilen treten bis zu 5 Personen per Link bei, jede mit eigener Apple-ID, und nur die Abos, die du auswählst, werden geteilt. Pro Jährlich und Lifetime funktionieren auch mit der Apple-Familienfreigabe.</p></div></details>
+    </div>
+  </div>
+</section>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Muss ich meine Bank verbinden?", "acceptedAnswer": {"@type": "Answer", "text": "Nein. Füge Abos aus dem Katalog mit über 500 Diensten hinzu, tippe sie ein oder teile einen Beleg, Screenshot, ein PDF oder einen Kontoauszug. Alles wird auf deinem iPhone gelesen; Billow fragt nie nach Bankzugangsdaten."}}, {"@type": "Question", "name": "Wo werden meine Daten gespeichert?", "acceptedAnswer": {"@type": "Answer", "text": "Auf deinem iPhone und in deiner eigenen privaten iCloud-Datenbank, die auch deine anderen Geräte synchronisiert. Billow hat kein Konto, keinen Server und keine Analytik."}}, {"@type": "Question", "name": "Was ist kostenlos und wofür brauche ich Pro?", "acceptedAnswer": {"@type": "Answer", "text": "Kostenlos verwaltet bis zu 7 Abos mit Kalender, Zahltag-Ansicht und Import auf dem Gerät. Pro hebt das Limit auf und ergänzt Testphasen-Countdowns, Preiswarnungen, alle Widgets, Export, Haushalt-Teilen und Kündigungsschreiben. Das Jahresabo beginnt mit 14 Tagen kostenlos."}}, {"@type": "Question", "name": "Was passiert, wenn ich Pro nicht mehr bezahle?", "acceptedAnswer": {"@type": "Answer", "text": "Es wird nichts gelöscht. Deine Abos bleiben, und die Limits der kostenlosen Version gelten wieder, bis du erneut abonnierst."}}, {"@type": "Question", "name": "Wie kündige ich Pro?", "acceptedAnswer": {"@type": "Answer", "text": "In deinem Apple-Konto: Einstellungen › dein Name › Abonnements › Billow. Kündige mindestens 24 Stunden vor der Verlängerung, dann wird nichts mehr abgebucht."}}, {"@type": "Question", "name": "Welche Länder und Sprachen?", "acceptedAnswer": {"@type": "Answer", "text": "Gemacht für die USA, Albanien, Deutschland, Italien und Spanien, auf Deutsch, Englisch, Albanisch, Italienisch und Spanisch, mit jeder Währung und deiner Hauptwährung für Summen."}}, {"@type": "Question", "name": "Wie funktionieren Testphasen in Billow?", "acceptedAnswer": {"@type": "Answer", "text": "Markiere ein Abo als Testphase und Billow setzt eine „Kündigen bis“-Frist einen Tag vor der Umwandlung, erinnert dich 3 Tage, 1 Tag vorher und am Stichtag und zeigt einen Live-Activity-Countdown auf dem Sperrbildschirm."}}, {"@type": "Question", "name": "Kann ich mit Familie oder Haushalt teilen?", "acceptedAnswer": {"@type": "Answer", "text": "Ja. Beim Haushalt-Teilen treten bis zu 5 Personen per Link bei, jede mit eigener Apple-ID, und nur die Abos, die du auswählst, werden geteilt. Pro Jährlich und Lifetime funktionieren auch mit der Apple-Familienfreigabe."}}]}</script>
 
 <section class="contact" id="contact">
   <div class="wrap">
@@ -794,6 +864,7 @@ footer .author:hover { color: var(--accent); text-decoration: none; }
 </section>
 <script src="../contact.js?v=e89cdd1a" defer></script>
 <script src="../theme.js?v=e9f8b050" defer></script>
+<script src="../gallery.js?v=0a5d86e7" defer></script>
 
 <section class="closing">
   <div class="wrap">
@@ -808,7 +879,7 @@ footer .author:hover { color: var(--accent); text-decoration: none; }
 <footer>
   <div class="wrap">
     <a class="brand" href="../de/index.html"><img src="../img/icon.png" alt="">Billow</a>
-    <nav><a href="../support.html">Support</a><a href="#contact">Kontakt</a><a href="../privacy.html">Datenschutzerklärung</a><a href="../terms.html">Nutzungsbedingungen</a></nav>
+    <nav><a href="../support.html">Support</a><a href="#faq">FAQ</a><a href="#contact">Kontakt</a><a href="../privacy.html">Datenschutzerklärung</a><a href="../terms.html">Nutzungsbedingungen</a></nav>
     <span>© 2026 <a class="author" href="https://www.linkedin.com/in/ervin-capi/" rel="me noopener" target="_blank">Ervin Capi<svg viewBox="0 0 24 24" aria-label="LinkedIn" role="img"><path d="M20.4 2H3.6A1.6 1.6 0 0 0 2 3.6v16.8A1.6 1.6 0 0 0 3.6 22h16.8a1.6 1.6 0 0 0 1.6-1.6V3.6A1.6 1.6 0 0 0 20.4 2zM8 19H5v-9h3zM6.5 8.7a1.7 1.7 0 1 1 0-3.4 1.7 1.7 0 0 1 0 3.4zM19 19h-3v-4.6c0-1.1 0-2.5-1.5-2.5S12.7 13 12.7 14.3V19h-3v-9h2.9v1.2a3.2 3.2 0 0 1 2.9-1.6c3.1 0 3.6 2 3.6 4.7z"/></svg></a> · Händlerlogos von <a href="https://logo.dev">Logo.dev</a></span>
   </div>
 </footer>

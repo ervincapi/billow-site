@@ -18,7 +18,17 @@
 <meta property="og:title" content="Billow — Ndjekja e abonimeve">
 <meta property="og:description" content="Dijeni çfarë del nga llogaria juaj para ditës së rrogës.">
 <meta property="og:locale" content="sq_AL">
-<meta property="og:image" content="https://billow-app.org/img/icon.png">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://billow-app.org/sq/">
+<meta property="og:site_name" content="Billow">
+<meta property="og:image" content="https://billow-app.org/img/og-sq.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Dijeni çfarë del nga llogaria juaj para ditës së rrogës.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Billow — Ndjekja e abonimeve">
+<meta name="twitter:description" content="Dijeni çfarë del nga llogaria juaj para ditës së rrogës.">
+<meta name="twitter:image" content="https://billow-app.org/img/og-sq.png">
 
 <script>document.documentElement.classList.add("js");try{var t=localStorage.getItem("billow-theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
 <style>
@@ -481,6 +491,45 @@ footer .author:hover { color: var(--accent); text-decoration: none; }
   .hint-arrow-down { display: block; }
   .js .hint .line { stroke-dasharray: 160; stroke-dashoffset: 160; }
 }
+
+/* ---------- FAQ ---------- */
+.faq { padding: 24px 0 72px; }
+.faq .head { text-align: center; max-width: 60ch; margin: 0 auto 32px; }
+.faq h2 { font-size: clamp(30px, 3.8vw, 42px); margin: 0 0 12px; }
+.faq .sub { color: var(--muted); font-size: 18px; margin: 0; }
+.faq-list { max-width: 760px; margin: 0 auto; display: grid; gap: 10px; }
+.faq-item { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 0 20px; transition: border-color .2s; }
+.faq-item[open] { border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); }
+.faq-item summary { list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 0; font-weight: 600; font-size: 17px; }
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 8px; }
+.faq-item .chev { flex: none; width: 26px; height: 26px; border-radius: 50%; background: var(--tint); position: relative; transition: transform .25s; }
+.faq-item .chev::after { content: ""; position: absolute; left: 9px; top: 7px; width: 7px; height: 7px; border-right: 2px solid var(--accent); border-bottom: 2px solid var(--accent); transform: rotate(45deg); }
+.faq-item[open] .chev { transform: rotate(180deg); }
+.faq-item .answer { padding: 0 0 18px; color: var(--muted); font-size: 16px; }
+.faq-item .answer p { margin: 0; max-width: 64ch; }
+
+/* ---------- lightbox ---------- */
+.shot-btn { display: block; padding: 0; border: 0; background: none; cursor: zoom-in; border-radius: 36px; font: inherit; }
+.shot-btn:focus-visible { outline: 3px solid var(--accent); outline-offset: 6px; }
+.lightbox { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; }
+.lightbox[hidden] { display: none; }
+.lb-backdrop { position: absolute; inset: 0; background: rgba(4, 12, 18, .78); backdrop-filter: blur(10px); }
+.lb-frame { position: relative; display: flex; align-items: center; gap: 18px; padding: 24px; }
+.lb-fig { margin: 0; text-align: center; }
+.lb-fig .phone { width: min(360px, 78vw); max-width: none; border-radius: 52px; padding: 11px; }
+.lb-fig .phone::before { top: 22px; height: 26px; }
+.lb-fig .phone img { border-radius: 42px; }
+.lb-fig figcaption { color: #CFE9F0; font-weight: 600; margin-top: 16px; font-size: 15px; }
+.lightbox button { font: inherit; cursor: pointer; border: 1px solid rgba(255,255,255,.2); background: rgba(255,255,255,.1); color: #fff; width: 48px; height: 48px; border-radius: 50%; font-size: 30px; line-height: 1; display: grid; place-items: center; backdrop-filter: blur(8px); transition: background .2s; }
+.lightbox button:hover { background: rgba(255,255,255,.2); }
+.lightbox button:focus-visible { outline: 3px solid #7DD3E6; outline-offset: 3px; }
+.lb-close { position: fixed; top: 18px; right: 18px; font-size: 26px; }
+body.lb-open { overflow: hidden; }
+@media (max-width: 640px) { .lb-frame { gap: 8px; padding: 12px; } .lightbox .lb-prev, .lightbox .lb-next { width: 40px; height: 40px; font-size: 24px; } }
+
+/* ---------- demo focus styles ---------- */
+.app button:focus-visible, .app input:focus-visible, .app select:focus-visible { outline: 2px solid #0E7490; outline-offset: 2px; }
 </style>
 
 </head>
@@ -555,12 +604,13 @@ footer .author:hover { color: var(--accent); text-decoration: none; }
       <svg class="hint-arrow-down" viewBox="0 0 60 120" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path class="line" d="M30 8 C 10 40, 50 70, 30 108"/><path class="head" d="M16 94 L 30 110 L 44 94"/></svg>
     </div>
     <div class="demo reveal d1">
-      <div class="phone"><div class="live"><i></i>Demo e drejtpërdrejtë</div><div class="screen"><div class="app" id="demo" lang="sq"></div></div></div>
+      <div class="phone"><div class="live"><i></i>Demo e drejtpërdrejtë</div><div class="screen"><div class="app" id="demo" lang="sq" role="region" aria-label="Demo interaktive"></div></div></div>
+      <div id="demo-live" class="visually-hidden" aria-live="polite"></div>
     </div>
   </div>
 </section>
 <script>window.BILLOW_DEMO = {"lang": "sq", "currency": "EUR", "t": {"this_month": "Këtë muaj", "per_month": "/muaj", "per_year": "/vit", "trials_add": "Provat do të shtonin {x}/muaj", "attention_one": "1 gjë ka nevojë për vëmendje", "attention_many": "{n} gjëra kanë nevojë për vëmendje", "all_good": "Gjithçka nën kontroll", "before_payday": "Para pagës", "payday": "Dita e pagës", "next7": "7 ditët e ardhshme", "all_subs": "Të gjitha abonimet", "empty": "Asgjë ende. Shtoni abonimin e parë.", "home": "Kreu", "add": "Shto", "calendar": "Kalendari", "search": "Kërkoni në 500+ shërbime", "price": "Çmimi", "billing": "Faturimi", "monthly": "Mujor", "yearly": "Vjetor", "next_charge": "Pagesa e ardhshme", "trial": "Provë falas", "trial_hint": "14 ditë falas, pastaj {x}", "add_btn": "Shto abonimin", "back": "Prapa", "added": "{name} u shtua", "trial_ends_in": "Prova mbaron pas {n} ditësh", "trial_ends_today": "Prova mbaron sot", "cancel_by": "Anuloni deri më {d} ose paguani {x}", "price_up": "Çmimi u rrit", "price_up_body": "{old} → {new} · +{diff}/muaj", "converts": "bëhet {x}", "today": "Sot", "tomorrow": "Nesër", "in_days": "pas {n} ditësh", "trial_tag": "PROVË", "remove": "Hiq", "day": "dita"}};</script>
-<script src="../demo.js?v=1ce2f435" defer></script>
+<script src="../demo.js?v=ed83f0ca" defer></script>
 
 <main id="features">
 
@@ -734,13 +784,13 @@ footer .author:hover { color: var(--accent); text-decoration: none; }
 
 <section class="gallery">
   <div class="head reveal"><h2>Një vështrim më nga afër</h2></div>
-  <div class="strip">
-    <figure><div class="phone"><img src="../img/onboarding.jpg" alt="Mirëseardhja" loading="lazy" width="414" height="900"></div><figcaption>Mirëseardhja</figcaption></figure>
-    <figure><div class="phone"><img src="../img/home.jpg" alt="Kreu" loading="lazy" width="414" height="900"></div><figcaption>Kreu</figcaption></figure>
-    <figure><div class="phone"><img src="../img/calendar.jpg" alt="Kalendari" loading="lazy" width="414" height="900"></div><figcaption>Kalendari</figcaption></figure>
-    <figure><div class="phone"><img src="../img/insights.jpg" alt="Analiza" loading="lazy" width="414" height="900"></div><figcaption>Analiza</figcaption></figure>
-    <figure><div class="phone"><img src="../img/detail.jpg" alt="Detajet" loading="lazy" width="414" height="900"></div><figcaption>Detajet</figcaption></figure>
-    <figure><div class="phone"><img src="../img/add.jpg" alt="Shto" loading="lazy" width="414" height="900"></div><figcaption>Shto</figcaption></figure>
+  <div class="strip" data-labels='{"close": "Mbyll", "prev": "Ekrani i mëparshëm", "next": "Ekrani tjetër"}'>
+    <figure><button type="button" class="shot-btn" aria-label="Hap Mirëseardhja në madhësi të plotë"><div class="phone"><img src="../img/onboarding.jpg" alt="Mirëseardhja" loading="lazy" width="414" height="900"></div></button><figcaption>Mirëseardhja</figcaption></figure>
+    <figure><button type="button" class="shot-btn" aria-label="Hap Kreu në madhësi të plotë"><div class="phone"><img src="../img/home.jpg" alt="Kreu" loading="lazy" width="414" height="900"></div></button><figcaption>Kreu</figcaption></figure>
+    <figure><button type="button" class="shot-btn" aria-label="Hap Kalendari në madhësi të plotë"><div class="phone"><img src="../img/calendar.jpg" alt="Kalendari" loading="lazy" width="414" height="900"></div></button><figcaption>Kalendari</figcaption></figure>
+    <figure><button type="button" class="shot-btn" aria-label="Hap Analiza në madhësi të plotë"><div class="phone"><img src="../img/insights.jpg" alt="Analiza" loading="lazy" width="414" height="900"></div></button><figcaption>Analiza</figcaption></figure>
+    <figure><button type="button" class="shot-btn" aria-label="Hap Detajet në madhësi të plotë"><div class="phone"><img src="../img/detail.jpg" alt="Detajet" loading="lazy" width="414" height="900"></div></button><figcaption>Detajet</figcaption></figure>
+    <figure><button type="button" class="shot-btn" aria-label="Hap Shto në madhësi të plotë"><div class="phone"><img src="../img/add.jpg" alt="Shto" loading="lazy" width="414" height="900"></div></button><figcaption>Shto</figcaption></figure>
   </div>
 </section>
 
@@ -765,6 +815,26 @@ footer .author:hover { color: var(--accent); text-decoration: none; }
     <div class="flags"><a href="../index.html" lang="en">English</a><a href="../de/index.html" lang="de">Deutsch</a><a href="../es/index.html" lang="es">Español</a><a href="../it/index.html" lang="it">Italiano</a><a href="../sq/index.html" lang="sq" aria-current="page">Shqip</a></div>
   </div>
 </section>
+
+<section class="faq" id="faq">
+  <div class="wrap">
+    <div class="head reveal">
+      <h2>Pyetje dhe përgjigje</h2>
+      <p class="sub">Keni ende pyetje? Shkruani më poshtë. <a href="#contact">Kontakt</a></p>
+    </div>
+    <div class="faq-list">
+      <details class="faq-item reveal" open><summary>A duhet të lidh bankën?<span class="chev" aria-hidden="true"></span></summary><div class="answer"><p>Jo. Shtoni abonime nga katalogu me mbi 500 shërbime, shkruajini ose ndani një faturë, pamje ekrani, PDF ose pasqyrë bankare. Gjithçka lexohet në iPhone-in tuaj; Billow nuk kërkon kurrë kredenciale bankare.</p></div></details>
+      <details class="faq-item reveal"><summary>Ku ruhen të dhënat e mia?<span class="chev" aria-hidden="true"></span></summary><div class="answer"><p>Në iPhone-in tuaj dhe në bazën tuaj private të iCloud, që sinkronizon edhe pajisjet e tjera. Billow nuk ka llogari, server apo analitikë.</p></div></details>
+      <details class="faq-item reveal"><summary>Çfarë është falas dhe çfarë kërkon Pro?<span class="chev" aria-hidden="true"></span></summary><div class="answer"><p>Falas ndjek deri në 7 abonime me kalendarin, pamjen e ditës së pagës dhe importin në pajisje. Pro heq kufirin dhe shton numërimin mbrapsht të provave, njoftimet për rritje çmimi, të gjitha widget-et, eksportin, ndarjen familjare dhe letrat e anulimit. Plani vjetor fillon me 14 ditë falas.</p></div></details>
+      <details class="faq-item reveal"><summary>Çfarë ndodh nëse ndaloj së paguari Pro?<span class="chev" aria-hidden="true"></span></summary><div class="answer"><p>Asgjë nuk fshihet. Abonimet tuaja mbeten dhe kufijtë e versionit Falas zbatohen sërish derisa të riabonoheni.</p></div></details>
+      <details class="faq-item reveal"><summary>Si e anuloj Pro?<span class="chev" aria-hidden="true"></span></summary><div class="answer"><p>Në llogarinë tuaj Apple: Settings › emri juaj › Subscriptions › Billow. Anuloni të paktën 24 orë para rinovimit dhe nuk do të paguani më.</p></div></details>
+      <details class="faq-item reveal"><summary>Cilat vende dhe gjuhë?<span class="chev" aria-hidden="true"></span></summary><div class="answer"><p>Krijuar për SHBA-në, Shqipërinë, Gjermaninë, Italinë dhe Spanjën, në shqip, anglisht, gjermanisht, italisht dhe spanjisht, me çdo monedhë dhe monedhën tuaj kryesore për totalet.</p></div></details>
+      <details class="faq-item reveal"><summary>Si funksionojnë provat falas në Billow?<span class="chev" aria-hidden="true"></span></summary><div class="answer"><p>Shënoni një abonim si provë dhe Billow vendos afatin “anuloni deri” një ditë para se të kthehet me pagesë, ju kujton 3 ditë, 1 ditë para dhe në afat, dhe tregon numërimin mbrapsht në Live Activity në ekranin e kyçur.</p></div></details>
+      <details class="faq-item reveal"><summary>A mund ta ndaj me familjen?<span class="chev" aria-hidden="true"></span></summary><div class="answer"><p>Po. Me ndarjen familjare deri në 5 persona hyjnë me një lidhje, secili me Apple ID-në e vet, dhe ndahen vetëm abonimet që zgjidhni ju. Pro vjetor dhe Lifetime punojnë edhe me Family Sharing të Apple.</p></div></details>
+    </div>
+  </div>
+</section>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "A duhet të lidh bankën?", "acceptedAnswer": {"@type": "Answer", "text": "Jo. Shtoni abonime nga katalogu me mbi 500 shërbime, shkruajini ose ndani një faturë, pamje ekrani, PDF ose pasqyrë bankare. Gjithçka lexohet në iPhone-in tuaj; Billow nuk kërkon kurrë kredenciale bankare."}}, {"@type": "Question", "name": "Ku ruhen të dhënat e mia?", "acceptedAnswer": {"@type": "Answer", "text": "Në iPhone-in tuaj dhe në bazën tuaj private të iCloud, që sinkronizon edhe pajisjet e tjera. Billow nuk ka llogari, server apo analitikë."}}, {"@type": "Question", "name": "Çfarë është falas dhe çfarë kërkon Pro?", "acceptedAnswer": {"@type": "Answer", "text": "Falas ndjek deri në 7 abonime me kalendarin, pamjen e ditës së pagës dhe importin në pajisje. Pro heq kufirin dhe shton numërimin mbrapsht të provave, njoftimet për rritje çmimi, të gjitha widget-et, eksportin, ndarjen familjare dhe letrat e anulimit. Plani vjetor fillon me 14 ditë falas."}}, {"@type": "Question", "name": "Çfarë ndodh nëse ndaloj së paguari Pro?", "acceptedAnswer": {"@type": "Answer", "text": "Asgjë nuk fshihet. Abonimet tuaja mbeten dhe kufijtë e versionit Falas zbatohen sërish derisa të riabonoheni."}}, {"@type": "Question", "name": "Si e anuloj Pro?", "acceptedAnswer": {"@type": "Answer", "text": "Në llogarinë tuaj Apple: Settings › emri juaj › Subscriptions › Billow. Anuloni të paktën 24 orë para rinovimit dhe nuk do të paguani më."}}, {"@type": "Question", "name": "Cilat vende dhe gjuhë?", "acceptedAnswer": {"@type": "Answer", "text": "Krijuar për SHBA-në, Shqipërinë, Gjermaninë, Italinë dhe Spanjën, në shqip, anglisht, gjermanisht, italisht dhe spanjisht, me çdo monedhë dhe monedhën tuaj kryesore për totalet."}}, {"@type": "Question", "name": "Si funksionojnë provat falas në Billow?", "acceptedAnswer": {"@type": "Answer", "text": "Shënoni një abonim si provë dhe Billow vendos afatin “anuloni deri” një ditë para se të kthehet me pagesë, ju kujton 3 ditë, 1 ditë para dhe në afat, dhe tregon numërimin mbrapsht në Live Activity në ekranin e kyçur."}}, {"@type": "Question", "name": "A mund ta ndaj me familjen?", "acceptedAnswer": {"@type": "Answer", "text": "Po. Me ndarjen familjare deri në 5 persona hyjnë me një lidhje, secili me Apple ID-në e vet, dhe ndahen vetëm abonimet që zgjidhni ju. Pro vjetor dhe Lifetime punojnë edhe me Family Sharing të Apple."}}]}</script>
 
 <section class="contact" id="contact">
   <div class="wrap">
@@ -794,6 +864,7 @@ footer .author:hover { color: var(--accent); text-decoration: none; }
 </section>
 <script src="../contact.js?v=e89cdd1a" defer></script>
 <script src="../theme.js?v=e9f8b050" defer></script>
+<script src="../gallery.js?v=0a5d86e7" defer></script>
 
 <section class="closing">
   <div class="wrap">
@@ -808,7 +879,7 @@ footer .author:hover { color: var(--accent); text-decoration: none; }
 <footer>
   <div class="wrap">
     <a class="brand" href="../sq/index.html"><img src="../img/icon.png" alt="">Billow</a>
-    <nav><a href="../support.html">Ndihma</a><a href="#contact">Kontakt</a><a href="../privacy.html">Politika e privatësisë</a><a href="../terms.html">Kushtet e përdorimit</a></nav>
+    <nav><a href="../support.html">Ndihma</a><a href="#faq">FAQ</a><a href="#contact">Kontakt</a><a href="../privacy.html">Politika e privatësisë</a><a href="../terms.html">Kushtet e përdorimit</a></nav>
     <span>© 2026 <a class="author" href="https://www.linkedin.com/in/ervin-capi/" rel="me noopener" target="_blank">Ervin Capi<svg viewBox="0 0 24 24" aria-label="LinkedIn" role="img"><path d="M20.4 2H3.6A1.6 1.6 0 0 0 2 3.6v16.8A1.6 1.6 0 0 0 3.6 22h16.8a1.6 1.6 0 0 0 1.6-1.6V3.6A1.6 1.6 0 0 0 20.4 2zM8 19H5v-9h3zM6.5 8.7a1.7 1.7 0 1 1 0-3.4 1.7 1.7 0 0 1 0 3.4zM19 19h-3v-4.6c0-1.1 0-2.5-1.5-2.5S12.7 13 12.7 14.3V19h-3v-9h2.9v1.2a3.2 3.2 0 0 1 2.9-1.6c3.1 0 3.6 2 3.6 4.7z"/></svg></a> · Logot e shërbimeve nga <a href="https://logo.dev">Logo.dev</a></span>
   </div>
 </footer>

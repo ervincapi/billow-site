@@ -14,6 +14,7 @@ BASE = "https://billow-app.org/"
 DEMO_VER = hashlib.sha1((SITE / "demo.js").read_bytes()).hexdigest()[:8]
 THEME_VER = hashlib.sha1((SITE / "theme.js").read_bytes()).hexdigest()[:8]
 CONTACT_VER = hashlib.sha1((SITE / "contact.js").read_bytes()).hexdigest()[:8]
+GALLERY_VER = hashlib.sha1((SITE / "gallery.js").read_bytes()).hexdigest()[:8]
 
 LANGS = ["en", "de", "es", "it", "sq"]
 NAMES = {"en": "English", "de": "Deutsch", "es": "Español", "it": "Italiano", "sq": "Shqip"}
@@ -548,7 +549,8 @@ def try_section(lang, root):
       <svg class="hint-arrow-down" viewBox="0 0 60 120" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path class="line" d="M30 8 C 10 40, 50 70, 30 108"/><path class="head" d="M16 94 L 30 110 L 44 94"/></svg>
     </div>
     <div class="demo reveal d1">
-      <div class="phone"><div class="live"><i></i>{e(t["live"])}</div><div class="screen"><div class="app" id="demo" lang="{lang}"></div></div></div>
+      <div class="phone"><div class="live"><i></i>{e(t["live"])}</div><div class="screen"><div class="app" id="demo" lang="{lang}" role="region" aria-label="{e(t["eyebrow"])}"></div></div></div>
+      <div id="demo-live" class="visually-hidden" aria-live="polite"></div>
     </div>
   </div>
 </section>
@@ -601,7 +603,8 @@ def contact_section(lang, root):
   </div>
 </section>
 <script src="{root}contact.js?v={CONTACT_VER}" defer></script>
-<script src="{root}theme.js?v={THEME_VER}" defer></script>"""
+<script src="{root}theme.js?v={THEME_VER}" defer></script>
+<script src="{root}gallery.js?v={GALLERY_VER}" defer></script>"""
 
 # ---- Pricing: plan names, Pro features and the Free/Pro split come from the app's String Catalog; prices from App/Billow.storekit.
 PAYWALL = {
@@ -784,6 +787,85 @@ def theme_button(lang):
     labels = json.dumps(THEME[lang], ensure_ascii=False).replace("'", "&#39;")
     return f"""<button type="button" class="theme-toggle" data-labels='{labels}' aria-label="{e(THEME[lang]["name"])}">{THEME_ICONS}</button>"""
 
+# ---- FAQ: shown as native <details> and emitted as schema.org FAQPage JSON-LD.
+FAQ = {
+  "en": ("Questions, answered", "Still wondering? Ask below.", [
+    ("Do I need to connect my bank?", "No. Add subscriptions from the catalog of 500+ services, type them in, or share a receipt, screenshot, PDF or bank statement. Everything is read on your iPhone; Billow never asks for bank credentials."),
+    ("Where is my data stored?", "On your iPhone and in your own private iCloud database, which also syncs your other devices. Billow has no account, no server and no analytics."),
+    ("What is free and what needs Pro?", "Free tracks up to 7 subscriptions with the calendar, payday view and on-device import. Pro removes the limit and adds trial countdowns, price-change alerts, all widgets, export, household sharing and cancellation letters. The yearly plan starts with 14 days free."),
+    ("What happens if I stop paying for Pro?", "Nothing is deleted. Your subscriptions stay, and the Free limits apply again until you resubscribe."),
+    ("How do I cancel Pro?", "In your Apple account: Settings › your name › Subscriptions › Billow. Cancel at least 24 hours before the renewal date and you won't be charged again."),
+    ("Which countries and languages?", "Built for the United States, Albania, Germany, Italy and Spain, in English, Albanian, German, Italian and Spanish, with every currency and your home currency for totals."),
+    ("How do free trials work in Billow?", "Mark a subscription as a trial and Billow sets a cancel-by deadline one day before it converts, reminds you at 3 days, 1 day and on the deadline, and shows a Live Activity countdown on your Lock Screen."),
+    ("Can I share with my family or household?", "Yes. Household sharing lets up to 5 people join by link, each with their own Apple ID, and only the subscriptions you choose are shared. Pro yearly and lifetime also work with Apple Family Sharing."),
+  ]),
+  "de": ("Fragen und Antworten", "Noch Fragen? Schreib mir unten.", [
+    ("Muss ich meine Bank verbinden?", "Nein. Füge Abos aus dem Katalog mit über 500 Diensten hinzu, tippe sie ein oder teile einen Beleg, Screenshot, ein PDF oder einen Kontoauszug. Alles wird auf deinem iPhone gelesen; Billow fragt nie nach Bankzugangsdaten."),
+    ("Wo werden meine Daten gespeichert?", "Auf deinem iPhone und in deiner eigenen privaten iCloud-Datenbank, die auch deine anderen Geräte synchronisiert. Billow hat kein Konto, keinen Server und keine Analytik."),
+    ("Was ist kostenlos und wofür brauche ich Pro?", "Kostenlos verwaltet bis zu 7 Abos mit Kalender, Zahltag-Ansicht und Import auf dem Gerät. Pro hebt das Limit auf und ergänzt Testphasen-Countdowns, Preiswarnungen, alle Widgets, Export, Haushalt-Teilen und Kündigungsschreiben. Das Jahresabo beginnt mit 14 Tagen kostenlos."),
+    ("Was passiert, wenn ich Pro nicht mehr bezahle?", "Es wird nichts gelöscht. Deine Abos bleiben, und die Limits der kostenlosen Version gelten wieder, bis du erneut abonnierst."),
+    ("Wie kündige ich Pro?", "In deinem Apple-Konto: Einstellungen › dein Name › Abonnements › Billow. Kündige mindestens 24 Stunden vor der Verlängerung, dann wird nichts mehr abgebucht."),
+    ("Welche Länder und Sprachen?", "Gemacht für die USA, Albanien, Deutschland, Italien und Spanien, auf Deutsch, Englisch, Albanisch, Italienisch und Spanisch, mit jeder Währung und deiner Hauptwährung für Summen."),
+    ("Wie funktionieren Testphasen in Billow?", "Markiere ein Abo als Testphase und Billow setzt eine „Kündigen bis“-Frist einen Tag vor der Umwandlung, erinnert dich 3 Tage, 1 Tag vorher und am Stichtag und zeigt einen Live-Activity-Countdown auf dem Sperrbildschirm."),
+    ("Kann ich mit Familie oder Haushalt teilen?", "Ja. Beim Haushalt-Teilen treten bis zu 5 Personen per Link bei, jede mit eigener Apple-ID, und nur die Abos, die du auswählst, werden geteilt. Pro Jährlich und Lifetime funktionieren auch mit der Apple-Familienfreigabe."),
+  ]),
+  "es": ("Preguntas frecuentes", "¿Todavía tienes dudas? Pregunta abajo.", [
+    ("¿Tengo que conectar mi banco?", "No. Añade suscripciones desde el catálogo de más de 500 servicios, escríbelas o comparte un recibo, una captura, un PDF o un extracto bancario. Todo se lee en tu iPhone; Billow nunca pide credenciales bancarias."),
+    ("¿Dónde se guardan mis datos?", "En tu iPhone y en tu propia base de datos privada de iCloud, que también sincroniza tus otros dispositivos. Billow no tiene cuenta, ni servidor, ni analíticas."),
+    ("¿Qué es gratis y qué necesita Pro?", "Gratis controla hasta 7 suscripciones con calendario, vista del día de pago e importación en el dispositivo. Pro quita el límite y añade cuentas atrás de pruebas, avisos de subidas de precio, todos los widgets, exportación, uso compartido en casa y cartas de cancelación. El plan anual empieza con 14 días gratis."),
+    ("¿Qué pasa si dejo de pagar Pro?", "No se borra nada. Tus suscripciones se quedan y vuelven a aplicarse los límites de Gratis hasta que te suscribas de nuevo."),
+    ("¿Cómo cancelo Pro?", "En tu cuenta de Apple: Ajustes › tu nombre › Suscripciones › Billow. Cancela al menos 24 horas antes de la renovación y no se te volverá a cobrar."),
+    ("¿Qué países e idiomas?", "Pensado para Estados Unidos, Albania, Alemania, Italia y España, en español, inglés, albanés, alemán e italiano, con cualquier moneda y tu moneda principal para los totales."),
+    ("¿Cómo funcionan las pruebas gratis en Billow?", "Marca una suscripción como prueba y Billow fija un plazo «cancelar antes del» un día antes de que pase a ser de pago, te recuerda a los 3 días, 1 día y en la fecha límite, y muestra una cuenta atrás en Actividad en vivo en la pantalla bloqueada."),
+    ("¿Puedo compartir con mi familia o mi hogar?", "Sí. Con el uso compartido en casa, hasta 5 personas se unen con un enlace, cada una con su Apple ID, y solo se comparten las suscripciones que elijas. Pro anual y Lifetime también funcionan con En familia de Apple."),
+  ]),
+  "it": ("Domande frequenti", "Hai ancora dubbi? Chiedi qui sotto.", [
+    ("Devo collegare la banca?", "No. Aggiungi gli abbonamenti dal catalogo di oltre 500 servizi, scrivili o condividi una ricevuta, uno screenshot, un PDF o un estratto conto. Tutto viene letto sul tuo iPhone; Billow non chiede mai credenziali bancarie."),
+    ("Dove sono salvati i miei dati?", "Sul tuo iPhone e nel tuo database privato di iCloud, che sincronizza anche gli altri tuoi dispositivi. Billow non ha account, server né analytics."),
+    ("Cosa è gratis e cosa richiede Pro?", "Gratis segue fino a 7 abbonamenti con calendario, vista stipendio e import sul dispositivo. Pro toglie il limite e aggiunge conto alla rovescia delle prove, avvisi sugli aumenti di prezzo, tutti i widget, esportazione, condivisione familiare e lettere di disdetta. Il piano annuale parte con 14 giorni gratis."),
+    ("Cosa succede se smetto di pagare Pro?", "Non viene eliminato nulla. I tuoi abbonamenti restano e tornano a valere i limiti di Gratis finché non ti riabboni."),
+    ("Come disdico Pro?", "Dal tuo account Apple: Impostazioni › il tuo nome › Abbonamenti › Billow. Disdici almeno 24 ore prima del rinnovo e non ti verrà più addebitato nulla."),
+    ("Quali paesi e lingue?", "Pensato per Stati Uniti, Albania, Germania, Italia e Spagna, in italiano, inglese, albanese, tedesco e spagnolo, con ogni valuta e la tua valuta principale per i totali."),
+    ("Come funzionano le prove gratuite in Billow?", "Segna un abbonamento come prova e Billow imposta una scadenza «disdici entro» un giorno prima della conversione, ti ricorda a 3 giorni, 1 giorno e alla scadenza, e mostra un conto alla rovescia in Attività Live sulla schermata di blocco."),
+    ("Posso condividere con la famiglia?", "Sì. Con la condivisione familiare fino a 5 persone entrano con un link, ognuna con il proprio Apple ID, e si condividono solo gli abbonamenti che scegli. Pro annuale e Lifetime funzionano anche con In famiglia di Apple."),
+  ]),
+  "sq": ("Pyetje dhe përgjigje", "Keni ende pyetje? Shkruani më poshtë.", [
+    ("A duhet të lidh bankën?", "Jo. Shtoni abonime nga katalogu me mbi 500 shërbime, shkruajini ose ndani një faturë, pamje ekrani, PDF ose pasqyrë bankare. Gjithçka lexohet në iPhone-in tuaj; Billow nuk kërkon kurrë kredenciale bankare."),
+    ("Ku ruhen të dhënat e mia?", "Në iPhone-in tuaj dhe në bazën tuaj private të iCloud, që sinkronizon edhe pajisjet e tjera. Billow nuk ka llogari, server apo analitikë."),
+    ("Çfarë është falas dhe çfarë kërkon Pro?", "Falas ndjek deri në 7 abonime me kalendarin, pamjen e ditës së pagës dhe importin në pajisje. Pro heq kufirin dhe shton numërimin mbrapsht të provave, njoftimet për rritje çmimi, të gjitha widget-et, eksportin, ndarjen familjare dhe letrat e anulimit. Plani vjetor fillon me 14 ditë falas."),
+    ("Çfarë ndodh nëse ndaloj së paguari Pro?", "Asgjë nuk fshihet. Abonimet tuaja mbeten dhe kufijtë e versionit Falas zbatohen sërish derisa të riabonoheni."),
+    ("Si e anuloj Pro?", "Në llogarinë tuaj Apple: Settings › emri juaj › Subscriptions › Billow. Anuloni të paktën 24 orë para rinovimit dhe nuk do të paguani më."),
+    ("Cilat vende dhe gjuhë?", "Krijuar për SHBA-në, Shqipërinë, Gjermaninë, Italinë dhe Spanjën, në shqip, anglisht, gjermanisht, italisht dhe spanjisht, me çdo monedhë dhe monedhën tuaj kryesore për totalet."),
+    ("Si funksionojnë provat falas në Billow?", "Shënoni një abonim si provë dhe Billow vendos afatin “anuloni deri” një ditë para se të kthehet me pagesë, ju kujton 3 ditë, 1 ditë para dhe në afat, dhe tregon numërimin mbrapsht në Live Activity në ekranin e kyçur."),
+    ("A mund ta ndaj me familjen?", "Po. Me ndarjen familjare deri në 5 persona hyjnë me një lidhje, secili me Apple ID-në e vet, dhe ndahen vetëm abonimet që zgjidhni ju. Pro vjetor dhe Lifetime punojnë edhe me Family Sharing të Apple."),
+  ]),
+}
+
+def faq_section(lang, root):
+    h, sub, items = FAQ[lang]
+    details = "\n      ".join(f'<details class="faq-item reveal"{" open" if i == 0 else ""}><summary>{e(q)}<span class="chev" aria-hidden="true"></span></summary><div class="answer"><p>{e(a)}</p></div></details>' for i, (q, a) in enumerate(items))
+    ld = json.dumps({"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in items]}, ensure_ascii=False)
+    return f"""<section class="faq" id="faq">
+  <div class="wrap">
+    <div class="head reveal">
+      <h2>{e(h)}</h2>
+      <p class="sub">{e(sub)} <a href="#contact">{e(CONTACT[lang]["nav"])}</a></p>
+    </div>
+    <div class="faq-list">
+      {details}
+    </div>
+  </div>
+</section>
+<script type="application/ld+json">{ld}</script>"""
+
+LIGHTBOX = {
+  "en": dict(close="Close", prev="Previous screen", next="Next screen", open="Open {0} full size"),
+  "de": dict(close="Schließen", prev="Vorheriger Bildschirm", next="Nächster Bildschirm", open="{0} in voller Größe öffnen"),
+  "es": dict(close="Cerrar", prev="Pantalla anterior", next="Pantalla siguiente", open="Abrir {0} a tamaño completo"),
+  "it": dict(close="Chiudi", prev="Schermata precedente", next="Schermata successiva", open="Apri {0} a schermo intero"),
+  "sq": dict(close="Mbyll", prev="Ekrani i mëparshëm", next="Ekrani tjetër", open="Hap {0} në madhësi të plotë"),
+}
+
 def page(lang):
     t = T[lang]
     root = "" if lang == "en" else "../"
@@ -823,8 +905,9 @@ def page(lang):
   </div>
 </section>""")
     gallery = "\n    ".join(
-        f'<figure><div class="phone"><img src="{root}img/{n}.jpg" alt="{e(c)}" loading="lazy" width="414" height="900"></div><figcaption>{e(c)}</figcaption></figure>'
+        f'<figure><button type="button" class="shot-btn" aria-label="{e(LIGHTBOX[lang]["open"].format(c))}"><div class="phone"><img src="{root}img/{n}.jpg" alt="{e(c)}" loading="lazy" width="414" height="900"></div></button><figcaption>{e(c)}</figcaption></figure>'
         for n, c in zip(GALLERY, t["caps"]))
+    lb_labels = json.dumps({k: LIGHTBOX[lang][k] for k in ("close", "prev", "next")}, ensure_ascii=False).replace("'", "&#39;")
     tiles = "\n      ".join(
         f'<div class="tile reveal d{i % 4}"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">{ico}</svg></div><strong>{e(a)}</strong><span>{e(b)}</span></div>'
         for i, (ico, (a, b)) in enumerate(zip(ICONS, t["tiles"])))
@@ -845,7 +928,17 @@ def page(lang):
 <meta property="og:title" content="{e(t["title"])}">
 <meta property="og:description" content="{e(t["og"])}">
 <meta property="og:locale" content="{OG[lang]}">
-<meta property="og:image" content="{BASE}img/icon.png">
+<meta property="og:type" content="website">
+<meta property="og:url" content="{url(lang)}">
+<meta property="og:site_name" content="Billow">
+<meta property="og:image" content="{BASE}img/og-{lang}.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="{e(t["og"])}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{e(t["title"])}">
+<meta name="twitter:description" content="{e(t["og"])}">
+<meta name="twitter:image" content="{BASE}img/og-{lang}.png">
 {DETECT if lang == "en" else ""}
 {JS_FLAG}
 {style}
@@ -912,7 +1005,7 @@ def page(lang):
 
 <section class="gallery">
   <div class="head reveal"><h2>{e(t["gallery"])}</h2></div>
-  <div class="strip">
+  <div class="strip" data-labels='{lb_labels}'>
     {gallery}
   </div>
 </section>
@@ -936,6 +1029,8 @@ def page(lang):
   </div>
 </section>
 
+{faq_section(lang, root)}
+
 {contact_section(lang, root)}
 
 <section class="closing">
@@ -951,7 +1046,7 @@ def page(lang):
 <footer>
   <div class="wrap">
     <a class="brand" href="{href(lang)}"><img src="{root}img/icon.png" alt="">Billow</a>
-    <nav><a href="{root}support.html">{e(t["nav_support"])}</a><a href="#contact">{e(CONTACT[lang]["nav"])}</a><a href="{root}privacy.html">{e(t["privacy_policy"])}</a><a href="{root}terms.html">{e(TERMS[lang])}</a></nav>
+    <nav><a href="{root}support.html">{e(t["nav_support"])}</a><a href="#faq">FAQ</a><a href="#contact">{e(CONTACT[lang]["nav"])}</a><a href="{root}privacy.html">{e(t["privacy_policy"])}</a><a href="{root}terms.html">{e(TERMS[lang])}</a></nav>
     <span>© 2026 <a class="author" href="https://www.linkedin.com/in/ervin-capi/" rel="me noopener" target="_blank">Ervin Capi<svg viewBox="0 0 24 24" aria-label="LinkedIn" role="img"><path d="M20.4 2H3.6A1.6 1.6 0 0 0 2 3.6v16.8A1.6 1.6 0 0 0 3.6 22h16.8a1.6 1.6 0 0 0 1.6-1.6V3.6A1.6 1.6 0 0 0 20.4 2zM8 19H5v-9h3zM6.5 8.7a1.7 1.7 0 1 1 0-3.4 1.7 1.7 0 0 1 0 3.4zM19 19h-3v-4.6c0-1.1 0-2.5-1.5-2.5S12.7 13 12.7 14.3V19h-3v-9h2.9v1.2a3.2 3.2 0 0 1 2.9-1.6c3.1 0 3.6 2 3.6 4.7z"/></svg></a> · {e(t["logos_by"])} <a href="https://logo.dev">Logo.dev</a></span>
   </div>
 </footer>

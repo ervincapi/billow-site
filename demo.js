@@ -63,7 +63,7 @@
     h += '<div class="hd"><div class="dbrand"><i></i>Billow</div><div class="greet"><b>' + esc(dShort.format(today())) + "</b><small" + (attention ? ' class="amber"' : "") + ">" + esc(attention === 0 ? T.all_good : attention === 1 ? T.attention_one : fmt(T.attention_many, { n: attention })) + "</small></div></div>";
     h += '<div class="body">';
     h += '<section class="dcard total"><small>' + esc(dMonth.format(today())).toUpperCase() + "</small><div><b>" + money.format(total) + "</b><span>" + esc(T.per_month) + "</span></div>" + (trialAdd ? '<em class="amber">' + esc(fmt(T.trials_add, { x: money.format(trialAdd) })) + "</em>" : "") + "</section>";
-    h += '<section class="dcard payday"><div><small>' + esc(T.before_payday) + " · " + esc(dLong.format(pd)) + "</small><b>" + money.format(beforeTotal) + "</b></div><label>" + esc(T.payday) + ' <select data-act="payday">' + Array.from({ length: 28 }, function (_, i) { return '<option value="' + (i + 1) + '"' + (state.payday === i + 1 ? " selected" : "") + ">" + (i + 1) + "</option>"; }).join("") + "</select></label></section>";
+    h += '<section class="dcard payday"><div><small>' + esc(T.before_payday) + " · " + esc(dLong.format(pd)) + "</small><b>" + money.format(beforeTotal) + "</b></div><label>" + esc(T.payday) + ' <select data-act="payday" aria-label="' + esc(T.payday) + '">' + Array.from({ length: 28 }, function (_, i) { return '<option value="' + (i + 1) + '"' + (state.payday === i + 1 ? " selected" : "") + ">" + (i + 1) + "</option>"; }).join("") + "</select></label></section>";
     var alerts = "";
     trials.forEach(function (s) { var n = days(s.next); alerts += '<div class="alert amber"><small>' + esc(n <= 0 ? T.trial_ends_today : fmt(T.trial_ends_in, { n: n })) + "</small><b>" + esc(s.name) + "</b><span>" + esc(fmt(T.cancel_by, { d: dShort.format(addDays(s.next, -1)), x: money.format(s.price) })) + "</span></div>"; });
     subs.filter(function (s) { return s.oldPrice; }).forEach(function (s) { alerts += '<div class="alert teal"><small>' + esc(T.price_up) + "</small><b>" + esc(s.name) + "</b><span>" + esc(fmt(T.price_up_body, { old: money.format(s.oldPrice), "new": money.format(s.price), diff: money.format(s.price - s.oldPrice) })) + "</span></div>"; });
@@ -90,7 +90,7 @@
     }
     var q = state.query.trim().toLowerCase();
     var list = CATALOG.filter(function (c) { return !q || c.name.toLowerCase().indexOf(q) >= 0; });
-    return '<div class="hd light"><input type="search" placeholder="' + esc(T.search) + '" value="' + esc(state.query) + '" data-field="query" autocomplete="off"></div>' +
+    return '<div class="hd light"><input type="search" placeholder="' + esc(T.search) + '" aria-label="' + esc(T.search) + '" value="' + esc(state.query) + '" data-field="query" autocomplete="off"></div>' +
       '<div class="body"><section class="list">' + list.map(function (c) { return '<button type="button" class="item pick" data-act="pick" data-id="' + c.id + '">' + logo(c) + '<div class="meta"><b>' + esc(c.name) + "</b><small>" + money.format(c.price) + esc(c.cycle === "y" ? T.per_year : T.per_month) + "</small></div><span>+</span></button>"; }).join("") + "</section></div>";
   }
 
@@ -112,27 +112,35 @@
   function render() {
     var view = state.tab === "home" ? homeView() : state.tab === "add" ? addView() : calendarView();
     var tabs = [["home", T.home, '<path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>'], ["add", T.add, '<circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/>'], ["calendar", T.calendar, '<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/>']];
-    root.innerHTML = '<div class="view ' + state.tab + '">' + view + "</div>" + (state.toast ? '<div class="toast">' + esc(state.toast) + "</div>" : "") +
-      '<nav class="tabs">' + tabs.map(function (t) { return '<button type="button" data-act="tab" data-v="' + t[0] + '" class="' + (state.tab === t[0] ? "on" : "") + '"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + t[2] + "</svg>" + esc(t[1]) + "</button>"; }).join("") + "</nav>";
+    root.innerHTML = '<div class="view ' + state.tab + '" role="tabpanel" id="demo-panel" aria-labelledby="demo-tab-' + state.tab + '">' + view + "</div>" + (state.toast ? '<div class="toast" aria-hidden="true">' + esc(state.toast) + "</div>" : "") +
+      '<nav class="tabs" role="tablist">' + tabs.map(function (t) { var on = state.tab === t[0]; return '<button type="button" role="tab" id="demo-tab-' + t[0] + '" aria-selected="' + on + '" aria-controls="demo-panel" tabindex="' + (on ? "0" : "-1") + '" data-act="tab" data-v="' + t[0] + '" class="' + (on ? "on" : "") + '"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + t[2] + "</svg>" + esc(t[1]) + "</button>"; }).join("") + "</nav>";
+    if (state.focus) { var target = root.querySelector(state.focus); if (target) target.focus(); state.focus = null; }
     var q = root.querySelector('[data-field="query"]'); if (q && state.tab === "add" && document.activeElement !== q && state.focusQuery) { q.focus(); q.setSelectionRange(q.value.length, q.value.length); }
   }
-  function toast(msg) { state.toast = msg; render(); clearTimeout(toast.t); toast.t = setTimeout(function () { state.toast = ""; render(); }, 1800); }
+  var live = document.getElementById("demo-live");
+  function announce(msg) { if (live) { live.textContent = ""; setTimeout(function () { live.textContent = msg; }, 50); } }
+  function toast(msg) { state.toast = msg; announce(msg); render(); clearTimeout(toast.t); toast.t = setTimeout(function () { state.toast = ""; render(); }, 1800); }
 
   root.addEventListener("click", function (ev) {
     var el = ev.target.closest("[data-act]"); if (!el) return;
     var act = el.getAttribute("data-act"), id = +el.getAttribute("data-id");
-    if (act === "tab") { state.tab = el.getAttribute("data-v"); state.form = null; state.focusQuery = false; }
-    else if (act === "pick") { var c = CATALOG[id]; state.form = { service: c, price: c.price, cycle: c.cycle, next: addDays(today(), 3 + (id % 20)).toISOString().slice(0, 10), trial: false }; }
-    else if (act === "back") { state.form = null; }
+    if (act === "tab") { state.tab = el.getAttribute("data-v"); state.form = null; state.focusQuery = false; state.focus = '[role="tab"][aria-selected="true"]'; }
+    else if (act === "pick") { var c = CATALOG[id]; state.form = { service: c, price: c.price, cycle: c.cycle, next: addDays(today(), 3 + (id % 20)).toISOString().slice(0, 10), trial: false }; state.focus = '[data-field="price"]'; }
+    else if (act === "back") { state.form = null; state.focus = '[data-field="query"]'; }
     else if (act === "cycle") { state.form.cycle = el.getAttribute("data-v"); }
     else if (act === "save") {
       var f = state.form, next = new Date(f.next + "T00:00:00"); if (isNaN(next)) next = addDays(today(), 7);
       if (f.trial) next = addDays(today(), 14);
       state.subs.push({ id: nextId++, name: f.service.name, price: +f.price || 0, cycle: f.cycle, color: f.service.color, next: next, trial: !!f.trial });
-      state.form = null; state.query = ""; state.tab = "home"; toast(fmt(T.added, { name: f.service.name })); return;
+      state.form = null; state.query = ""; state.tab = "home"; state.focus = '[role="tab"][aria-selected="true"]'; toast(fmt(T.added, { name: f.service.name })); return;
     }
-    else if (act === "remove") { state.subs = state.subs.filter(function (s) { return s.id !== id; }); }
+    else if (act === "remove") { var gone = state.subs.filter(function (s) { return s.id === id; })[0]; state.subs = state.subs.filter(function (s) { return s.id !== id; }); if (gone) announce(T.remove + ": " + gone.name); state.focus = '[role="tab"][aria-selected="true"]'; }
     render();
+  });
+  root.addEventListener("keydown", function (ev) {
+    var tab = ev.target.closest('[role="tab"]'); if (!tab || (ev.key !== "ArrowLeft" && ev.key !== "ArrowRight")) return;
+    var order = ["home", "add", "calendar"], i = order.indexOf(state.tab), n = order[(i + (ev.key === "ArrowRight" ? 1 : -1) + order.length) % order.length];
+    ev.preventDefault(); state.tab = n; state.form = null; state.focus = '[role="tab"][aria-selected="true"]'; render();
   });
   root.addEventListener("input", function (ev) {
     var f = ev.target.getAttribute("data-field"); if (!f) return;

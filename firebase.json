@@ -2,14 +2,42 @@
   "hosting": {
     "site": "billow-513813",
     "public": ".",
-    "ignore": ["firebase.json", ".firebaserc", "tools/**", "**/.*", "**/node_modules/**", "README.md"],
+    "ignore": [
+      "firebase.json",
+      ".firebaserc",
+      "tools/**",
+      "**/.*",
+      "**/node_modules/**",
+      "README.md"
+    ],
     "cleanUrls": false,
     "trailingSlash": true,
     "headers": [
-      { "source": "**/*.@(jpg|png|css)", "headers": [{ "key": "Cache-Control", "value": "public, max-age=604800" }] }
+      {
+        "source": "**/*.@(jpg|png|css)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=604800"
+          }
+        ]
+      },
+      {
+        "source": "/img/og-*.png",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=86400"
+          }
+        ]
+      }
     ],
     "redirects": [
-      { "source": "/billow-site/:path*", "destination": "/:path", "type": 301 }
+      {
+        "source": "/billow-site/:path*",
+        "destination": "/:path",
+        "type": 301
+      }
     ]
   }
 }
