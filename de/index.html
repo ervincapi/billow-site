@@ -195,6 +195,9 @@ footer .brand img { width: 24px; height: 24px; border-radius: 6px; }
 footer nav { display: flex; flex-wrap: wrap; gap: 6px 22px; }
 footer nav a { color: var(--muted); }
 footer nav a:hover { color: var(--ink); }
+footer .author { display: inline-flex; align-items: center; gap: 5px; color: var(--ink); font-weight: 600; }
+footer .author svg { width: 15px; height: 15px; fill: #0A66C2; }
+footer .author:hover { color: var(--accent); text-decoration: none; }
 
 /* ---------- motion ---------- */
 .js .reveal { opacity: 0; transform: translateY(20px); transition: opacity .9s cubic-bezier(.2,.7,.2,1), transform .9s cubic-bezier(.2,.7,.2,1); }
@@ -619,7 +622,7 @@ footer nav a:hover { color: var(--ink); }
   <div class="wrap">
     <a class="brand" href="../de/index.html"><img src="../img/icon.png" alt="">Billow</a>
     <nav><a href="../support.html">Support</a><a href="../privacy.html">Datenschutzerklärung</a><a href="../terms.html">Nutzungsbedingungen</a></nav>
-    <span>© 2026 Ervin Capi · Händlerlogos von <a href="https://logo.dev">Logo.dev</a></span>
+    <span>© 2026 <a class="author" href="https://www.linkedin.com/in/ervin-capi/" rel="me noopener" target="_blank">Ervin Capi<svg viewBox="0 0 24 24" aria-label="LinkedIn" role="img"><path d="M20.4 2H3.6A1.6 1.6 0 0 0 2 3.6v16.8A1.6 1.6 0 0 0 3.6 22h16.8a1.6 1.6 0 0 0 1.6-1.6V3.6A1.6 1.6 0 0 0 20.4 2zM8 19H5v-9h3zM6.5 8.7a1.7 1.7 0 1 1 0-3.4 1.7 1.7 0 0 1 0 3.4zM19 19h-3v-4.6c0-1.1 0-2.5-1.5-2.5S12.7 13 12.7 14.3V19h-3v-9h2.9v1.2a3.2 3.2 0 0 1 2.9-1.6c3.1 0 3.6 2 3.6 4.7z"/></svg></a> · Händlerlogos von <a href="https://logo.dev">Logo.dev</a></span>
   </div>
 </footer>
 

@@ -707,7 +707,7 @@ def page(lang):
   <div class="wrap">
     <a class="brand" href="{href(lang)}"><img src="{root}img/icon.png" alt="">Billow</a>
     <nav><a href="{root}support.html">{e(t["nav_support"])}</a><a href="{root}privacy.html">{e(t["privacy_policy"])}</a><a href="{root}terms.html">{e(TERMS[lang])}</a></nav>
-    <span>© 2026 Ervin Capi · {e(t["logos_by"])} <a href="https://logo.dev">Logo.dev</a></span>
+    <span>© 2026 <a class="author" href="https://www.linkedin.com/in/ervin-capi/" rel="me noopener" target="_blank">Ervin Capi<svg viewBox="0 0 24 24" aria-label="LinkedIn" role="img"><path d="M20.4 2H3.6A1.6 1.6 0 0 0 2 3.6v16.8A1.6 1.6 0 0 0 3.6 22h16.8a1.6 1.6 0 0 0 1.6-1.6V3.6A1.6 1.6 0 0 0 20.4 2zM8 19H5v-9h3zM6.5 8.7a1.7 1.7 0 1 1 0-3.4 1.7 1.7 0 0 1 0 3.4zM19 19h-3v-4.6c0-1.1 0-2.5-1.5-2.5S12.7 13 12.7 14.3V19h-3v-9h2.9v1.2a3.2 3.2 0 0 1 2.9-1.6c3.1 0 3.6 2 3.6 4.7z"/></svg></a> · {e(t["logos_by"])} <a href="https://logo.dev">Logo.dev</a></span>
   </div>
 </footer>
 
