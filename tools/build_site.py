@@ -259,14 +259,7 @@ ICONS = [
   '<path d="M7 18a5 5 0 0 1-.5-9.97A6 6 0 0 1 18 9a4.5 4.5 0 0 1-.5 9H7z"/>',
   '<circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/>',
 ]
-EXTRA_CSS = """
-.lang { position: relative; }
-.lang select { appearance: none; -webkit-appearance: none; font: inherit; font-size: 14px; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 6px 30px 6px 12px; cursor: pointer; }
-.lang::after { content: ""; position: absolute; right: 12px; top: 50%; width: 7px; height: 7px; border-right: 2px solid var(--muted); border-bottom: 2px solid var(--muted); transform: translateY(-70%) rotate(45deg); pointer-events: none; }
-header.top nav { align-items: center; }
-.flags a { background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 8px 16px; font-size: 15px; color: var(--ink); }
-.flags a[aria-current] { border-color: var(--accent); color: var(--accent); font-weight: 600; }
-"""
+EXTRA_CSS = ""
 # Root page only: send first-time visitors to their language once; never override a choice they made.
 DETECT = """<script>
 (function () {
@@ -286,10 +279,44 @@ document.getElementById("lang").addEventListener("change", function (e) {
   try { localStorage.setItem("billow-lang", e.target.value); } catch (err) {}
   location.href = e.target.options[e.target.selectedIndex].dataset.href;
 });
+(function () {
+  var els = document.querySelectorAll(".reveal");
+  if (!("IntersectionObserver" in window)) { els.forEach(function (el) { el.classList.add("in"); }); return; }
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); } });
+  }, { rootMargin: "0px 0px -8% 0px", threshold: 0.08 });
+  els.forEach(function (el) { io.observe(el); });
+})();
 </script>"""
 
 e = html.escape
 
+
+
+JS_FLAG = '<script>document.documentElement.classList.add("js")</script>'
+ARROW = '<svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12l7 7 7-7"/></svg>'
+SPARK = '<svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/></svg>'
+CARD_ICONS = [
+  ('teal',  '<svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>'),
+  ('amber', '<svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 2h6"/></svg>'),
+  ('mint',  '<svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg>'),
+]
+# Floating cards beside the hero phone: (label, value) x3, matching CARD_ICONS.
+HERO_CARDS = {
+  "en": [("Before payday", "$84.97"), ("Trial ends", "in 2 days"), ("Price went up", "+$3.00")],
+  "de": [("Vor dem Zahltag", "84,97 €"), ("Testphase endet", "in 2 Tagen"), ("Preis gestiegen", "+3,00 €")],
+  "es": [("Antes del día de pago", "84,97 €"), ("La prueba termina", "en 2 días"), ("Subida de precio", "+3,00 €")],
+  "it": [("Prima dello stipendio", "84,97 €"), ("La prova finisce", "tra 2 giorni"), ("Prezzo aumentato", "+3,00 €")],
+  "sq": [("Para pagës", "84,97 €"), ("Prova mbaron", "pas 2 ditësh"), ("Çmimi u rrit", "+3,00 €")],
+}
+# Stats strip under the hero: (value, label) x3.
+STATS = {
+  "en": [("500+", "services with logos"), ("5", "languages, every currency"), ("0", "accounts, servers or trackers")],
+  "de": [("500+", "Dienste mit Logos"), ("5", "Sprachen, jede Währung"), ("0", "Konten, Server oder Tracker")],
+  "es": [("500+", "servicios con logos"), ("5", "idiomas, cualquier moneda"), ("0", "cuentas, servidores o rastreadores")],
+  "it": [("500+", "servizi con logo"), ("5", "lingue, ogni valuta"), ("0", "account, server o tracker")],
+  "sq": [("500+", "shërbime me logo"), ("5", "gjuhë, çdo monedhë"), ("0", "llogari, serverë apo gjurmues")],
+}
 
 def page(lang):
     t = T[lang]
@@ -302,6 +329,11 @@ def page(lang):
     options = "".join(f'<option value="{l}" data-href="{href(l)}"{" selected" if l == lang else ""}>{NAMES[l]}</option>' for l in LANGS)
     flags = "".join(f'<a href="{href(l)}" lang="{l}"{" aria-current=\"page\"" if l == lang else ""}>{NAMES[l]}</a>' for l in LANGS)
     pills = "".join(f'<span class="pill">{e(p)}</span>' for p in t["pills"])
+    kicker = t["title"].split(" — ", 1)[-1]
+    cards = "\n      ".join(
+        f'<div class="card c{i + 1}"><span class="ci {cls}">{svg}</span><span><small>{e(a)}</small><strong>{e(b)}</strong></span></div>'
+        for i, ((cls, svg), (a, b)) in enumerate(zip(CARD_ICONS, HERO_CARDS[lang])))
+    stats = "\n      ".join(f'<div class="stat"><b>{e(v)}</b><span>{e(l)}</span></div>' for v, l in STATS[lang])
     shots = {"s1": "detail", "s2": "calendar", "s5": "insights", "s3": "onboarding", "s4": "add", "s6": "mailboxes"}
     sections = []
     for i, k in enumerate(["s1", "s2", "s5", "s3", "s4", "s6"]):
@@ -312,23 +344,23 @@ def page(lang):
         flip = " flip" if i % 2 else ""
         sections.append(f"""<section class="feature{flip}">
   <div class="wrap">
-    <div class="text">
-      <div class="eyebrow">{e(eyebrow)}</div>
+    <div class="text reveal">
+      <div class="eyebrow"><span class="num">{i + 1:02d}</span>{e(eyebrow)}</div>
       <h2>{e(h2)}</h2>
       <p>{p}</p>
       <ul>
         {lis}
       </ul>
     </div>
-    <div class="shot"><div class="phone"><img src="{root}img/{shots[k]}.jpg" alt="{e(alt)}" loading="lazy"></div></div>
+    <div class="shot reveal d1"><div class="phone"><img src="{root}img/{shots[k]}.jpg" alt="{e(alt)}" loading="lazy" width="414" height="900"></div></div>
   </div>
 </section>""")
     gallery = "\n    ".join(
-        f'<figure><div class="phone"><img src="{root}img/{n}.jpg" alt="{e(c)}" loading="lazy"></div><figcaption>{e(c)}</figcaption></figure>'
+        f'<figure><div class="phone"><img src="{root}img/{n}.jpg" alt="{e(c)}" loading="lazy" width="414" height="900"></div><figcaption>{e(c)}</figcaption></figure>'
         for n, c in zip(GALLERY, t["caps"]))
     tiles = "\n      ".join(
-        f'<div class="tile"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">{ico}</svg></div><strong>{e(a)}</strong><span>{e(b)}</span></div>'
-        for ico, (a, b) in zip(ICONS, t["tiles"]))
+        f'<div class="tile reveal d{i % 4}"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">{ico}</svg></div><strong>{e(a)}</strong><span>{e(b)}</span></div>'
+        for i, (ico, (a, b)) in enumerate(zip(ICONS, t["tiles"])))
     style = STYLE.replace("</style>", EXTRA_CSS + "</style>")
     return f"""<!doctype html>
 <html lang="{lang}">
@@ -337,6 +369,7 @@ def page(lang):
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{e(t["title"])}</title>
 <meta name="description" content="{e(t["desc"])}">
+<meta name="theme-color" content="#06202A">
 <link rel="canonical" href="{url(lang)}">
 {alts}
 <link rel="alternate" hreflang="x-default" href="{BASE}">
@@ -347,6 +380,7 @@ def page(lang):
 <meta property="og:locale" content="{OG[lang]}">
 <meta property="og:image" content="{BASE}img/icon.png">
 {DETECT if lang == "en" else ""}
+{JS_FLAG}
 {style}
 </head>
 <body>
@@ -357,8 +391,8 @@ def page(lang):
     <nav>
       <a class="hide-sm" href="#features">{e(t["nav_features"])}</a>
       <a class="hide-sm" href="#privacy">{e(t["nav_privacy"])}</a>
-      <a href="{root}support.html">{e(t["nav_support"])}</a>
-      <label class="lang"><span class="visually-hidden" style="position:absolute;left:-9999px">{e(t["lang_label"])}</span><select id="lang" aria-label="{e(t["lang_label"])}">{options}</select></label>
+      <a class="cta" href="{root}support.html">{e(t["nav_support"])}</a>
+      <label class="lang"><span class="visually-hidden">{e(t["lang_label"])}</span><select id="lang" aria-label="{e(t["lang_label"])}">{options}</select></label>
     </nav>
   </div>
 </header>
@@ -366,12 +400,28 @@ def page(lang):
 <section class="hero">
   <div class="wrap">
     <div>
+      <span class="kicker"><i>{SPARK}</i>{e(kicker)}</span>
       <h1>{e(t["h1a"])} <span>{e(t["h1b"])}</span></h1>
       <p class="lead">{e(t["lead"])}</p>
-      <span class="badge">{APPLE}{e(t["badge"])}</span>
+      <div class="cta-row">
+        <span class="badge">{APPLE}{e(t["badge"])}</span>
+        <a class="ghost" href="#features">{e(t["nav_features"])}{ARROW}</a>
+      </div>
       <div class="pills">{pills}</div>
     </div>
-    <div class="phone"><img src="{root}img/home.jpg" alt="{e(t["alt_home"])}"></div>
+    <div class="visual" aria-hidden="false">
+      <div class="ring" aria-hidden="true"></div>
+      <div class="phone"><img src="{root}img/home.jpg" alt="{e(t["alt_home"])}" width="414" height="900" fetchpriority="high"></div>
+      {cards}
+    </div>
+  </div>
+</section>
+
+<section class="stats" aria-label="Billow in numbers">
+  <div class="wrap">
+    <div>
+      {stats}
+    </div>
   </div>
 </section>
 
@@ -382,7 +432,7 @@ def page(lang):
 </main>
 
 <section class="gallery">
-  <h2>{e(t["gallery"])}</h2>
+  <div class="head reveal"><h2>{e(t["gallery"])}</h2></div>
   <div class="strip">
     {gallery}
   </div>
@@ -390,8 +440,10 @@ def page(lang):
 
 <section class="privacy" id="privacy">
   <div class="wrap">
-    <h2>{e(t["priv_h"])}</h2>
-    <p class="sub">{e(t["priv_sub"])}</p>
+    <div class="reveal">
+      <h2>{e(t["priv_h"])}</h2>
+      <p class="sub">{e(t["priv_sub"])}</p>
+    </div>
     <div class="grid4">
       {tiles}
     </div>
@@ -399,16 +451,27 @@ def page(lang):
 </section>
 
 <section class="langs">
-  <div class="wrap">
+  <div class="wrap reveal">
     <h2>{e(t["langs_h"])}</h2>
     <div class="flags">{flags}</div>
   </div>
 </section>
 
+<section class="closing">
+  <div class="wrap">
+    <div class="box reveal">
+      <h2>{e(t["h1a"])} <span>{e(t["h1b"])}</span></h2>
+      <p>{e(t["priv_sub"])}</p>
+      <div class="cta-row"><span class="badge">{APPLE}{e(t["badge"])}</span></div>
+    </div>
+  </div>
+</section>
+
 <footer>
   <div class="wrap">
-    <span>© 2026 Ervin Capi · {e(t["logos_by"])} <a href="https://logo.dev">Logo.dev</a></span>
+    <a class="brand" href="{href(lang)}"><img src="{root}img/icon.png" alt="">Billow</a>
     <nav><a href="{root}support.html">{e(t["nav_support"])}</a><a href="{root}privacy.html">{e(t["privacy_policy"])}</a><a href="{root}terms.html">{e(TERMS[lang])}</a></nav>
+    <span>© 2026 Ervin Capi · {e(t["logos_by"])} <a href="https://logo.dev">Logo.dev</a></span>
   </div>
 </footer>
 
