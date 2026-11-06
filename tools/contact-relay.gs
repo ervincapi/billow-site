@@ -13,7 +13,7 @@ var ALLOWED_ORIGIN = "https://billow-app.org";
 
 function doPost(e) {
   var p = {};
-  try { p = e.postData && e.postData.type === "application/json" ? JSON.parse(e.postData.contents) : e.parameter; } catch (err) {}
+  try { p = JSON.parse(e.postData.contents); } catch (err) { p = e.parameter || {}; }  /* JSON or form-encoded */
   if (p._honey) return reply({ success: "true" });  /* bot filled the hidden field: pretend it worked */
   var name = String(p.name || "").slice(0, 120), email = String(p.email || "").slice(0, 200), message = String(p.message || "").slice(0, 4000);
   if (!name || !email || !message || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return reply({ success: "false", message: "missing fields" });
