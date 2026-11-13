@@ -18,7 +18,18 @@ var MAX_PER_HOUR = 10;       /* cap on emails sent per hour, whatever happens */
 
 /* Captcha (Cloudflare Turnstile) is enforced only when the secret is set:
    Project Settings › Script properties › add TURNSTILE_SECRET. Never paste the secret into this file. */
-function turnstileSecret() { return PropertiesService.getScriptProperties().getProperty("TURNSTILE_SECRET") || ""; }
+function turnstileSecret() { return String(PropertiesService.getScriptProperties().getProperty("TURNSTILE_SECRET") || "").trim(); }
+
+/* Run this from the editor (select it next to Debug › Run) to test the secret without revealing it.
+   "invalid-input-response" means the secret is fine; "invalid-input-secret" means it is wrong. */
+function checkTurnstileSecret() {
+  var raw = String(PropertiesService.getScriptProperties().getProperty("TURNSTILE_SECRET") || "");
+  console.log("secret length " + raw.length + ", trimmed " + raw.trim().length + ", starts with 0x: " + /^0x/.test(raw.trim()));
+  var res = UrlFetchApp.fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
+    method: "post", payload: { secret: raw.trim(), response: "test" }, muteHttpExceptions: true,
+  });
+  console.log("Cloudflare says: " + res.getContentText());
+}
 
 function doPost(e) {
   var p = readBody(e);
@@ -27,11 +38,11 @@ function doPost(e) {
   if (!name || !email || !message || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return reply({ success: "false", message: "missing fields" });
   /* Real failures (not fake success) from here on, so a wrongly blocked person gets the site's email fallback. */
   var elapsed = Number(p._e);
-  if (!(elapsed >= MIN_SECONDS)) return reply({ success: "false", message: "too fast" });
-  if (looksLikeGibberish(name, message)) return reply({ success: "false", message: "rejected" });
+  if (!(elapsed >= MIN_SECONDS)) { console.log("rejected: " + "too fast"); return reply({ success: "false", message: "too fast" }); }
+  if (looksLikeGibberish(name, message)) { console.log("rejected: " + "rejected"); return reply({ success: "false", message: "rejected" }); }
   var secret = turnstileSecret();
   if (secret && !captchaPassed(secret, p["cf-turnstile-response"])) return reply({ success: "false", message: "captcha" });
-  if (!underHourlyLimit()) return reply({ success: "false", message: "busy" });
+  if (!underHourlyLimit()) { console.log("rejected: " + "busy"); return reply({ success: "false", message: "busy" }); }
   MailApp.sendEmail({
     to: TO,
     replyTo: email,
@@ -73,8 +84,9 @@ function captchaPassed(secret, token) {
       method: "post", payload: { secret: secret, response: String(token) }, muteHttpExceptions: true,
     });
     var j = JSON.parse(res.getContentText());
+    if (j.success !== true) console.log("captcha rejected: " + JSON.stringify(j["error-codes"] || []));
     return j.success === true;  /* the secret is bound to the hostnames set on the widget in Cloudflare */
-  } catch (err) { return false; }
+  } catch (err) { console.log("captcha check failed: " + err.message); return false; }
 }
 
 function underHourlyLimit() {
