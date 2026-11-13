@@ -879,7 +879,7 @@ LIGHTBOX = {
 # and iPhone Safari shows the smart app banner.
 APP_STORE_ID = "6830713677"
 APP_STORE_URL = f"https://apps.apple.com/app/id{APP_STORE_ID}"
-APP_STORE_LIVE = False
+APP_STORE_LIVE = True
 STORE_BADGE = {"en": ("Download on the", "App Store"), "de": ("Laden im", "App Store"), "es": ("Consíguelo en el", "App Store"), "it": ("Scarica su", "App Store"), "sq": ("Shkarkoje në", "App Store")}
 
 def store_badge(lang, fallback_text):
