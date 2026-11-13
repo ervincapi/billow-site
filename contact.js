@@ -18,7 +18,7 @@
     loading = true;
     window.billowTurnstileReady = function () {
       widget = window.turnstile.render(box, {
-        sitekey: sitekey, theme: "auto", size: "flexible", appearance: "interaction-only",
+        sitekey: sitekey, theme: "auto", size: "flexible", appearance: "always",
         callback: function (tk) { token = tk; if (pending) { pending = false; submit(); } },
         "expired-callback": function () { token = ""; },
         "error-callback": function () { token = ""; }
