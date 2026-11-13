@@ -3,6 +3,7 @@ import hashlib
 import html
 import json
 import pathlib
+import re
 import sys
 from datetime import datetime, timezone
 
@@ -596,6 +597,10 @@ def try_section(lang, root):
 # ---- Contact form: posts to the owner's own relay (Google Apps Script web app, source in tools/contact-relay.gs), which emails CONTACT_EMAIL.
 CONTACT_EMAIL = "ecapi88@gmail.com"
 CONTACT_RELAY = "https://script.google.com/macros/s/AKfycbwyyLMU7Jk-GYlnWHQQom6_0QEGJDzTC4GAfF0sRChL-YQVGXAbD-aO3emt8ghBGWHNZA/exec"
+# Cloudflare Turnstile site key (public). Empty = no captcha widget. The matching secret lives only in the relay's
+# Script properties as TURNSTILE_SECRET. support.html gets this key and the contact.js version patched in at build time.
+TURNSTILE_SITEKEY = ""
+CAPTCHA_WAIT = {"en": "One moment, checking you're not a robot…", "de": "Einen Moment, wir prüfen, dass du kein Roboter bist…", "es": "Un momento, comprobando que no eres un robot…", "it": "Un attimo, verifichiamo che tu non sia un robot…", "sq": "Një moment, po kontrollojmë që nuk jeni robot…"}
 CONTACT = {
   "en": dict(open_mail="Open in your mail app", eyebrow="Contact", h="Get in touch.", sub="A question, an idea or a bug? Write to me and I'll reply within two working days.", name="Your name", email="Your email", message="Message", send="Send message", sending="Sending…", sent="Thanks, your message is on its way.", error="Couldn't send. Email me directly at {mail}.", direct="Or email", note="Goes straight to my inbox and is used only to reply to you.", nav="Contact", subject="Message from billow-app.org"),
   "de": dict(open_mail="In deiner Mail-App öffnen", eyebrow="Kontakt", h="Schreib mir.", sub="Eine Frage, eine Idee oder ein Fehler? Schreib mir und ich antworte innerhalb von zwei Werktagen.", name="Dein Name", email="Deine E-Mail", message="Nachricht", send="Nachricht senden", sending="Wird gesendet…", sent="Danke, deine Nachricht ist unterwegs.", error="Senden fehlgeschlagen. Schreib mir direkt an {mail}.", direct="Oder per E-Mail", note="Landet direkt in meinem Postfach und wird nur für die Antwort verwendet.", nav="Kontakt", subject="Nachricht von billow-app.org"),
@@ -607,7 +612,7 @@ CONTACT = {
 def contact_form(lang, root, next_url):
     c = CONTACT[lang]
     mail_link = f'<a href="mailto:{CONTACT_EMAIL}">{CONTACT_EMAIL}</a>'
-    return f"""<form id="contact-form" class="contact-form" action="{CONTACT_RELAY}" method="POST" data-to="{CONTACT_EMAIL}" data-sending="{e(c["sending"])}" data-sent="{e(c["sent"])}" data-error="{e(c["error"]).replace("{mail}", e(mail_link))}" data-open="{e(c["open_mail"])}">
+    return f"""<form id="contact-form" class="contact-form" action="{CONTACT_RELAY}" method="POST" data-to="{CONTACT_EMAIL}" data-sending="{e(c["sending"])}" data-sent="{e(c["sent"])}" data-error="{e(c["error"]).replace("{mail}", e(mail_link))}" data-open="{e(c["open_mail"])}" data-captcha="{e(CAPTCHA_WAIT[lang])}" data-turnstile="{TURNSTILE_SITEKEY}">
         <input type="hidden" name="_subject" value="{e(c["subject"])}">
         <input type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px">
         <div class="two">
@@ -615,6 +620,7 @@ def contact_form(lang, root, next_url):
           <label><span>{e(c["email"])}</span><input type="email" name="email" required autocomplete="email" maxlength="200"></label>
         </div>
         <label><span>{e(c["message"])}</span><textarea name="message" required rows="5" maxlength="4000"></textarea></label>
+        <div class="captcha"></div>
         <div class="actions">
           <button type="submit" class="send">{e(c["send"])}</button>
           <span class="direct">{e(c["direct"])} {mail_link}</span>
@@ -1383,3 +1389,10 @@ for lang in LANGS:
         (gdir / slug / "index.html").write_text(guide_page(slug, lang))
 write_sitemap()
 print(SITE / "sitemap.xml")
+
+# ---- support.html is hand-written; keep its contact form in step with the generated ones.
+_sup = SITE / "support.html"
+_txt = _sup.read_text()
+_txt = re.sub(r'contact\.js\?v=[0-9a-f]+', f'contact.js?v={CONTACT_VER}', _txt)
+_txt = re.sub(r'data-turnstile="[^"]*"', f'data-turnstile="{TURNSTILE_SITEKEY}"', _txt)
+_sup.write_text(_txt)
