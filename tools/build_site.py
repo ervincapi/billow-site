@@ -20,6 +20,7 @@ CONTACT_VER = hashlib.sha1((SITE / "contact.js").read_bytes()).hexdigest()[:8]
 GALLERY_VER = hashlib.sha1((SITE / "gallery.js").read_bytes()).hexdigest()[:8]
 CALC_VER = hashlib.sha1((SITE / "calc.js").read_bytes()).hexdigest()[:8]
 STATS_VER = hashlib.sha1((SITE / "stats.js").read_bytes()).hexdigest()[:8]
+ANALYTICS_VER = hashlib.sha1((SITE / "analytics.js").read_bytes()).hexdigest()[:8]
 TODAY = __import__("datetime").date.today().isoformat()
 
 LANGS = ["en", "de", "es", "it", "sq"]
@@ -600,6 +601,11 @@ CONTACT_RELAY = "https://script.google.com/macros/s/AKfycbwyyLMU7Jk-GYlnWHQQom6_
 # Cloudflare Turnstile site key (public). Empty = no captcha widget. The matching secret lives only in the relay's
 # Script properties as TURNSTILE_SECRET. support.html gets this key and the contact.js version patched in at build time.
 TURNSTILE_SITEKEY = "0x4AAAAAAF_TvOFLPELMkwQc"
+
+# Google Analytics 4 measurement ID ("G-XXXXXXXXXX") from analytics.google.com › Admin › Data streams › billow-app.org.
+# Empty = analytics off: no tag on any page, no consent bar, no website paragraph in privacy.html.
+# analytics.js only loads gtag.js after the visitor accepts the consent bar (choice kept in localStorage).
+GA_MEASUREMENT_ID = ""
 CAPTCHA_WAIT = {"en": "One moment, checking you're not a robot…", "de": "Einen Moment, wir prüfen, dass du kein Roboter bist…", "es": "Un momento, comprobando que no eres un robot…", "it": "Un attimo, verifichiamo che tu non sia un robot…", "sq": "Një moment, po kontrollojmë që nuk jeni robot…"}
 CONTACT = {
   "en": dict(open_mail="Open in your mail app", eyebrow="Contact", h="Get in touch.", sub="A question, an idea or a bug? Write to me and I'll reply within two working days.", name="Your name", email="Your email", message="Message", send="Send message", sending="Sending…", sent="Thanks, your message is on its way.", error="Couldn't send. Email me directly at {mail}.", direct="Or email", note="Goes straight to my inbox and is used only to reply to you.", nav="Contact", subject="Message from billow-app.org"),
@@ -976,8 +982,14 @@ def calc_section(lang, root):
   </div>
 </section>"""
 
+def analytics_tag(root):
+    if not GA_MEASUREMENT_ID:
+        return ""
+    return f'<script src="{root}analytics.js?v={ANALYTICS_VER}" data-id="{GA_MEASUREMENT_ID}" data-privacy="{root}privacy.html" defer></script>'
+
 def stats_tag(root):
-    return f'<script src="{root}stats.js?v={STATS_VER}" data-relay="{CONTACT_RELAY}" defer></script>'
+    tag = f'<script src="{root}stats.js?v={STATS_VER}" data-relay="{CONTACT_RELAY}" defer></script>'
+    return tag + ("\n" + analytics_tag(root) if GA_MEASUREMENT_ID else "")
 
 def guides_url(lang, slug=None):
     base = BASE if lang == "en" else f"{BASE}{lang}/"
@@ -1395,3 +1407,21 @@ _txt = _sup.read_text()
 _txt = re.sub(r'contact\.js\?v=[0-9a-f]+', f'contact.js?v={CONTACT_VER}', _txt)
 _txt = re.sub(r'data-turnstile="[^"]*"', f'data-turnstile="{TURNSTILE_SITEKEY}"', _txt)
 _sup.write_text(_txt)
+
+# ---- Hand-written pages get the analytics tag inserted right after their stats.js line (or removed when the ID is empty).
+for _name, _root in [("support.html", ""), ("privacy.html", ""), ("terms.html", ""), ("404.html", "/")]:
+    _f = SITE / _name
+    _txt = re.sub(r'\n<script src="[^"]*analytics\.js[^"]*"[^>]*></script>', "", _f.read_text())
+    if GA_MEASUREMENT_ID:
+        _txt, _n = re.subn(r'(<script src="[^"]*stats\.js[^"]*"[^>]*></script>)', lambda m: m.group(1) + "\n" + analytics_tag(_root), _txt, count=1)
+        assert _n == 1, f"{_name}: stats.js tag not found"
+    _f.write_text(_txt)
+
+# ---- privacy.html: the website paragraph exists only while analytics is on. Markers stay in the file either way.
+ANALYTICS_PRIVACY = """<h2>This website</h2>
+<p>billow-app.org counts page views with one anonymous ping to the developer's own relay (no cookies, no identifiers, no IP address stored). If you accept the bar at the bottom of the page, the site also loads Google Analytics, which sets cookies on this domain and sends visit statistics to Google; see <a href="https://policies.google.com/technologies/partner-sites">how Google uses this data</a>. Nothing is loaded before you accept, and you can <a href="#" data-analytics-settings>change your choice</a> at any time. The contact form uses Cloudflare Turnstile to block spam.</p>"""
+_priv = SITE / "privacy.html"
+_txt = _priv.read_text()
+assert "<!-- analytics -->" in _txt and "<!-- /analytics -->" in _txt, "privacy.html: analytics markers missing"
+_txt = re.sub(r"<!-- analytics -->.*?<!-- /analytics -->", lambda m: "<!-- analytics -->" + (("\n" + ANALYTICS_PRIVACY + "\n") if GA_MEASUREMENT_ID else "") + "<!-- /analytics -->", _txt, flags=re.S)
+_priv.write_text(_txt)
