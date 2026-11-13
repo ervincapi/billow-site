@@ -4,10 +4,9 @@
 (function () {
   var s = document.currentScript; if (!s) return;
   var id = s.getAttribute("data-id"); if (!id) return;
-  if (navigator.doNotTrack === "1" || window.doNotTrack === "1" || navigator.globalPrivacyControl) return;
-  if (/^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname) && !/[?&]ga=debug\b/.test(location.search)) return;
-
   var KEY = "billow-analytics", root = document.documentElement, loaded = false;
+  var blocked = navigator.doNotTrack === "1" || window.doNotTrack === "1" || !!navigator.globalPrivacyControl ||
+    (/^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname) && !/[?&]ga=debug\b/.test(location.search));
   var L = {
     en: { text: "May we count your visit? Billow uses Google Analytics to see which pages help people. Only if you say yes.", yes: "Yes, that's fine", no: "No thanks", more: "Privacy" },
     de: { text: "Dürfen wir deinen Besuch zählen? Billow nutzt Google Analytics, um zu sehen, welche Seiten helfen. Nur wenn du zustimmst.", yes: "Ja, in Ordnung", no: "Nein danke", more: "Datenschutz" },
@@ -20,6 +19,14 @@
 
   function choice() { try { return localStorage.getItem(KEY); } catch (e) { return null; } }
   function remember(v) { try { localStorage.setItem(KEY, v); } catch (e) {} }
+  function clearCookies() {
+    var host = location.hostname, domains = [host, "." + host, "." + host.split(".").slice(-2).join(".")];
+    document.cookie.split(";").forEach(function (c) {
+      var name = c.split("=")[0].trim(); if (name.indexOf("_ga") !== 0 && name.indexOf("_gid") !== 0) return;
+      domains.forEach(function (d) { document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; domain=" + d; });
+      document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
+    });
+  }
 
   window.dataLayer = window.dataLayer || [];
   function gtag() { dataLayer.push(arguments); }
@@ -43,7 +50,7 @@
     if (!document.getElementById("ga-consent-style")) {
       var st = document.createElement("style"); st.id = "ga-consent-style";
       st.textContent =
-        ".ga-consent{position:fixed;left:16px;right:16px;bottom:16px;z-index:60;max-width:560px;margin:0 auto;padding:14px 16px;border:1px solid var(--line,#d9e2e6);border-radius:16px;background:var(--card,var(--ground,#fff));color:var(--fg,var(--ink,#0b1b22));box-shadow:0 18px 40px -18px rgba(6,32,42,.45);font:15px/1.45 inherit;display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center}" +
+        ".ga-consent{position:fixed;left:16px;right:16px;bottom:16px;z-index:60;max-width:560px;margin:0 auto;padding:14px 16px;border:1px solid var(--line,#d9e2e6);border-radius:16px;background:var(--card,var(--ground,#fff));color:var(--fg,var(--ink,#0b1b22));box-shadow:0 18px 40px -18px rgba(6,32,42,.45);font-size:15px;line-height:1.45;display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center}" +
         ".ga-consent p{margin:0;flex:1 1 260px}.ga-consent p a{color:inherit;text-decoration:underline}" +
         ".ga-consent .ga-actions{display:flex;gap:8px;margin-left:auto}" +
         ".ga-consent button{font:inherit;border-radius:999px;padding:8px 16px;cursor:pointer;border:1px solid var(--line,#d9e2e6);background:transparent;color:inherit}" +
@@ -58,22 +65,25 @@
     var actions = document.createElement("div"); actions.className = "ga-actions";
     var no = document.createElement("button"), yes = document.createElement("button");
     no.type = "button"; no.textContent = t.no; yes.type = "button"; yes.className = "yes"; yes.textContent = t.yes;
-    no.addEventListener("click", function () { remember("denied"); hide(); });
+    no.addEventListener("click", function () { remember("denied"); hide(); gtag("consent", "update", { analytics_storage: "denied" }); clearCookies(); });
     yes.addEventListener("click", function () { remember("granted"); hide(); enable(); });
     actions.appendChild(no); actions.appendChild(yes);
     bar.appendChild(p); bar.appendChild(actions);
     document.body.appendChild(bar);
   }
 
-  var c = choice();
-  if (c === "granted") enable(); else if (c !== "denied") show();
-
   // Links with data-analytics-settings (privacy page) reopen the bar so the choice can be changed.
+  // Registered before the privacy-signal exit so the link never dead-ends.
   document.addEventListener("click", function (ev) {
     var el = ev.target.closest && ev.target.closest("[data-analytics-settings]"); if (!el) return;
     ev.preventDefault();
     try { localStorage.removeItem(KEY); } catch (e) {}
     gtag("consent", "update", { analytics_storage: "denied" });
+    clearCookies();
     show();
   });
+
+  if (blocked) return;
+  var c = choice();
+  if (c === "granted") enable(); else if (c !== "denied") show();
 })();
