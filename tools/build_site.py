@@ -605,7 +605,7 @@ TURNSTILE_SITEKEY = "0x4AAAAAAF_TvOFLPELMkwQc"
 # Google Analytics 4 measurement ID ("G-XXXXXXXXXX") from analytics.google.com › Admin › Data streams › billow-app.org.
 # Empty = analytics off: no tag on any page, no consent bar, no website paragraph in privacy.html.
 # analytics.js only loads gtag.js after the visitor accepts the consent bar (choice kept in localStorage).
-GA_MEASUREMENT_ID = ""
+GA_MEASUREMENT_ID = "G-93D4628HXX"
 CAPTCHA_WAIT = {"en": "One moment, checking you're not a robot…", "de": "Einen Moment, wir prüfen, dass du kein Roboter bist…", "es": "Un momento, comprobando que no eres un robot…", "it": "Un attimo, verifichiamo che tu non sia un robot…", "sq": "Një moment, po kontrollojmë që nuk jeni robot…"}
 CONTACT = {
   "en": dict(open_mail="Open in your mail app", eyebrow="Contact", h="Get in touch.", sub="A question, an idea or a bug? Write to me and I'll reply within two working days.", name="Your name", email="Your email", message="Message", send="Send message", sending="Sending…", sent="Thanks, your message is on its way.", error="Couldn't send. Email me directly at {mail}.", direct="Or email", note="Goes straight to my inbox and is used only to reply to you.", nav="Contact", subject="Message from billow-app.org"),
