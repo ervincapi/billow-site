@@ -27,7 +27,7 @@
 <meta property="og:image:alt" content="Udhëzues">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://billow-app.org/img/og-sq.png">
-<script>document.documentElement.classList.add("js");try{var t=localStorage.getItem("billow-theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+<script>document.documentElement.classList.add("js");try{var t=localStorage.getItem("billow-theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}try{if(Date.now()>=Date.parse("2026-11-14T09:00:00Z"))document.documentElement.classList.add("store-live")}catch(e){}</script>
 <style>
 :root {
   --ground: #FFFFFF; --surface: #F7F9FB; --ink: #0B1220; --muted: #66737F; --soft: #EEF2F5;
@@ -593,7 +593,7 @@ main.guide article li { margin: 6px 0; }
 .guide-more h2 { font-size: 22px; margin: 0 0 16px; }
 .guide-more .guide-grid { grid-template-columns: 1fr 1fr; }
 @media (max-width: 960px) { .guide-grid { grid-template-columns: 1fr; } .guide-cta { grid-template-columns: 1fr; } .guide-more .guide-grid { grid-template-columns: 1fr; } }
-</style>
+html:not(.store-live) .badge.store.timed{display:none}html.store-live .badge.soon{display:none}</style>
 
 </head>
 <body>

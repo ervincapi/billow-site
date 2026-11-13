@@ -329,7 +329,20 @@ e = html.escape
 
 
 
-JS_FLAG = '<script>document.documentElement.classList.add("js");try{var t=localStorage.getItem("billow-theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>'
+# ---- App Store switch.
+# APP_STORE_LIVE = True: store links everywhere, no timer (use this once the app is out).
+# APP_STORE_LAUNCH = ISO UTC time: pages ship both badges and the browser picks one by its clock,
+# so the site can be deployed before release. 2026-11-14T09:00:00Z is 10:00 in Tirana (CET).
+APP_STORE_ID = "6830713677"
+APP_STORE_URL = f"https://apps.apple.com/app/id{APP_STORE_ID}"
+APP_STORE_LIVE = False
+APP_STORE_LAUNCH = "2026-11-14T09:00:00Z"
+STORE_TIMED = bool(APP_STORE_LAUNCH) and not APP_STORE_LIVE
+STORE_TIMER_JS = f'try{{if(Date.now()>=Date.parse("{APP_STORE_LAUNCH}"))document.documentElement.classList.add("store-live")}}catch(e){{}}' if STORE_TIMED else ""
+STORE_TIMER_CSS = "html:not(.store-live) .badge.store.timed{display:none}html.store-live .badge.soon{display:none}" if STORE_TIMED else ""
+SMART_BANNER = f'<meta name="apple-itunes-app" content="app-id={APP_STORE_ID}">'
+
+JS_FLAG = '<script>document.documentElement.classList.add("js");try{var t=localStorage.getItem("billow-theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}' + STORE_TIMER_JS + '</script>'
 ARROW = '<svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12l7 7 7-7"/></svg>'
 SPARK = '<svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/></svg>'
 CARD_ICONS = [
@@ -875,18 +888,15 @@ LIGHTBOX = {
   "sq": dict(close="Mbyll", prev="Ekrani i mëparshëm", next="Ekrani tjetër", open="Hap {0} në madhësi të plotë"),
 }
 
-# ---- App Store: flip APP_STORE_LIVE to True once Apple approves; the hero and closing badges become store links
-# and iPhone Safari shows the smart app banner.
-APP_STORE_ID = "6830713677"
-APP_STORE_URL = f"https://apps.apple.com/app/id{APP_STORE_ID}"
-APP_STORE_LIVE = True
 STORE_BADGE = {"en": ("Download on the", "App Store"), "de": ("Laden im", "App Store"), "es": ("Consíguelo en el", "App Store"), "it": ("Scarica su", "App Store"), "sq": ("Shkarkoje në", "App Store")}
 
 def store_badge(lang, fallback_text):
-    if not APP_STORE_LIVE:
-        return f'<span class="badge">{APPLE}{e(fallback_text)}</span>'
+    soon = f'<span class="badge{" soon" if STORE_TIMED else ""}">{APPLE}{e(fallback_text)}</span>'
+    if not (APP_STORE_LIVE or STORE_TIMED):
+        return soon
     small, big = STORE_BADGE[lang]
-    return f'<a class="badge store" href="{APP_STORE_URL}" rel="noopener">{APPLE}<span class="two"><small>{e(small)}</small><b>{e(big)}</b></span></a>'
+    link = f'<a class="badge store{" timed" if STORE_TIMED else ""}" href="{APP_STORE_URL}" rel="noopener">{APPLE}<span class="two"><small>{e(small)}</small><b>{e(big)}</b></span></a>'
+    return soon + link if STORE_TIMED else link
 
 def app_jsonld(lang, t):
     data = {
@@ -901,7 +911,7 @@ def app_jsonld(lang, t):
             {"@type": "Offer", "name": "Billow Pro Lifetime", "price": "49.99", "priceCurrency": "USD"},
         ],
     }
-    if APP_STORE_LIVE:
+    if APP_STORE_LIVE or STORE_TIMED:
         data["installUrl"] = APP_STORE_URL; data["downloadUrl"] = APP_STORE_URL
     return '<script type="application/ld+json">' + json.dumps(data, ensure_ascii=False) + "</script>"
 
@@ -1011,7 +1021,7 @@ def head_common(lang, root, title, desc, canonical, alts, og_image_alt):
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="{BASE}img/og-{lang}.png">
 {JS_FLAG}
-{STYLE.replace("</style>", EXTRA_CSS + "</style>")}"""
+{STYLE.replace("</style>", EXTRA_CSS + STORE_TIMER_CSS + "</style>")}"""
 
 def guide_body(g):
     out = [f'<p class="lead">{e(g["intro"])}</p>']
@@ -1189,7 +1199,7 @@ def page(lang):
     tiles = "\n      ".join(
         f'<div class="tile reveal d{i % 4}"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">{ico}</svg></div><strong>{e(a)}</strong><span>{e(b)}</span></div>'
         for i, (ico, (a, b)) in enumerate(zip(ICONS, t["tiles"])))
-    style = STYLE.replace("</style>", EXTRA_CSS + "</style>")
+    style = STYLE.replace("</style>", EXTRA_CSS + STORE_TIMER_CSS + "</style>")
     return f"""<!doctype html>
 <html lang="{lang}">
 <head>
@@ -1198,7 +1208,7 @@ def page(lang):
 <title>{e(t["title"])}</title>
 <meta name="description" content="{e(t["desc"])}">
 <meta name="theme-color" content="#06202A">
-{f'<meta name="apple-itunes-app" content="app-id={APP_STORE_ID}">' if APP_STORE_LIVE else ''}
+{SMART_BANNER if APP_STORE_LIVE else (f"<script>try{{if(Date.now()>=Date.parse('{APP_STORE_LAUNCH}'))document.write('{SMART_BANNER}')}}catch(e){{}}</script>" if STORE_TIMED else '')}
 <link rel="canonical" href="{url(lang)}">
 {alts}
 <link rel="alternate" hreflang="x-default" href="{BASE}">
