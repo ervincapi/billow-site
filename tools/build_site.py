@@ -4,6 +4,7 @@ import html
 import json
 import pathlib
 import sys
+from datetime import datetime, timezone
 
 sys.path.insert(0, str(pathlib.Path(__file__).parent))
 from theme_css import theme_aware
@@ -337,9 +338,24 @@ APP_STORE_ID = "6830713677"
 APP_STORE_URL = f"https://apps.apple.com/app/id{APP_STORE_ID}"
 APP_STORE_LIVE = False
 APP_STORE_LAUNCH = "2026-11-14T09:00:00Z"
+# A build made after the launch time is a plain live build: the timer and countdown disable themselves.
+if APP_STORE_LAUNCH and datetime.now(timezone.utc) >= datetime.fromisoformat(APP_STORE_LAUNCH.replace("Z", "+00:00")):
+    APP_STORE_LIVE = True
 STORE_TIMED = bool(APP_STORE_LAUNCH) and not APP_STORE_LIVE
-STORE_TIMER_JS = f'try{{if(Date.now()>=Date.parse("{APP_STORE_LAUNCH}"))document.documentElement.classList.add("store-live")}}catch(e){{}}' if STORE_TIMED else ""
-STORE_TIMER_CSS = "html:not(.store-live) .badge.store.timed{display:none}html.store-live .badge.soon{display:none}" if STORE_TIMED else ""
+# Runs in <head>: past launch it flips the badges at once; before launch it ticks the countdown
+# each second and flips the badges (and stops) when it reaches zero.
+STORE_TIMER_JS = ('try{var L=Date.parse("' + APP_STORE_LAUNCH + '"),D=document.documentElement;'
+    'if(Date.now()>=L)D.classList.add("store-live");'
+    'else document.addEventListener("DOMContentLoaded",function(){'
+    'var el=document.querySelectorAll("[data-countdown]"),p=function(n){return(n<10?"0":"")+n},iv;'
+    'function tick(){var d=L-Date.now();if(d<=0){D.classList.add("store-live");clearInterval(iv);return}'
+    'var s=Math.floor(d/1000),t=Math.floor(s/3600)+":"+p(Math.floor(s%3600/60))+":"+p(s%60);'
+    'for(var i=0;i<el.length;i++)el[i].textContent=t}'
+    'tick();iv=setInterval(tick,1000)})}catch(e){}') if STORE_TIMED else ""
+STORE_TIMER_CSS = ("html:not(.store-live) .badge.store.timed{display:none}html.store-live .badge.soon{display:none}"
+    ".countdown{display:none}html.js:not(.store-live) .countdown{display:inline-flex;align-items:baseline;gap:6px;font-size:14px;opacity:.85}"
+    ".countdown b{font-variant-numeric:tabular-nums;font-weight:700;font-size:16px;letter-spacing:.02em}") if STORE_TIMED else ""
+COUNTDOWN_LABEL = {"en": "On the App Store in", "de": "Im App Store in", "es": "En el App Store en", "it": "Su App Store tra", "sq": "Në App Store pas"}
 SMART_BANNER = f'<meta name="apple-itunes-app" content="app-id={APP_STORE_ID}">'
 
 JS_FLAG = '<script>document.documentElement.classList.add("js");try{var t=localStorage.getItem("billow-theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}' + STORE_TIMER_JS + '</script>'
@@ -896,7 +912,10 @@ def store_badge(lang, fallback_text):
         return soon
     small, big = STORE_BADGE[lang]
     link = f'<a class="badge store{" timed" if STORE_TIMED else ""}" href="{APP_STORE_URL}" rel="noopener">{APPLE}<span class="two"><small>{e(small)}</small><b>{e(big)}</b></span></a>'
-    return soon + link if STORE_TIMED else link
+    if not STORE_TIMED:
+        return link
+    countdown = f'<span class="countdown" role="timer">{e(COUNTDOWN_LABEL[lang])} <b data-countdown></b></span>'
+    return soon + link + countdown
 
 def app_jsonld(lang, t):
     data = {

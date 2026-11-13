@@ -27,7 +27,7 @@
 <meta property="og:image:alt" content="Guides">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://billow-app.org/img/og-en.png">
-<script>document.documentElement.classList.add("js");try{var t=localStorage.getItem("billow-theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}try{if(Date.now()>=Date.parse("2026-11-14T09:00:00Z"))document.documentElement.classList.add("store-live")}catch(e){}</script>
+<script>document.documentElement.classList.add("js");try{var t=localStorage.getItem("billow-theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}try{var L=Date.parse("2026-11-14T09:00:00Z"),D=document.documentElement;if(Date.now()>=L)D.classList.add("store-live");else document.addEventListener("DOMContentLoaded",function(){var el=document.querySelectorAll("[data-countdown]"),p=function(n){return(n<10?"0":"")+n},iv;function tick(){var d=L-Date.now();if(d<=0){D.classList.add("store-live");clearInterval(iv);return}var s=Math.floor(d/1000),t=Math.floor(s/3600)+":"+p(Math.floor(s%3600/60))+":"+p(s%60);for(var i=0;i<el.length;i++)el[i].textContent=t}tick();iv=setInterval(tick,1000)})}catch(e){}</script>
 <style>
 :root {
   --ground: #FFFFFF; --surface: #F7F9FB; --ink: #0B1220; --muted: #66737F; --soft: #EEF2F5;
@@ -593,7 +593,7 @@ main.guide article li { margin: 6px 0; }
 .guide-more h2 { font-size: 22px; margin: 0 0 16px; }
 .guide-more .guide-grid { grid-template-columns: 1fr 1fr; }
 @media (max-width: 960px) { .guide-grid { grid-template-columns: 1fr; } .guide-cta { grid-template-columns: 1fr; } .guide-more .guide-grid { grid-template-columns: 1fr; } }
-html:not(.store-live) .badge.store.timed{display:none}html.store-live .badge.soon{display:none}</style>
+html:not(.store-live) .badge.store.timed{display:none}html.store-live .badge.soon{display:none}.countdown{display:none}html.js:not(.store-live) .countdown{display:inline-flex;align-items:baseline;gap:6px;font-size:14px;opacity:.85}.countdown b{font-variant-numeric:tabular-nums;font-weight:700;font-size:16px;letter-spacing:.02em}</style>
 
 </head>
 <body>
