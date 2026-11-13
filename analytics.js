@@ -37,7 +37,8 @@
     gtag("consent", "update", { analytics_storage: "granted" });
     if (loaded) return; loaded = true;
     gtag("js", new Date());
-    gtag("config", id, { anonymize_ip: true });
+    // page_location without the fragment: demo share links (#try=...) must never reach Google.
+    gtag("config", id, { anonymize_ip: true, page_location: location.href.split("#")[0] });
     var g = document.createElement("script");
     g.async = true; g.src = "https://www.googletagmanager.com/gtag/js?id=" + encodeURIComponent(id);
     document.head.appendChild(g);
