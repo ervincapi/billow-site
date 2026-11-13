@@ -623,7 +623,6 @@ def contact_form(lang, root, next_url):
         <div class="captcha"></div>
         <div class="actions">
           <button type="submit" class="send">{e(c["send"])}</button>
-          <span class="direct">{e(c["direct"])} {mail_link}</span>
         </div>
         <p class="status" role="status" aria-live="polite"></p>
         <p class="note">{e(c["note"])}</p>
