@@ -599,7 +599,7 @@ CONTACT_EMAIL = "ecapi88@gmail.com"
 CONTACT_RELAY = "https://script.google.com/macros/s/AKfycbwyyLMU7Jk-GYlnWHQQom6_0QEGJDzTC4GAfF0sRChL-YQVGXAbD-aO3emt8ghBGWHNZA/exec"
 # Cloudflare Turnstile site key (public). Empty = no captcha widget. The matching secret lives only in the relay's
 # Script properties as TURNSTILE_SECRET. support.html gets this key and the contact.js version patched in at build time.
-TURNSTILE_SITEKEY = ""
+TURNSTILE_SITEKEY = "0x4AAAAAAF_TvOFLPELMkwQc"
 CAPTCHA_WAIT = {"en": "One moment, checking you're not a robot…", "de": "Einen Moment, wir prüfen, dass du kein Roboter bist…", "es": "Un momento, comprobando que no eres un robot…", "it": "Un attimo, verifichiamo che tu non sia un robot…", "sq": "Një moment, po kontrollojmë që nuk jeni robot…"}
 CONTACT = {
   "en": dict(open_mail="Open in your mail app", eyebrow="Contact", h="Get in touch.", sub="A question, an idea or a bug? Write to me and I'll reply within two working days.", name="Your name", email="Your email", message="Message", send="Send message", sending="Sending…", sent="Thanks, your message is on its way.", error="Couldn't send. Email me directly at {mail}.", direct="Or email", note="Goes straight to my inbox and is used only to reply to you.", nav="Contact", subject="Message from billow-app.org"),
