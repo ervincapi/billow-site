@@ -5,7 +5,7 @@ import json
 import pathlib
 import re
 import sys
-from datetime import datetime, timezone
+
 
 sys.path.insert(0, str(pathlib.Path(__file__).parent))
 from theme_css import theme_aware
@@ -332,35 +332,17 @@ e = html.escape
 
 
 
-# ---- App Store switch.
-# APP_STORE_LIVE = True: store links everywhere, no timer (use this once the app is out).
-# APP_STORE_LAUNCH = ISO UTC time: pages ship both badges and the browser picks one by its clock,
-# so the site can be deployed before release. 2026-11-14T09:00:00Z is 10:00 in Tirana (CET).
+# ---- App Store. The app is live since 2026-11-14. The badge and smart banner use the
+# "website" campaign link (App Store Connect > App Analytics > Acquisition > Campaigns) so
+# installs from the site show up as their own campaign.
 APP_STORE_ID = "6830713677"
-APP_STORE_URL = f"https://apps.apple.com/app/id{APP_STORE_ID}"
-APP_STORE_LIVE = False
-APP_STORE_LAUNCH = "2026-11-14T09:00:00Z"
-# A build made after the launch time is a plain live build: the timer and countdown disable themselves.
-if APP_STORE_LAUNCH and datetime.now(timezone.utc) >= datetime.fromisoformat(APP_STORE_LAUNCH.replace("Z", "+00:00")):
-    APP_STORE_LIVE = True
-STORE_TIMED = bool(APP_STORE_LAUNCH) and not APP_STORE_LIVE
-# Runs in <head>: past launch it flips the badges at once; before launch it ticks the countdown
-# each second and flips the badges (and stops) when it reaches zero.
-STORE_TIMER_JS = ('try{var L=Date.parse("' + APP_STORE_LAUNCH + '"),D=document.documentElement;'
-    'if(Date.now()>=L)D.classList.add("store-live");'
-    'else document.addEventListener("DOMContentLoaded",function(){'
-    'var el=document.querySelectorAll("[data-countdown]"),p=function(n){return(n<10?"0":"")+n},iv;'
-    'function tick(){var d=L-Date.now();if(d<=0){D.classList.add("store-live");clearInterval(iv);return}'
-    'var s=Math.floor(d/1000),t=Math.floor(s/3600)+":"+p(Math.floor(s%3600/60))+":"+p(s%60);'
-    'for(var i=0;i<el.length;i++)el[i].textContent=t}'
-    'tick();iv=setInterval(tick,1000)})}catch(e){}') if STORE_TIMED else ""
-STORE_TIMER_CSS = ("html:not(.store-live) .badge.store.timed{display:none}html.store-live .badge.soon{display:none}"
-    ".countdown{display:none}html.js:not(.store-live) .countdown{display:inline-flex;align-items:baseline;gap:6px;font-size:14px;opacity:.85}"
-    ".countdown b{font-variant-numeric:tabular-nums;font-weight:700;font-size:16px;letter-spacing:.02em}") if STORE_TIMED else ""
-COUNTDOWN_LABEL = {"en": "On the App Store in", "de": "Im App Store in", "es": "En el App Store en", "it": "Su App Store tra", "sq": "Në App Store pas"}
-SMART_BANNER = f'<meta name="apple-itunes-app" content="app-id={APP_STORE_ID}">'
+APP_STORE_PROVIDER = "129738999"
+APP_STORE_CAMPAIGN = "website"
+APP_STORE_URL = f"https://apps.apple.com/app/apple-store/id{APP_STORE_ID}?pt={APP_STORE_PROVIDER}&ct={APP_STORE_CAMPAIGN}&mt=8"
+INSTAGRAM_URL = "https://www.instagram.com/billow.al/"
+SMART_BANNER = f'<meta name="apple-itunes-app" content="app-id={APP_STORE_ID}, affiliate-data=pt={APP_STORE_PROVIDER}&ct={APP_STORE_CAMPAIGN}">'
 
-JS_FLAG = '<script>document.documentElement.classList.add("js");try{var t=localStorage.getItem("billow-theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}' + STORE_TIMER_JS + '</script>'
+JS_FLAG = '<script>document.documentElement.classList.add("js");try{var t=localStorage.getItem("billow-theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>'
 ARROW = '<svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12l7 7 7-7"/></svg>'
 SPARK = '<svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/></svg>'
 CARD_ICONS = [
@@ -918,15 +900,8 @@ LIGHTBOX = {
 STORE_BADGE = {"en": ("Download on the", "App Store"), "de": ("Laden im", "App Store"), "es": ("Consíguelo en el", "App Store"), "it": ("Scarica su", "App Store"), "sq": ("Shkarkoje në", "App Store")}
 
 def store_badge(lang, fallback_text):
-    soon = f'<span class="badge{" soon" if STORE_TIMED else ""}">{APPLE}{e(fallback_text)}</span>'
-    if not (APP_STORE_LIVE or STORE_TIMED):
-        return soon
     small, big = STORE_BADGE[lang]
-    link = f'<a class="badge store{" timed" if STORE_TIMED else ""}" href="{APP_STORE_URL}" rel="noopener">{APPLE}<span class="two"><small>{e(small)}</small><b>{e(big)}</b></span></a>'
-    if not STORE_TIMED:
-        return link
-    countdown = f'<span class="countdown" role="timer">{e(COUNTDOWN_LABEL[lang])} <b data-countdown></b></span>'
-    return soon + link + countdown
+    return f'<a class="badge store" href="{APP_STORE_URL}" rel="noopener">{APPLE}<span class="two"><small>{e(small)}</small><b>{e(big)}</b></span></a>'
 
 def app_jsonld(lang, t):
     data = {
@@ -941,8 +916,8 @@ def app_jsonld(lang, t):
             {"@type": "Offer", "name": "Billow Pro Lifetime", "price": "49.99", "priceCurrency": "USD"},
         ],
     }
-    if APP_STORE_LIVE or STORE_TIMED:
-        data["installUrl"] = APP_STORE_URL; data["downloadUrl"] = APP_STORE_URL
+    data["installUrl"] = APP_STORE_URL; data["downloadUrl"] = APP_STORE_URL
+    data["sameAs"] = [INSTAGRAM_URL]
     return '<script type="application/ld+json">' + json.dumps(data, ensure_ascii=False) + "</script>"
 
 # ---- Savings calculator
@@ -1022,6 +997,8 @@ def site_header(lang, root, lang_href):
   </div>
 </header>"""
 
+IG_LINK = f'<a class="social" href="{INSTAGRAM_URL}" rel="me noopener" target="_blank" aria-label="Billow on Instagram">' + '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.2c3.2 0 3.6 0 4.8.1 1.2.1 1.8.2 2.2.4.6.2 1 .5 1.4.9.4.4.7.8.9 1.4.2.4.4 1 .4 2.2.1 1.3.1 1.6.1 4.8s0 3.6-.1 4.8c-.1 1.2-.2 1.8-.4 2.2-.2.6-.5 1-.9 1.4-.4.4-.8.7-1.4.9-.4.2-1 .4-2.2.4-1.3.1-1.6.1-4.8.1s-3.6 0-4.8-.1c-1.2-.1-1.8-.2-2.2-.4-.6-.2-1-.5-1.4-.9-.4-.4-.7-.8-.9-1.4-.2-.4-.4-1-.4-2.2C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.8c.1-1.2.2-1.8.4-2.2.2-.6.5-1 .9-1.4.4-.4.8-.7 1.4-.9.4-.2 1-.4 2.2-.4C8.4 2.2 8.8 2.2 12 2.2zm0 1.8c-3.1 0-3.5 0-4.7.1-1.1 0-1.7.2-2.1.4-.5.2-.8.4-1.2.8-.4.4-.6.7-.8 1.2-.2.4-.3 1-.4 2.1C2.7 9.7 2.7 10.1 2.7 12s0 3.5.1 4.7c0 1.1.2 1.7.4 2.1.2.5.4.8.8 1.2.4.4.7.6 1.2.8.4.2 1 .3 2.1.4 1.2.1 1.6.1 4.7.1s3.5 0 4.7-.1c1.1 0 1.7-.2 2.1-.4.5-.2.8-.4 1.2-.8.4-.4.6-.7.8-1.2.2-.4.3-1 .4-2.1.1-1.2.1-1.6.1-4.7s0-3.5-.1-4.7c0-1.1-.2-1.7-.4-2.1-.2-.5-.4-.8-.8-1.2-.4-.4-.7-.6-1.2-.8-.4-.2-1-.3-2.1-.4C15.5 4 15.1 4 12 4zm0 3a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 1.8a3.2 3.2 0 1 0 0 6.4 3.2 3.2 0 0 0 0-6.4zm5.3-2.2a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4z"/></svg>' + "Instagram</a>"
+
 def site_footer(lang, root):
     t = T[lang]
     home = f"{root}index.html" if lang == "en" else f"{root}{lang}/index.html"
@@ -1029,7 +1006,7 @@ def site_footer(lang, root):
   <div class="wrap">
     <a class="brand" href="{home}"><img src="{root}img/icon.png" alt="">Billow</a>
     <nav><a href="{root}support.html">{e(t["nav_support"])}</a><a href="{guides_href(lang, root)}">{e(GUIDES_META[lang]["nav"])}</a><a href="{home}#faq">FAQ</a><a href="{home}#contact">{e(CONTACT[lang]["nav"])}</a><a href="{root}privacy.html">{e(t["privacy_policy"])}</a><a href="{root}terms.html">{e(TERMS[lang])}</a></nav>
-    <span>© 2026 <a class="author" href="https://www.linkedin.com/in/ervin-capi/" rel="me noopener" target="_blank">Ervin Capi</a> · {e(t["logos_by"])} <a href="https://logo.dev">Logo.dev</a></span>
+    <span>© 2026 <a class="author" href="https://www.linkedin.com/in/ervin-capi/" rel="me noopener" target="_blank">Ervin Capi</a> · {IG_LINK} · {e(t["logos_by"])} <a href="https://logo.dev">Logo.dev</a></span>
   </div>
 </footer>"""
 
@@ -1057,7 +1034,7 @@ def head_common(lang, root, title, desc, canonical, alts, og_image_alt):
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="{BASE}img/og-{lang}.png">
 {JS_FLAG}
-{STYLE.replace("</style>", EXTRA_CSS + STORE_TIMER_CSS + "</style>")}"""
+{STYLE.replace("</style>", EXTRA_CSS + "</style>")}"""
 
 def guide_body(g):
     out = [f'<p class="lead">{e(g["intro"])}</p>']
@@ -1235,7 +1212,7 @@ def page(lang):
     tiles = "\n      ".join(
         f'<div class="tile reveal d{i % 4}"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">{ico}</svg></div><strong>{e(a)}</strong><span>{e(b)}</span></div>'
         for i, (ico, (a, b)) in enumerate(zip(ICONS, t["tiles"])))
-    style = STYLE.replace("</style>", EXTRA_CSS + STORE_TIMER_CSS + "</style>")
+    style = STYLE.replace("</style>", EXTRA_CSS + "</style>")
     return f"""<!doctype html>
 <html lang="{lang}">
 <head>
@@ -1244,7 +1221,7 @@ def page(lang):
 <title>{e(t["title"])}</title>
 <meta name="description" content="{e(t["desc"])}">
 <meta name="theme-color" content="#06202A">
-{SMART_BANNER if APP_STORE_LIVE else (f"<script>try{{if(Date.now()>=Date.parse('{APP_STORE_LAUNCH}'))document.write('{SMART_BANNER}')}}catch(e){{}}</script>" if STORE_TIMED else '')}
+{SMART_BANNER}
 <link rel="canonical" href="{url(lang)}">
 {alts}
 <link rel="alternate" hreflang="x-default" href="{BASE}">
@@ -1377,7 +1354,7 @@ def page(lang):
   <div class="wrap">
     <a class="brand" href="{href(lang)}"><img src="{root}img/icon.png" alt="">Billow</a>
     <nav><a href="{root}support.html">{e(t["nav_support"])}</a><a href="{guides_href(lang, root)}">{e(GUIDES_META[lang]["nav"])}</a><a href="#faq">FAQ</a><a href="#contact">{e(CONTACT[lang]["nav"])}</a><a href="{root}privacy.html">{e(t["privacy_policy"])}</a><a href="{root}terms.html">{e(TERMS[lang])}</a></nav>
-    <span>© 2026 <a class="author" href="https://www.linkedin.com/in/ervin-capi/" rel="me noopener" target="_blank">Ervin Capi<svg viewBox="0 0 24 24" aria-label="LinkedIn" role="img"><path d="M20.4 2H3.6A1.6 1.6 0 0 0 2 3.6v16.8A1.6 1.6 0 0 0 3.6 22h16.8a1.6 1.6 0 0 0 1.6-1.6V3.6A1.6 1.6 0 0 0 20.4 2zM8 19H5v-9h3zM6.5 8.7a1.7 1.7 0 1 1 0-3.4 1.7 1.7 0 0 1 0 3.4zM19 19h-3v-4.6c0-1.1 0-2.5-1.5-2.5S12.7 13 12.7 14.3V19h-3v-9h2.9v1.2a3.2 3.2 0 0 1 2.9-1.6c3.1 0 3.6 2 3.6 4.7z"/></svg></a> · {e(t["logos_by"])} <a href="https://logo.dev">Logo.dev</a></span>
+    <span>© 2026 <a class="author" href="https://www.linkedin.com/in/ervin-capi/" rel="me noopener" target="_blank">Ervin Capi<svg viewBox="0 0 24 24" aria-label="LinkedIn" role="img"><path d="M20.4 2H3.6A1.6 1.6 0 0 0 2 3.6v16.8A1.6 1.6 0 0 0 3.6 22h16.8a1.6 1.6 0 0 0 1.6-1.6V3.6A1.6 1.6 0 0 0 20.4 2zM8 19H5v-9h3zM6.5 8.7a1.7 1.7 0 1 1 0-3.4 1.7 1.7 0 0 1 0 3.4zM19 19h-3v-4.6c0-1.1 0-2.5-1.5-2.5S12.7 13 12.7 14.3V19h-3v-9h2.9v1.2a3.2 3.2 0 0 1 2.9-1.6c3.1 0 3.6 2 3.6 4.7z"/></svg></a> · {IG_LINK} · {e(t["logos_by"])} <a href="https://logo.dev">Logo.dev</a></span>
   </div>
 </footer>
 
